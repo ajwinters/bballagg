@@ -1,0 +1,6 @@
+{
+    "editor.hover.delay": 600,
+    "editor.hover.enabled": true,
+    "editor.hover.sticky": false,
+    "editor.hover.hidingDelay": 200
+}
