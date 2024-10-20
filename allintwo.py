@@ -7,6 +7,8 @@ from nba_api.stats.endpoints import leaguegamefinder
 import psycopg2
 from psycopg2.extras import execute_batch  # Import execute_batch from extras
 import re
+from psycopg2 import sql
+
 
 def connect_to_rds(db_name, username, password, host, port=5432):
     try:
@@ -104,9 +106,6 @@ def query_database_to_dataframe(conn, query):
         print(f"Error executing query: {str(e)}")
         return None
     
-import pandas as pd
-import psycopg2
-from psycopg2 import sql
 
 def insert_dataframe_to_rds(conn, df, table_name):
    
@@ -136,3 +135,28 @@ def insert_dataframe_to_rds(conn, df, table_name):
         print(f"Error: {e}")
 
 
+def fetch_table_to_dataframe(conn, table_name):
+
+    # Create a cursor object
+    cur = conn.cursor()
+    
+    try:
+        # Execute the SQL query to fetch all data from the table
+        query = f"SELECT * FROM {table_name};"
+        cur.execute(query)
+        
+        # Fetch all the data
+        data = cur.fetchall()
+        
+        # Get the column names from the cursor
+        colnames = [desc[0] for desc in cur.description]
+        
+        # Convert the data into a pandas DataFrame
+        df = pd.DataFrame(data, columns=colnames)
+        
+        print(f"Data fetched successfully from {table_name} table.")
+        return df
+    
+    except Exception as e:
+        print(f"Error: {e}")
+        return None
