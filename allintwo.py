@@ -134,7 +134,6 @@ def insert_dataframe_to_rds(conn, df, table_name):
         conn.rollback()
         print(f"Error: {e}")
 
-
 def fetch_table_to_dataframe(conn, table_name):
 
     # Create a cursor object
@@ -160,3 +159,15 @@ def fetch_table_to_dataframe(conn, table_name):
     except Exception as e:
         print(f"Error: {e}")
         return None
+    
+def game_difference(conn,tablename):
+    allgames = fetch_table_data(conn,"mastergames")
+    allgameslist = allgames['gameid'].to_list()
+
+    tablegames = fetch_table_data(conn,tablename)
+    tablegameslist = tablegames['gameid'].to_list()
+    difference = set(allgameslist) - set(tablegameslist)
+    result = list(difference)
+    return result
+
+
