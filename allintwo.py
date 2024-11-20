@@ -8,7 +8,7 @@ import psycopg2
 from psycopg2.extras import execute_batch  # Import execute_batch from extras
 import re
 from psycopg2 import sql
-
+import rdshelp
 
 def connect_to_rds(db_name, username, password, host, port=5432):
     try:
@@ -91,7 +91,7 @@ def check_table_exists(connection, table_name):
     
 def create_table(conn, table_name, dataframe):
     cursor = conn.cursor()
-    columns = ', '.join([f"{col} {map_dtype_to_postgresql(dtype)}" for col, dtype in zip(dataframe.columns, dataframe.dtypes)])
+    columns = ', '.join([f"{col} {map_dtype_to_postgresql(dtype)}" for col, dtype in zip(clean_column_names(dataframe).columns, dataframe.dtypes)])
 
     create_query = f"CREATE TABLE IF NOT EXISTS {table_name} ({columns});"
     cursor.execute(create_query)
@@ -113,6 +113,8 @@ def insert_dataframe_to_rds(conn, df, table_name):
     cur = conn.cursor()
     
     # Prepare a SQL query for inserting data
+    df = clean_column_names(df)
+    print(df.columns)
     columns = df.columns
     insert_query = sql.SQL("INSERT INTO {table} ({fields}) VALUES ({values})").format(
         table=sql.Identifier(table_name),
