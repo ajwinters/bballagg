@@ -96,7 +96,7 @@ def create_table(conn, table_name, dataframe):
     create_query = f"CREATE TABLE IF NOT EXISTS {table_name} ({columns});"
     cursor.execute(create_query)
     conn.commit()
-    print(f"Master table {table_name} created successfully.")
+    print(f"Master table {table_name} created successfully or already exists.")
 
 def query_database_to_dataframe(conn, query):
     try:
@@ -114,7 +114,6 @@ def insert_dataframe_to_rds(conn, df, table_name):
     
     # Prepare a SQL query for inserting data
     df = clean_column_names(df)
-    print(df.columns)
     columns = df.columns
     insert_query = sql.SQL("INSERT INTO {table} ({fields}) VALUES ({values})").format(
         table=sql.Identifier(table_name),
