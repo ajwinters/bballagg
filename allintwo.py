@@ -171,4 +171,13 @@ def game_difference(conn,tablename):
     result = list(difference)
     return result
 
+def player_difference(conn,tablename):
+    allplayers = fetch_table_data(conn,"masterplayers")
+    allplayerslist = allplayers['playerid'].to_list()
+
+    tableplayers = fetch_table_data(conn,tablename)
+    tableplayerslist = tableplayers['playerid'].to_list()
+    difference = set(allplayerslist) - set(tableplayerslist)
+    result = list(difference)
+    return result
 
