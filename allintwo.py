@@ -1,14 +1,12 @@
 import pandas as pd
-import time
-import numpy as np
-from nba_api.stats.endpoints import playercareerstats
-import nba_api.stats.endpoints as nbaapi
-from nba_api.stats.endpoints import leaguegamefinder
+
+# from nba_api.stats.endpoints import playercareerstats
+# import nba_api.stats.endpoints as nbaapi
+# from nba_api.stats.endpoints import leaguegamefinder
 import psycopg2
 from psycopg2.extras import execute_batch  # Import execute_batch from extras
 import re
 from psycopg2 import sql
-import rdshelp
 
 def connect_to_rds(db_name, username, password, host, port=5432):
     try:

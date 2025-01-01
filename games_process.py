@@ -2,7 +2,7 @@ import pandas as pd
 import time
 import nba_api.stats.endpoints as nbaapi
 from nba_api.stats.endpoints import *
-import allintwo
+import allintwo as allintwo
 
 ### 
 testplayer='203076'
