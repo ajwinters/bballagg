@@ -2,7 +2,7 @@ import pandas as pd
 import time
 import nba_api.stats.endpoints as nbaapi
 from nba_api.stats.endpoints import *
-import allintwo as allintwo
+import archive.rdshelp as rdshelp
 import requests
 import socket
 
@@ -122,7 +122,7 @@ import logging
 #     test_nba_api()
 
 # adds the connection
-conn = allintwo.connect_to_rds('thebigone', 'ajwin', 'CharlesBark!23', 'nba-rds-instance.c9wwc0ukkiu5.us-east-1.rds.amazonaws.com')
+conn = rdshelp.connect_to_rds('thebigone', 'ajwin', 'CharlesBark!23', 'nba-rds-instance.c9wwc0ukkiu5.us-east-1.rds.amazonaws.com')
 
 ## Naming stuff
 
@@ -143,19 +143,19 @@ def games_createandinsert(func,index):
     df = func(param).get_data_frames()[index]
 
     ### Creates Table if none exists
-    allintwo.create_table(conn,name,df)
+    rdshelp.create_table(conn,name,df)
 
-    gameslist = allintwo.game_difference(conn,name)
+    gameslist = rdshelp.game_difference(conn,name)
 
     for i in gameslist:
         try:
             tdf = func(i).get_data_frames()[index]
-            allintwo.insert_dataframe_to_rds(conn,tdf,name)
+            rdshelp.insert_dataframe_to_rds(conn,tdf,name)
             #print(i)
             time.sleep(1)
         except Exception as e:
             fdf = pd.DataFrame({"gameid":[i]})
-            allintwo.insert_dataframe_to_rds(conn,fdf,name)
+            rdshelp.insert_dataframe_to_rds(conn,fdf,name)
             print("An error occurred:", e)
 
 if __name__ == "__main__":

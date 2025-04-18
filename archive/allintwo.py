@@ -1,12 +1,9 @@
 import pandas as pd
-
-# from nba_api.stats.endpoints import playercareerstats
-# import nba_api.stats.endpoints as nbaapi
-# from nba_api.stats.endpoints import leaguegamefinder
 import psycopg2
 from psycopg2.extras import execute_batch  # Import execute_batch from extras
 import re
 from psycopg2 import sql
+
 
 def connect_to_rds(db_name, username, password, host, port=5432):
     try:
