@@ -4,9 +4,9 @@ FROM python:3.12-slim
 WORKDIR /app
 
 # Copy the script and install dependencies
-COPY games_process.py /app/
-COPY allintwo.py /app/
-COPY requirements.txt /app/
+COPY ../src/games_process.py /app/
+COPY ../src/allintwo.py /app/
+COPY ../config/requirements.txt /app/
 
 RUN pip install --no-cache-dir -r requirements.txt
 
