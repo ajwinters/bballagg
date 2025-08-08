@@ -1,0 +1,10 @@
+league_id,league_name,season,success,players_count
+00,NBA,2023-24,True,572
+00,NBA,2022-23,True,539
+00,NBA,2021-22,True,605
+10,WNBA,2023,True,156
+10,WNBA,2022,True,166
+10,WNBA,2021,True,155
+20,G-League,2023-24,True,512
+20,G-League,2022-23,True,471
+20,G-League,2021-22,True,493
