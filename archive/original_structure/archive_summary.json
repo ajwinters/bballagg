@@ -1,0 +1,10 @@
+{
+  "archive_date": "2025-08-10T11:13:26.528851",
+  "archived_directories": [
+    "src",
+    "data",
+    "config"
+  ],
+  "reason": "File structure reorganization - separating masters from endpoints",
+  "restoration_note": "Original structure preserved for reference and rollback if needed"
+}

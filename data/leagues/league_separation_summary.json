@@ -1,0 +1,25 @@
+{
+  "separation_timestamp": "2025-08-10T10:29:04.405728",
+  "total_leagues": 3,
+  "leagues": {
+    "NBA": {
+      "games_count": 13515,
+      "players_count": 2825,
+      "games_file": "data/leagues/nba_master_games.csv",
+      "players_file": "data/leagues/nba_master_players.csv"
+    },
+    "G-League": {
+      "games_count": 4404,
+      "players_count": 2232,
+      "games_file": "data/leagues/g_league_master_games.csv",
+      "players_file": "data/leagues/g_league_master_players.csv"
+    },
+    "WNBA": {
+      "games_count": 2318,
+      "players_count": 779,
+      "games_file": "data/leagues/wnba_master_games.csv",
+      "players_file": "data/leagues/wnba_master_players.csv"
+    }
+  },
+  "output_directory": "data/leagues"
+}

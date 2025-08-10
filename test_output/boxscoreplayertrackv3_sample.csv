@@ -1,0 +1,6 @@
+gameId,teamId,teamCity,teamName,teamTricode,teamSlug,personId,firstName,familyName,nameI,playerSlug,position,comment,jerseyNum,minutes,speed,distance,reboundChancesOffensive,reboundChancesDefensive,reboundChancesTotal,touches,secondaryAssists,freeThrowAssists,passes,assists,contestedFieldGoalsMade,contestedFieldGoalsAttempted,contestedFieldGoalPercentage,uncontestedFieldGoalsMade,uncontestedFieldGoalsAttempted,uncontestedFieldGoalsPercentage,fieldGoalPercentage,defendedAtRimFieldGoalsMade,defendedAtRimFieldGoalsAttempted,defendedAtRimFieldGoalPercentage
+2022100252,1612709921,Long Island,Nets,LIN,nets,1629596,Bryce,Brown,B. Brown,bryce-brown,F,,,37:15,0.0,0.0,0,0,0,0,0,0,0,4,0,0,0.0,0,0,0.0,0.364,0,0,0.0
+2022100252,1612709921,Long Island,Nets,LIN,nets,1630672,Brandon,Rachal,B. Rachal,brandon-rachal,F,,,29:23,0.0,0.0,0,0,0,0,0,0,0,1,0,0,0.0,0,0,0.0,0.474,0,0,0.0
+2022100252,1612709921,Long Island,Nets,LIN,nets,1627967,Adam,Woodbury,A. Woodbury,adam-woodbury,C,,,23:11,0.0,0.0,0,0,0,0,0,0,0,1,0,0,0.0,0,0,0.0,0.7,0,0,0.0
+2022100252,1612709921,Long Island,Nets,LIN,nets,1630310,Craig,Randall II,C. Randall II,craig-randall-ii,G,,,41:13,0.0,0.0,0,0,0,0,0,0,0,10,0,0,0.0,0,0,0.0,0.474,0,0,0.0
+2022100252,1612709921,Long Island,Nets,LIN,nets,1627820,Tyrone,Wallace,T. Wallace,tyrone-wallace,G,,,39:13,0.0,0.0,0,0,0,0,0,0,0,13,0,0,0.0,0,0,0.0,0.357,0,0,0.0

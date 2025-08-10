@@ -1,0 +1,14 @@
+{
+  "project_name": "NBA Data Collection System",
+  "reorganization_date": "2025-08-10T11:13:26.556512",
+  "structure": {
+    "masters": "Master data collection system",
+    "endpoints": "Endpoint data processing system",
+    "shared": "Shared utilities and configurations"
+  },
+  "python_path": {
+    "masters": "masters",
+    "endpoints": "endpoints",
+    "shared": "shared"
+  }
+}

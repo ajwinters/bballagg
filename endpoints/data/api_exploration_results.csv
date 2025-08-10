@@ -1,0 +1,37 @@
+league_id,league_name,season_type,season_type_name,season,success,games_count
+00,NBA,Regular Season,Regular,2023-24,True,2460
+00,NBA,Regular Season,Regular,2022-23,True,2460
+00,NBA,Regular Season,Regular,2021-22,True,2460
+00,NBA,Pre Season,Preseason,2023-24,True,147
+00,NBA,Pre Season,Preseason,2022-23,True,140
+00,NBA,Pre Season,Preseason,2021-22,True,132
+00,NBA,Playoffs,Playoffs,2023-24,True,164
+00,NBA,Playoffs,Playoffs,2022-23,True,168
+00,NBA,Playoffs,Playoffs,2021-22,True,174
+00,NBA,All-Star,AllStar,2023-24,True,2
+00,NBA,All-Star,AllStar,2022-23,True,2
+00,NBA,All-Star,AllStar,2021-22,True,2
+10,WNBA,Regular Season,Regular,2023,True,480
+10,WNBA,Regular Season,Regular,2022,True,432
+10,WNBA,Regular Season,Regular,2021,True,384
+10,WNBA,Pre Season,Preseason,2023,True,22
+10,WNBA,Pre Season,Preseason,2022,True,18
+10,WNBA,Pre Season,Preseason,2021,True,14
+10,WNBA,Playoffs,Playoffs,2023,True,40
+10,WNBA,Playoffs,Playoffs,2022,True,46
+10,WNBA,Playoffs,Playoffs,2021,True,34
+10,WNBA,All-Star,AllStar,2023,True,2
+10,WNBA,All-Star,AllStar,2022,True,2
+10,WNBA,All-Star,AllStar,2021,True,2
+20,G-League,Regular Season,Regular,2023-24,True,1054
+20,G-League,Regular Season,Regular,2022-23,True,960
+20,G-League,Regular Season,Regular,2021-22,True,916
+20,G-League,Pre Season,Preseason,2023-24,True,4
+20,G-League,Pre Season,Preseason,2022-23,True,4
+20,G-League,Pre Season,Preseason,2021-22,True,10
+20,G-League,Playoffs,Playoffs,2023-24,True,26
+20,G-League,Playoffs,Playoffs,2022-23,True,24
+20,G-League,Playoffs,Playoffs,2021-22,True,24
+20,G-League,All-Star,AllStar,2023-24,True,6
+20,G-League,All-Star,AllStar,2022-23,True,2
+20,G-League,All-Star,AllStar,2021-22,True,0
