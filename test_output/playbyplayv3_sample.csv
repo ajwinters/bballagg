@@ -1,6 +1,0 @@
-gameId,actionNumber,clock,period,teamId,teamTricode,personId,playerName,playerNameI,xLegacy,yLegacy,shotDistance,shotResult,isFieldGoal,scoreHome,scoreAway,pointsTotal,location,description,actionType,subType,videoAvailable,shotValue,actionId
-2022100252,2,PT12M00.00S,1,0,,0,,,0,0,0,,0,0,0,0,,Start of 1st Period (8:03 PM EST),period,start,0,0,1
-2022100252,4,PT12M00.00S,1,1612709923,WCB,1630250,Simonovic,M. Simonovic,0,0,0,,0,,,0,h,Jump Ball Simonovic vs. Woodbury: Tip to Dotson,Jump Ball,,0,0,2
-2022100252,7,PT11M42.00S,1,1612709923,WCB,1630187,Oturu,D. Oturu,2,11,1,Missed,1,,,0,h,MISS Oturu 1' Driving Layup,Missed Shot,Driving Layup Shot,0,2,3
-2022100252,8,PT11M42.00S,1,1612709923,WCB,1630187,Oturu,D. Oturu,0,0,0,,0,,,0,h,Oturu REBOUND (Off:1 Def:0),Rebound,Unknown,0,0,4
-2022100252,697,PT11M42.00S,1,1612709923,WCB,1630187,Oturu,D. Oturu,9,8,1,Missed,1,,,0,h,MISS Oturu 1' Tip Layup Shot,Missed Shot,Tip Layup Shot,0,2,5

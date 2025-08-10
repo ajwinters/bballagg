@@ -22,15 +22,15 @@ from config.nba_endpoints_config import ALL_ENDPOINTS
 class SystematicEndpointTester:
     """Tests all configured endpoints systematically using master tables"""
     
-    def __init__(self, data_dir='data', test_output_dir='test_output'):
+    def __init__(self, data_dir='masters/data/comprehensive', test_output_dir='endpoints/tests/test_output'):
         self.data_dir = data_dir
         self.test_output_dir = test_output_dir
         os.makedirs(test_output_dir, exist_ok=True)
         
-        # Load master tables
-        self.master_games = pd.read_csv(f'{data_dir}/comprehensive_master_games.csv')
-        self.master_players = pd.read_csv(f'{data_dir}/comprehensive_master_players.csv') 
-        self.master_teams = pd.read_csv(f'{data_dir}/master_teams.csv')
+        # Load master tables from new organized structure
+        self.master_games = pd.read_csv(f'{data_dir}/games.csv')
+        self.master_players = pd.read_csv(f'{data_dir}/players.csv') 
+        self.master_teams = pd.read_csv(f'{data_dir}/teams.csv')
         
         # Test results tracking
         self.test_results = []
@@ -155,7 +155,9 @@ class SystematicEndpointTester:
                     
                     # Map parameters based on category
                     if category == 'game_based':
-                        test_params['game_id'] = sample
+                        # Format game_id with leading zeros to ensure 10-digit format
+                        formatted_game_id = f"{sample:010d}"
+                        test_params['game_id'] = formatted_game_id
                     elif category == 'player_based':
                         test_params['player_id'] = str(sample)
                     elif category == 'team_based':

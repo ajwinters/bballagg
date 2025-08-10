@@ -59,7 +59,7 @@ class LeagueSeparatedMasterCollector:
         
         self.collection_timestamp = datetime.now().isoformat()
         
-    def generate_seasons_by_league(self, league_name, start_year=1946, end_year=2025):
+    def generate_seasons_by_league(self, league_name, start_year=1984, end_year=2025):
         """Generate seasons in proper format for each league"""
         seasons = []
         
@@ -77,7 +77,7 @@ class LeagueSeparatedMasterCollector:
         
         return seasons[::-1]  # Most recent first for faster testing
     
-    def generate_all_seasons(self, start_year=1946, end_year=2025):
+    def generate_all_seasons(self, start_year=1984, end_year=2025):
         """Generate master seasons table (NBA format for reference)"""
         seasons = []
         for i in range(start_year, end_year):

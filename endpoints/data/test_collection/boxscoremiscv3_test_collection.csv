@@ -1,0 +1,83 @@
+gameId,teamId,teamCity,teamName,teamTricode,teamSlug,personId,firstName,familyName,nameI,playerSlug,position,comment,jerseyNum,minutes,pointsOffTurnovers,pointsSecondChance,pointsFastBreak,pointsPaint,oppPointsOffTurnovers,oppPointsSecondChance,oppPointsFastBreak,oppPointsPaint,blocks,blocksAgainst,foulsPersonal,foulsDrawn,game_id,endpoint,dataframe_index,collection_timestamp
+0022401191,1610612741,Chicago,Bulls,CHI,bulls,1641824.0,Matas,Buzelis,M. Buzelis,matas-buzelis,F,,14,14:28,0,2,0,4,7,10,0,14,0,0,0,0,0022401191,BoxScoreMiscV3,0,2025-08-10T12:04:46.101376
+0022401191,1610612741,Chicago,Bulls,CHI,bulls,1641763.0,Julian,Phillips,J. Phillips,julian-phillips,F,,15,26:06,2,0,9,6,9,10,7,30,1,1,2,0,0022401191,BoxScoreMiscV3,0,2025-08-10T12:04:46.101376
+0022401191,1610612741,Chicago,Bulls,CHI,bulls,202696.0,Nikola,Vučević,N. Vučević,nikola-vučević,C,,9,16:34,2,2,0,4,8,5,7,24,1,1,1,1,0022401191,BoxScoreMiscV3,0,2025-08-10T12:04:46.101376
+0022401191,1610612741,Chicago,Bulls,CHI,bulls,1629632.0,Coby,White,C. White,coby-white,G,,0,18:47,0,0,0,2,8,7,7,26,1,0,1,2,0022401191,BoxScoreMiscV3,0,2025-08-10T12:04:46.101376
+0022401191,1610612741,Chicago,Bulls,CHI,bulls,1628989.0,Kevin,Huerter,K. Huerter,kevin-huerter,G,,13,16:16,3,3,6,2,9,8,3,18,0,0,2,1,0022401191,BoxScoreMiscV3,0,2025-08-10T12:04:46.101376
+0022401191,1610612741,Chicago,Bulls,CHI,bulls,1631207.0,Dalen,Terry,D. Terry,dalen-terry,,,25,17:39,0,2,2,6,8,2,12,22,0,0,1,0,0022401191,BoxScoreMiscV3,0,2025-08-10T12:04:46.101376
+0022401191,1610612741,Chicago,Bulls,CHI,bulls,1630172.0,Patrick,Williams,P. Williams,patrick-williams,,,44,26:11,0,0,0,6,6,8,4,24,1,1,2,2,0022401191,BoxScoreMiscV3,0,2025-08-10T12:04:46.101376
+0022401191,1610612741,Chicago,Bulls,CHI,bulls,1630188.0,Jalen,Smith,J. Smith,jalen-smith,,,7,16:24,0,3,0,6,5,9,2,8,0,1,1,2,0022401191,BoxScoreMiscV3,0,2025-08-10T12:04:46.101376
+0022401191,1610612741,Chicago,Bulls,CHI,bulls,1629659.0,Talen,Horton-Tucker,T. Horton-Tucker,talen-horton-tucker,,,22,28:32,2,1,4,12,5,9,8,20,0,1,0,4,0022401191,BoxScoreMiscV3,0,2025-08-10T12:04:46.101376
+0022401191,1610612741,Chicago,Bulls,CHI,bulls,1628975.0,Jevon,Carter,J. Carter,jevon-carter,,,5,21:34,0,0,0,0,0,6,5,16,0,0,2,0,0022401191,BoxScoreMiscV3,0,2025-08-10T12:04:46.101376
+0022401191,1610612741,Chicago,Bulls,CHI,bulls,1628380.0,Zach,Collins,Z. Collins,zach-collins,,,12,15:02,2,0,0,6,0,2,3,12,0,1,1,2,0022401191,BoxScoreMiscV3,0,2025-08-10T12:04:46.101376
+0022401191,1610612741,Chicago,Bulls,CHI,bulls,1642443.0,Jahmir,Young,J. Young,jahmir-young,,,11,8:17,0,0,0,2,0,0,2,4,0,0,1,1,0022401191,BoxScoreMiscV3,0,2025-08-10T12:04:46.101376
+0022401191,1610612741,Chicago,Bulls,CHI,bulls,1641801.0,Emanuel,Miller,E. Miller,emanuel-miller,,,20,10:46,2,2,0,6,0,4,0,2,0,0,2,0,0022401191,BoxScoreMiscV3,0,2025-08-10T12:04:46.101376
+0022401191,1610612741,Chicago,Bulls,CHI,bulls,1630604.0,E.J.,Liddell,E. Liddell,ej-liddell,,,32,3:24,0,0,0,0,0,0,0,0,0,0,1,0,0022401191,BoxScoreMiscV3,0,2025-08-10T12:04:46.101376
+0022401191,1610612755,Philadelphia,76ers,PHI,sixers,1629022.0,Lonnie,Walker IV,L. Walker IV,lonnie-walker-iv,F,,16,36:53,3,6,2,4,11,8,19,46,0,0,0,1,0022401191,BoxScoreMiscV3,0,2025-08-10T12:04:46.101376
+0022401191,1610612755,Philadelphia,76ers,PHI,sixers,1630542.0,Marcus,Bagley,M. Bagley,marcus-bagley,F,,38,43:20,4,4,0,8,13,15,19,58,1,0,3,2,0022401191,BoxScoreMiscV3,0,2025-08-10T12:04:46.101376
+0022401191,1610612755,Philadelphia,76ers,PHI,sixers,1641737.0,Adem,Bona,A. Bona,adem-bona,C,,30,32:42,2,5,1,12,13,11,14,44,2,1,3,5,0022401191,BoxScoreMiscV3,0,2025-08-10T12:04:46.101376
+0022401191,1610612755,Philadelphia,76ers,PHI,sixers,1629656.0,Quentin,Grimes,Q. Grimes,quentin-grimes,G,,5,35:12,0,0,2,6,11,11,16,46,0,0,2,1,0022401191,BoxScoreMiscV3,0,2025-08-10T12:04:46.101376
+0022401191,1610612755,Philadelphia,76ers,PHI,sixers,1630215.0,Jared,Butler,J. Butler,jared-butler,G,,12,25:37,4,0,4,10,13,7,16,34,1,2,2,3,0022401191,BoxScoreMiscV3,0,2025-08-10T12:04:46.101376
+0022401191,1610612755,Philadelphia,76ers,PHI,sixers,1641741.0,Ricky,Council IV,R. Council IV,ricky-council-iv,,,14,21:51,0,0,0,0,2,9,7,28,1,1,0,3,0022401191,BoxScoreMiscV3,0,2025-08-10T12:04:46.101376
+0022401191,1610612755,Philadelphia,76ers,PHI,sixers,1641720.0,Jalen,Hood-Schifino,J. Hood-Schifino,jalen-hood-schifino,,,17,27:03,0,0,3,2,0,8,7,32,0,0,2,1,0022401191,BoxScoreMiscV3,0,2025-08-10T12:04:46.101376
+0022401191,1610612755,Philadelphia,76ers,PHI,sixers,1630600.0,Isaiah,Mobley,I. Mobley,isaiah-mobley,,,15,17:22,0,1,0,2,2,6,7,22,1,0,3,1,0022401191,BoxScoreMiscV3,0,2025-08-10T12:04:46.101376
+0022401191,1610612755,Philadelphia,76ers,PHI,sixers,1642348.0,Justin,Edwards,J. Edwards,justin-edwards,,DND - Injury/Illness,19,,0,0,0,0,0,0,0,0,0,0,0,0,0022401191,BoxScoreMiscV3,0,2025-08-10T12:04:46.101376
+0022401191,1610612755,Philadelphia,76ers,PHI,sixers,1626162.0,Kelly,Oubre Jr.,K. Oubre Jr.,kelly-oubre-jr,,DND - Injury/Illness,9,,0,0,0,0,0,0,0,0,0,0,0,0,0022401191,BoxScoreMiscV3,0,2025-08-10T12:04:46.101376
+0022401191,1610612755,Philadelphia,76ers,PHI,sixers,1627824.0,Guerschon,Yabusele,G. Yabusele,guerschon-yabusele,,DND - Injury/Illness,28,,0,0,0,0,0,0,0,0,0,0,0,0,0022401191,BoxScoreMiscV3,0,2025-08-10T12:04:46.101376
+0022401191,1610612755,Philadelphia,76ers,PHI,sixers,,,,,,,,,240:00,13,16,12,44,13,15,21,62,6,4,15,17,0022401191,BoxScoreMiscV3,1,2025-08-10T12:04:46.101376
+0022401191,1610612741,Chicago,Bulls,CHI,bulls,,,,,,,,,240:00,13,15,21,62,13,16,12,44,4,6,17,15,0022401191,BoxScoreMiscV3,1,2025-08-10T12:04:46.101376
+0022401199,1610612747,Los Angeles,Lakers,LAL,lakers,1642261.0,Dalton,Knecht,D. Knecht,dalton-knecht,F,,4,37:22,8,2,9,6,19,27,17,42,2,3,1,4,0022401199,BoxScoreMiscV3,0,2025-08-10T12:04:51.668464
+0022401199,1610612747,Los Angeles,Lakers,LAL,lakers,202693.0,Markieff,Morris,M. Morris,markieff-morris,F,,88,32:48,0,3,0,4,13,23,12,34,1,0,4,0,0022401199,BoxScoreMiscV3,0,2025-08-10T12:04:51.668464
+0022401199,1610612747,Los Angeles,Lakers,LAL,lakers,203458.0,Alex,Len,A. Len,alex-len,C,,27,13:33,0,0,0,4,9,17,6,18,1,0,6,0,0022401199,BoxScoreMiscV3,0,2025-08-10T12:04:51.668464
+0022401199,1610612747,Los Angeles,Lakers,LAL,lakers,1629003.0,Shake,Milton,S. Milton,shake-milton,G,,20,43:02,7,2,5,6,17,30,17,48,1,2,2,6,0022401199,BoxScoreMiscV3,0,2025-08-10T12:04:51.668464
+0022401199,1610612747,Los Angeles,Lakers,LAL,lakers,1642355.0,Bronny,James,B. James,bronny-james,G,,9,38:18,0,0,0,4,20,24,16,46,0,0,1,1,0022401199,BoxScoreMiscV3,0,2025-08-10T12:04:51.668464
+0022401199,1610612747,Los Angeles,Lakers,LAL,lakers,1630692.0,Jordan,Goodwin,J. Goodwin,jordan-goodwin,,,30,30:13,0,0,0,4,9,25,7,34,0,0,0,1,0022401199,BoxScoreMiscV3,0,2025-08-10T12:04:51.668464
+0022401199,1610612747,Los Angeles,Lakers,LAL,lakers,1631132.0,Christian,Koloko,C. Koloko,christian-koloko,,,10,19:29,0,0,0,4,6,8,7,14,5,0,3,2,0022401199,BoxScoreMiscV3,0,2025-08-10T12:04:51.668464
+0022401199,1610612747,Los Angeles,Lakers,LAL,lakers,1641998.0,Trey,Jemison III,T. Jemison III,trey-jemison-iii,,,55,25:15,0,1,0,2,12,16,13,24,1,1,4,2,0022401199,BoxScoreMiscV3,0,2025-08-10T12:04:51.668464
+0022401199,1610612747,Los Angeles,Lakers,LAL,lakers,1629637.0,Jaxson,Hayes,J. Hayes,jaxson-hayes,,DNP - Coach's Decision,11,,0,0,0,0,0,0,0,0,0,0,0,0,0022401199,BoxScoreMiscV3,0,2025-08-10T12:04:51.668464
+0022401199,1610612747,Los Angeles,Lakers,LAL,lakers,1629020.0,Jarred,Vanderbilt,J. Vanderbilt,jarred-vanderbilt,,DNP - Coach's Decision,2,,0,0,0,0,0,0,0,0,0,0,0,0,0022401199,BoxScoreMiscV3,0,2025-08-10T12:04:51.668464
+0022401199,1610612747,Los Angeles,Lakers,LAL,lakers,1629216.0,Gabe,Vincent,G. Vincent,gabe-vincent,,DNP - Coach's Decision,7,,0,0,0,0,0,0,0,0,0,0,0,0,0022401199,BoxScoreMiscV3,0,2025-08-10T12:04:51.668464
+0022401199,1610612757,Portland,Trail Blazers,POR,blazers,1631200.0,Kris,Murray,K. Murray,kris-murray,F,,24,29:50,2,2,5,6,11,8,8,14,1,2,0,1,0022401199,BoxScoreMiscV3,0,2025-08-10T12:04:51.668464
+0022401199,1610612757,Portland,Trail Blazers,POR,blazers,1641739.0,Toumani,Camara,T. Camara,toumani-camara,F,,33,21:37,0,5,0,2,6,5,6,8,0,0,3,0,0022401199,BoxScoreMiscV3,0,2025-08-10T12:04:51.668464
+0022401199,1610612757,Portland,Trail Blazers,POR,blazers,1642270.0,Donovan,Clingan,D. Clingan,donovan-clingan,C,,23,24:40,2,8,2,12,6,5,8,10,2,2,3,6,0022401199,BoxScoreMiscV3,0,2025-08-10T12:04:51.668464
+0022401199,1610612757,Portland,Trail Blazers,POR,blazers,1629680.0,Matisse,Thybulle,M. Thybulle,matisse-thybulle,G,,4,29:09,4,7,2,4,7,6,7,22,1,1,2,5,0022401199,BoxScoreMiscV3,0,2025-08-10T12:04:51.668464
+0022401199,1610612757,Portland,Trail Blazers,POR,blazers,1630625.0,Dalano,Banton,D. Banton,dalano-banton,G,,5,36:17,13,6,6,8,8,5,12,22,0,2,2,3,0022401199,BoxScoreMiscV3,0,2025-08-10T12:04:51.668464
+0022401199,1610612757,Portland,Trail Blazers,POR,blazers,1641712.0,Rayan,Rupert,R. Rupert,rayan-rupert,,,21,27:37,0,0,4,4,12,5,9,22,1,0,5,3,0022401199,BoxScoreMiscV3,0,2025-08-10T12:04:51.668464
+0022401199,1610612757,Portland,Trail Blazers,POR,blazers,1631321.0,Sidy,Cissoko,S. Cissoko,sidy-cissoko,,,25,29:01,0,2,0,6,9,3,8,28,1,2,0,2,0022401199,BoxScoreMiscV3,0,2025-08-10T12:04:51.668464
+0022401199,1610612757,Portland,Trail Blazers,POR,blazers,1631303.0,Justin,Minaya,J. Minaya,justin-minaya,,,10,18:29,0,2,0,2,7,0,6,20,0,0,1,0,0022401199,BoxScoreMiscV3,0,2025-08-10T12:04:51.668464
+0022401199,1610612757,Portland,Trail Blazers,POR,blazers,1631133.0,Jabari,Walker,J. Walker,jabari-walker,,,34,23:20,0,2,0,8,9,3,6,24,0,2,0,1,0022401199,BoxScoreMiscV3,0,2025-08-10T12:04:51.668464
+0022401199,1610612757,Portland,Trail Blazers,POR,blazers,1630166.0,Deni,Avdija,D. Avdija,deni-avdija,,DND - Injury/Illness,8,,0,0,0,0,0,0,0,0,0,0,0,0,0022401199,BoxScoreMiscV3,0,2025-08-10T12:04:51.668464
+0022401199,1610612757,Portland,Trail Blazers,POR,blazers,203924.0,Jerami,Grant,J. Grant,jerami-grant,,DND - Injury/Illness,9,,0,0,0,0,0,0,0,0,0,0,0,0,0022401199,BoxScoreMiscV3,0,2025-08-10T12:04:51.668464
+0022401199,1610612757,Portland,Trail Blazers,POR,blazers,1630703.0,Scoot,Henderson,S. Henderson,scoot-henderson,,DND - Concussion Protocol,00,,0,0,0,0,0,0,0,0,0,0,0,0,0022401199,BoxScoreMiscV3,0,2025-08-10T12:04:51.668464
+0022401199,1610612757,Portland,Trail Blazers,POR,blazers,1641871.0,Duop,Reath,D. Reath,duop-reath,,DNP - Coach's Decision,26,,0,0,0,0,0,0,0,0,0,0,0,0,0022401199,BoxScoreMiscV3,0,2025-08-10T12:04:51.668464
+0022401199,1610612757,Portland,Trail Blazers,POR,blazers,1631101.0,Shaedon,Sharpe,S. Sharpe,shaedon-sharpe,,DND - Injury/Illness,17,,0,0,0,0,0,0,0,0,0,0,0,0,0022401199,BoxScoreMiscV3,0,2025-08-10T12:04:51.668464
+0022401199,1610612757,Portland,Trail Blazers,POR,blazers,1629014.0,Anfernee,Simons,A. Simons,anfernee-simons,,DND - Injury/Illness,1,,0,0,0,0,0,0,0,0,0,0,0,0,0022401199,BoxScoreMiscV3,0,2025-08-10T12:04:51.668464
+0022401199,1610612757,Portland,Trail Blazers,POR,blazers,,,,,,,,,240:00,21,34,19,52,15,8,14,34,6,11,16,21,0022401199,BoxScoreMiscV3,1,2025-08-10T12:04:51.668464
+0022401199,1610612747,Los Angeles,Lakers,LAL,lakers,,,,,,,,,240:00,15,8,14,34,21,34,19,52,11,6,21,16,0022401199,BoxScoreMiscV3,1,2025-08-10T12:04:51.668464
+0022401197,1610612761,Toronto,Raptors,TOR,raptors,1642419.0,Jamison,Battle,J. Battle,jamison-battle,F,,77,42:21,3,3,0,2,13,9,18,52,0,0,5,0,0022401197,BoxScoreMiscV3,0,2025-08-10T12:05:02.801241
+0022401197,1610612761,Toronto,Raptors,TOR,raptors,1630567.0,Scottie,Barnes,S. Barnes,scottie-barnes,F,,4,36:34,4,4,8,20,12,10,15,44,0,0,0,2,0022401197,BoxScoreMiscV3,0,2025-08-10T12:05:02.801241
+0022401197,1610612761,Toronto,Raptors,TOR,raptors,1642367.0,Jonathan,Mogbo,J. Mogbo,jonathan-mogbo,C,,2,34:55,0,2,0,6,13,9,13,40,0,0,3,1,0022401197,BoxScoreMiscV3,0,2025-08-10T12:05:02.801241
+0022401197,1610612761,Toronto,Raptors,TOR,raptors,1630534.0,Ochai,Agbaji,O. Agbaji,ochai-agbaji,G,,30,37:31,2,0,2,8,10,10,13,40,1,1,5,1,0022401197,BoxScoreMiscV3,0,2025-08-10T12:05:02.801241
+0022401197,1610612761,Toronto,Raptors,TOR,raptors,1642347.0,Jamal,Shead,J. Shead,jamal-shead,G,,23,36:13,0,3,3,4,11,10,12,40,0,1,3,4,0022401197,BoxScoreMiscV3,0,2025-08-10T12:05:02.801241
+0022401197,1610612761,Toronto,Raptors,TOR,raptors,1630658.0,Colin,Castleton,C. Castleton,colin-castleton,,,11,29:16,4,0,2,10,7,1,9,36,0,0,6,2,0022401197,BoxScoreMiscV3,0,2025-08-10T12:05:02.801241
+0022401197,1610612761,Toronto,Raptors,TOR,raptors,1630639.0,A.J.,Lawson,A. Lawson,aj-lawson,,,0,21:18,5,0,7,4,9,1,7,32,0,0,1,3,0022401197,BoxScoreMiscV3,0,2025-08-10T12:05:02.801241
+0022401197,1610612761,Toronto,Raptors,TOR,raptors,202066.0,Garrett,Temple,G. Temple,garrett-temple,,,17,1:52,0,0,0,0,0,0,3,6,0,0,0,0,0022401197,BoxScoreMiscV3,0,2025-08-10T12:05:02.801241
+0022401197,1610612761,Toronto,Raptors,TOR,raptors,1629628.0,RJ,Barrett,R. Barrett,rj-barrett,,DND - Rest,9,,0,0,0,0,0,0,0,0,0,0,0,0,0022401197,BoxScoreMiscV3,0,2025-08-10T12:05:02.801241
+0022401197,1610612761,Toronto,Raptors,TOR,raptors,1628449.0,Chris,Boucher,C. Boucher,chris-boucher,,DND - Injury/Illness,25,,0,0,0,0,0,0,0,0,0,0,0,0,0022401197,BoxScoreMiscV3,0,2025-08-10T12:05:02.801241
+0022401197,1610612761,Toronto,Raptors,TOR,raptors,1630193.0,Immanuel,Quickley,I. Quickley,immanuel-quickley,,DND - Rest,5,,0,0,0,0,0,0,0,0,0,0,0,0,0022401197,BoxScoreMiscV3,0,2025-08-10T12:05:02.801241
+0022401197,1610612761,Toronto,Raptors,TOR,raptors,1631197.0,Jared,Rhoden,J. Rhoden,jared-rhoden,,DND - Injury/Illness,8,,0,0,0,0,0,0,0,0,0,0,0,0,0022401197,BoxScoreMiscV3,0,2025-08-10T12:05:02.801241
+0022401197,1610612759,San Antonio,Spurs,SAS,spurs,1630577.0,Julian,Champagnie,J. Champagnie,julian-champagnie,F,,30,34:45,0,0,0,0,6,6,13,42,1,0,1,0,0022401197,BoxScoreMiscV3,0,2025-08-10T12:05:02.801241
+0022401197,1610612759,San Antonio,Spurs,SAS,spurs,203084.0,Harrison,Barnes,H. Barnes,harrison-barnes,F,,40,34:12,0,0,0,4,11,9,18,40,0,0,0,4,0022401197,BoxScoreMiscV3,0,2025-08-10T12:05:02.801241
+0022401197,1610612759,San Antonio,Spurs,SAS,spurs,202687.0,Bismack,Biyombo,B. Biyombo,bismack-biyombo,C,,15,14:03,0,2,0,2,2,2,2,14,0,0,1,0,0022401197,BoxScoreMiscV3,0,2025-08-10T12:05:02.801241
+0022401197,1610612759,San Antonio,Spurs,SAS,spurs,1642264.0,Stephon,Castle,S. Castle,stephon-castle,G,,5,37:16,0,0,3,8,18,12,19,48,0,1,2,6,0022401197,BoxScoreMiscV3,0,2025-08-10T12:05:02.801241
+0022401197,1610612759,San Antonio,Spurs,SAS,spurs,101108.0,Chris,Paul,C. Paul,chris-paul,G,,3,33:51,3,5,0,2,6,9,13,40,0,0,2,3,0022401197,BoxScoreMiscV3,0,2025-08-10T12:05:02.801241
+0022401197,1610612759,San Antonio,Spurs,SAS,spurs,1630572.0,Sandro,Mamukelashvili,S. Mamukelashvili,sandro-mamukelashvili,,,54,18:58,2,0,2,12,9,6,9,20,0,0,1,1,0022401197,BoxScoreMiscV3,0,2025-08-10T12:05:02.801241
+0022401197,1610612759,San Antonio,Spurs,SAS,spurs,1629640.0,Keldon,Johnson,K. Johnson,keldon-johnson,,,0,27:12,4,3,3,18,9,10,7,28,1,0,0,5,0022401197,BoxScoreMiscV3,0,2025-08-10T12:05:02.801241
+0022401197,1610612759,San Antonio,Spurs,SAS,spurs,1631103.0,Malaki,Branham,M. Branham,malaki-branham,,,22,16:44,2,0,6,6,12,3,11,16,0,0,3,1,0022401197,BoxScoreMiscV3,0,2025-08-10T12:05:02.801241
+0022401197,1610612759,San Antonio,Spurs,SAS,spurs,1631104.0,Blake,Wesley,B. Wesley,blake-wesley,,,14,19:31,2,0,2,4,12,3,13,20,0,0,2,3,0022401197,BoxScoreMiscV3,0,2025-08-10T12:05:02.801241
+0022401197,1610612759,San Antonio,Spurs,SAS,spurs,1629162.0,Jordan,McLaughlin,J. McLaughlin,jordan-mclaughlin,,,11,3:28,2,0,2,2,5,0,5,2,0,0,1,0,0022401197,BoxScoreMiscV3,0,2025-08-10T12:05:02.801241
+0022401197,1610612759,San Antonio,Spurs,SAS,spurs,1629646.0,Charles,Bassey,C. Bassey,charles-bassey,,DNP - Coach's Decision,28,,0,0,0,0,0,0,0,0,0,0,0,0,0022401197,BoxScoreMiscV3,0,2025-08-10T12:05:02.801241
+0022401197,1610612759,San Antonio,Spurs,SAS,spurs,1630561.0,David,Duke Jr.,D. Duke Jr.,david-duke-jr,,DNP - Coach's Decision,7,,0,0,0,0,0,0,0,0,0,0,0,0,0022401197,BoxScoreMiscV3,0,2025-08-10T12:05:02.801241
+0022401197,1610612759,San Antonio,Spurs,SAS,spurs,1631127.0,Harrison,Ingram,H. Ingram,harrison-ingram,,DNP - Coach's Decision,55,,0,0,0,0,0,0,0,0,0,0,0,0,0022401197,BoxScoreMiscV3,0,2025-08-10T12:05:02.801241
+0022401197,1610612759,San Antonio,Spurs,SAS,spurs,,,,,,,,,240:00,15,10,18,58,18,12,22,54,2,1,13,23,0022401197,BoxScoreMiscV3,1,2025-08-10T12:05:02.801241
+0022401197,1610612761,Toronto,Raptors,TOR,raptors,,,,,,,,,240:00,18,12,22,54,15,10,18,58,1,2,23,13,0022401197,BoxScoreMiscV3,1,2025-08-10T12:05:02.801241

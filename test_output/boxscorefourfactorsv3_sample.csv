@@ -1,6 +1,0 @@
-gameId,teamId,teamCity,teamName,teamTricode,teamSlug,personId,firstName,familyName,nameI,playerSlug,position,comment,jerseyNum,minutes,effectiveFieldGoalPercentage,freeThrowAttemptRate,teamTurnoverPercentage,offensiveReboundPercentage,oppEffectiveFieldGoalPercentage,oppFreeThrowAttemptRate,oppTeamTurnoverPercentage,oppOffensiveReboundPercentage
-2022100252,1612709921,Long Island,Nets,LIN,nets,1629596,Bryce,Brown,B. Brown,bryce-brown,F,,,37:15,0.576,0.042,0.146,0.057,0.532,0.206,0.167,0.3
-2022100252,1612709921,Long Island,Nets,LIN,nets,1630672,Brandon,Rachal,B. Rachal,brandon-rachal,F,,,29:23,0.575,0.17,0.138,0.111,0.555,0.2,0.167,0.385
-2022100252,1612709921,Long Island,Nets,LIN,nets,1627967,Adam,Woodbury,A. Woodbury,adam-woodbury,C,,,23:11,0.511,0.022,0.172,0.125,0.566,0.158,0.219,0.313
-2022100252,1612709921,Long Island,Nets,LIN,nets,1630310,Craig,Randall II,C. Randall II,craig-randall-ii,G,,,41:13,0.513,0.118,0.161,0.024,0.532,0.169,0.147,0.325
-2022100252,1612709921,Long Island,Nets,LIN,nets,1627820,Tyrone,Wallace,T. Wallace,tyrone-wallace,G,,,39:13,0.527,0.147,0.152,0.0,0.514,0.183,0.152,0.27

@@ -1,0 +1,79 @@
+{
+  "test_games": [
+    "0022401191",
+    "0022401199",
+    "0022401197"
+  ],
+  "results": [
+    {
+      "endpoint": "BoxScoreAdvancedV3",
+      "status": "SUCCESS",
+      "games_collected": 3,
+      "total_rows": 82,
+      "columns": 42,
+      "output_file": "endpoints/data/test_collection/boxscoreadvancedv3_test_collection.csv"
+    },
+    {
+      "endpoint": "BoxScoreFourFactorsV3",
+      "status": "SUCCESS",
+      "games_collected": 3,
+      "total_rows": 82,
+      "columns": 27,
+      "output_file": "endpoints/data/test_collection/boxscorefourfactorsv3_test_collection.csv"
+    },
+    {
+      "endpoint": "BoxScoreMiscV3",
+      "status": "SUCCESS",
+      "games_collected": 3,
+      "total_rows": 82,
+      "columns": 31,
+      "output_file": "endpoints/data/test_collection/boxscoremiscv3_test_collection.csv"
+    },
+    {
+      "endpoint": "BoxScorePlayerTrackV3",
+      "status": "SUCCESS",
+      "games_collected": 3,
+      "total_rows": 82,
+      "columns": 39,
+      "output_file": "endpoints/data/test_collection/boxscoreplayertrackv3_test_collection.csv"
+    },
+    {
+      "endpoint": "BoxScoreScoringV3",
+      "status": "SUCCESS",
+      "games_collected": 3,
+      "total_rows": 82,
+      "columns": 34,
+      "output_file": "endpoints/data/test_collection/boxscorescoringv3_test_collection.csv"
+    },
+    {
+      "endpoint": "BoxScoreSummaryV2",
+      "status": "SUCCESS",
+      "games_collected": 3,
+      "total_rows": 21,
+      "columns": 61,
+      "output_file": "endpoints/data/test_collection/boxscoresummaryv2_test_collection.csv"
+    },
+    {
+      "endpoint": "BoxScoreTraditionalV3",
+      "status": "SUCCESS",
+      "games_collected": 3,
+      "total_rows": 94,
+      "columns": 39,
+      "output_file": "endpoints/data/test_collection/boxscoretraditionalv3_test_collection.csv"
+    },
+    {
+      "endpoint": "BoxScoreUsageV3",
+      "status": "SUCCESS",
+      "games_collected": 3,
+      "total_rows": 82,
+      "columns": 37,
+      "output_file": "endpoints/data/test_collection/boxscoreusagev3_test_collection.csv"
+    }
+  ],
+  "summary": {
+    "total_endpoints": 8,
+    "successful": 8,
+    "failed": 0,
+    "timestamp": "2025-08-10T12:06:22.060618"
+  }
+}

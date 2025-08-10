@@ -1,0 +1,947 @@
+{
+  "summary": {
+    "total_tests": 41,
+    "successful_tests": 33,
+    "failed_tests": 8,
+    "timestamp": "2025-08-10T12:12:34.824726"
+  },
+  "successful_tests": [
+    {
+      "endpoint": "BoxScoreAdvancedV3",
+      "status": "SUCCESS",
+      "num_dataframes": 2,
+      "total_rows": 28,
+      "total_columns": 67,
+      "test_params": {
+        "game_id": "0022400917"
+      },
+      "dataframe_shapes": [
+        [
+          26,
+          37
+        ],
+        [
+          2,
+          30
+        ]
+      ],
+      "timestamp": "2025-08-10T12:08:57.960775",
+      "sample_file": "endpoints/tests/test_output/boxscoreadvancedv3_sample.csv"
+    },
+    {
+      "endpoint": "BoxScoreAdvancedV2",
+      "status": "SUCCESS",
+      "num_dataframes": 2,
+      "total_rows": 28,
+      "total_columns": 61,
+      "test_params": {
+        "game_id": "0022400917"
+      },
+      "dataframe_shapes": [
+        [
+          26,
+          32
+        ],
+        [
+          2,
+          29
+        ]
+      ],
+      "timestamp": "2025-08-10T12:08:58.634882",
+      "sample_file": "endpoints/tests/test_output/boxscoreadvancedv2_sample.csv"
+    },
+    {
+      "endpoint": "BoxScoreDefensiveV2",
+      "status": "SUCCESS",
+      "num_dataframes": 2,
+      "total_rows": 21,
+      "total_columns": 36,
+      "test_params": {
+        "game_id": "0022400917"
+      },
+      "dataframe_shapes": [
+        [
+          19,
+          29
+        ],
+        [
+          2,
+          7
+        ]
+      ],
+      "timestamp": "2025-08-10T12:09:12.888052",
+      "sample_file": "endpoints/tests/test_output/boxscoredefensivev2_sample.csv"
+    },
+    {
+      "endpoint": "BoxScoreFourFactorsV3",
+      "status": "SUCCESS",
+      "num_dataframes": 2,
+      "total_rows": 28,
+      "total_columns": 38,
+      "test_params": {
+        "game_id": "0022400917"
+      },
+      "dataframe_shapes": [
+        [
+          26,
+          23
+        ],
+        [
+          2,
+          15
+        ]
+      ],
+      "timestamp": "2025-08-10T12:09:22.531841",
+      "sample_file": "endpoints/tests/test_output/boxscorefourfactorsv3_sample.csv"
+    },
+    {
+      "endpoint": "BoxScoreFourFactorsV2",
+      "status": "SUCCESS",
+      "num_dataframes": 2,
+      "total_rows": 28,
+      "total_columns": 32,
+      "test_params": {
+        "game_id": "0022400917"
+      },
+      "dataframe_shapes": [
+        [
+          26,
+          18
+        ],
+        [
+          2,
+          14
+        ]
+      ],
+      "timestamp": "2025-08-10T12:09:23.211338",
+      "sample_file": "endpoints/tests/test_output/boxscorefourfactorsv2_sample.csv"
+    },
+    {
+      "endpoint": "BoxScoreHustleV2",
+      "status": "SUCCESS",
+      "num_dataframes": 2,
+      "total_rows": 20,
+      "total_columns": 54,
+      "test_params": {
+        "game_id": "0022400917"
+      },
+      "dataframe_shapes": [
+        [
+          18,
+          31
+        ],
+        [
+          2,
+          23
+        ]
+      ],
+      "timestamp": "2025-08-10T12:09:38.975782",
+      "sample_file": "endpoints/tests/test_output/boxscorehustlev2_sample.csv"
+    },
+    {
+      "endpoint": "BoxScoreMatchupsV3",
+      "status": "SUCCESS",
+      "num_dataframes": 1,
+      "total_rows": 161,
+      "total_columns": 46,
+      "test_params": {
+        "game_id": "0022400917"
+      },
+      "dataframe_shapes": [
+        [
+          161,
+          46
+        ]
+      ],
+      "timestamp": "2025-08-10T12:09:51.190606",
+      "sample_file": "endpoints/tests/test_output/boxscorematchupsv3_sample.csv"
+    },
+    {
+      "endpoint": "BoxScoreMiscV3",
+      "status": "SUCCESS",
+      "num_dataframes": 2,
+      "total_rows": 28,
+      "total_columns": 46,
+      "test_params": {
+        "game_id": "0022400917"
+      },
+      "dataframe_shapes": [
+        [
+          26,
+          27
+        ],
+        [
+          2,
+          19
+        ]
+      ],
+      "timestamp": "2025-08-10T12:09:57.031633",
+      "sample_file": "endpoints/tests/test_output/boxscoremiscv3_sample.csv"
+    },
+    {
+      "endpoint": "BoxScoreMiscV2",
+      "status": "SUCCESS",
+      "num_dataframes": 2,
+      "total_rows": 28,
+      "total_columns": 40,
+      "test_params": {
+        "game_id": "0022400917"
+      },
+      "dataframe_shapes": [
+        [
+          26,
+          22
+        ],
+        [
+          2,
+          18
+        ]
+      ],
+      "timestamp": "2025-08-10T12:09:57.696717",
+      "sample_file": "endpoints/tests/test_output/boxscoremiscv2_sample.csv"
+    },
+    {
+      "endpoint": "BoxScorePlayerTrackV3",
+      "status": "SUCCESS",
+      "num_dataframes": 2,
+      "total_rows": 28,
+      "total_columns": 61,
+      "test_params": {
+        "game_id": "0022400917"
+      },
+      "dataframe_shapes": [
+        [
+          26,
+          35
+        ],
+        [
+          2,
+          26
+        ]
+      ],
+      "timestamp": "2025-08-10T12:10:07.452813",
+      "sample_file": "endpoints/tests/test_output/boxscoreplayertrackv3_sample.csv"
+    },
+    {
+      "endpoint": "BoxScorePlayerTrackV2",
+      "status": "SUCCESS",
+      "num_dataframes": 2,
+      "total_rows": 28,
+      "total_columns": 54,
+      "test_params": {
+        "game_id": "0022400917"
+      },
+      "dataframe_shapes": [
+        [
+          26,
+          29
+        ],
+        [
+          2,
+          25
+        ]
+      ],
+      "timestamp": "2025-08-10T12:10:08.701140",
+      "sample_file": "endpoints/tests/test_output/boxscoreplayertrackv2_sample.csv"
+    },
+    {
+      "endpoint": "BoxScoreScoringV3",
+      "status": "SUCCESS",
+      "num_dataframes": 2,
+      "total_rows": 28,
+      "total_columns": 52,
+      "test_params": {
+        "game_id": "0022400917"
+      },
+      "dataframe_shapes": [
+        [
+          26,
+          30
+        ],
+        [
+          2,
+          22
+        ]
+      ],
+      "timestamp": "2025-08-10T12:10:13.703955",
+      "sample_file": "endpoints/tests/test_output/boxscorescoringv3_sample.csv"
+    },
+    {
+      "endpoint": "BoxScoreScoringV2",
+      "status": "SUCCESS",
+      "num_dataframes": 2,
+      "total_rows": 28,
+      "total_columns": 46,
+      "test_params": {
+        "game_id": "0022400917"
+      },
+      "dataframe_shapes": [
+        [
+          26,
+          25
+        ],
+        [
+          2,
+          21
+        ]
+      ],
+      "timestamp": "2025-08-10T12:10:14.360980",
+      "sample_file": "endpoints/tests/test_output/boxscorescoringv2_sample.csv"
+    },
+    {
+      "endpoint": "BoxScoreSummaryV2",
+      "status": "SUCCESS",
+      "num_dataframes": 9,
+      "total_rows": 22,
+      "total_columns": 93,
+      "test_params": {
+        "game_id": "0022400917"
+      },
+      "dataframe_shapes": [
+        [
+          1,
+          14
+        ],
+        [
+          2,
+          14
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          10,
+          8
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          23
+        ],
+        [
+          1,
+          13
+        ],
+        [
+          1,
+          7
+        ],
+        [
+          1,
+          7
+        ]
+      ],
+      "timestamp": "2025-08-10T12:10:15.762656",
+      "sample_file": "endpoints/tests/test_output/boxscoresummaryv2_sample.csv"
+    },
+    {
+      "endpoint": "BoxScoreTraditionalV3",
+      "status": "SUCCESS",
+      "num_dataframes": 3,
+      "total_rows": 32,
+      "total_columns": 86,
+      "test_params": {
+        "game_id": "0022400917"
+      },
+      "dataframe_shapes": [
+        [
+          26,
+          34
+        ],
+        [
+          4,
+          26
+        ],
+        [
+          2,
+          26
+        ]
+      ],
+      "timestamp": "2025-08-10T12:10:16.530893",
+      "sample_file": "endpoints/tests/test_output/boxscoretraditionalv3_sample.csv"
+    },
+    {
+      "endpoint": "BoxScoreTraditionalV2",
+      "status": "SUCCESS",
+      "num_dataframes": 3,
+      "total_rows": 32,
+      "total_columns": 79,
+      "test_params": {
+        "game_id": "0022400917"
+      },
+      "dataframe_shapes": [
+        [
+          26,
+          29
+        ],
+        [
+          2,
+          25
+        ],
+        [
+          4,
+          25
+        ]
+      ],
+      "timestamp": "2025-08-10T12:10:17.200229",
+      "sample_file": "endpoints/tests/test_output/boxscoretraditionalv2_sample.csv"
+    },
+    {
+      "endpoint": "BoxScoreUsageV3",
+      "status": "SUCCESS",
+      "num_dataframes": 2,
+      "total_rows": 28,
+      "total_columns": 58,
+      "test_params": {
+        "game_id": "0022400917"
+      },
+      "dataframe_shapes": [
+        [
+          26,
+          33
+        ],
+        [
+          2,
+          25
+        ]
+      ],
+      "timestamp": "2025-08-10T12:10:31.933743",
+      "sample_file": "endpoints/tests/test_output/boxscoreusagev3_sample.csv"
+    },
+    {
+      "endpoint": "BoxScoreUsageV2",
+      "status": "SUCCESS",
+      "num_dataframes": 2,
+      "total_rows": 28,
+      "total_columns": 52,
+      "test_params": {
+        "game_id": "0022400917"
+      },
+      "dataframe_shapes": [
+        [
+          26,
+          28
+        ],
+        [
+          2,
+          24
+        ]
+      ],
+      "timestamp": "2025-08-10T12:10:32.600929",
+      "sample_file": "endpoints/tests/test_output/boxscoreusagev2_sample.csv"
+    },
+    {
+      "endpoint": "GameRotation",
+      "status": "SUCCESS",
+      "num_dataframes": 2,
+      "total_rows": 60,
+      "total_columns": 24,
+      "test_params": {
+        "game_id": "0022400917"
+      },
+      "dataframe_shapes": [
+        [
+          34,
+          12
+        ],
+        [
+          26,
+          12
+        ]
+      ],
+      "timestamp": "2025-08-10T12:10:49.939102",
+      "sample_file": "endpoints/tests/test_output/gamerotation_sample.csv"
+    },
+    {
+      "endpoint": "HustleStatsBoxScore",
+      "status": "SUCCESS",
+      "num_dataframes": 3,
+      "total_rows": 21,
+      "total_columns": 49,
+      "test_params": {
+        "game_id": "0022400917"
+      },
+      "dataframe_shapes": [
+        [
+          1,
+          2
+        ],
+        [
+          18,
+          25
+        ],
+        [
+          2,
+          22
+        ]
+      ],
+      "timestamp": "2025-08-10T12:11:10.562466",
+      "sample_file": "endpoints/tests/test_output/hustlestatsboxscore_sample.csv"
+    },
+    {
+      "endpoint": "PlayByPlayV3",
+      "status": "SUCCESS",
+      "num_dataframes": 2,
+      "total_rows": 446,
+      "total_columns": 25,
+      "test_params": {
+        "game_id": "0022400917"
+      },
+      "dataframe_shapes": [
+        [
+          445,
+          24
+        ],
+        [
+          1,
+          1
+        ]
+      ],
+      "timestamp": "2025-08-10T12:11:11.341341",
+      "sample_file": "endpoints/tests/test_output/playbyplayv3_sample.csv"
+    },
+    {
+      "endpoint": "CommonPlayerInfo",
+      "status": "SUCCESS",
+      "num_dataframes": 3,
+      "total_rows": 1,
+      "total_columns": 33,
+      "test_params": {
+        "player_id": "1631055"
+      },
+      "dataframe_shapes": [
+        [
+          1,
+          33
+        ],
+        [
+          0,
+          7
+        ],
+        [
+          0,
+          1
+        ]
+      ],
+      "timestamp": "2025-08-10T12:11:33.771495",
+      "sample_file": "endpoints/tests/test_output/commonplayerinfo_sample.csv"
+    },
+    {
+      "endpoint": "PlayerGameLog",
+      "status": "SUCCESS",
+      "num_dataframes": 1,
+      "total_rows": 0,
+      "total_columns": 0,
+      "test_params": {
+        "player_id": "1631055"
+      },
+      "dataframe_shapes": [
+        [
+          0,
+          27
+        ]
+      ],
+      "timestamp": "2025-08-10T12:11:35.879851"
+    },
+    {
+      "endpoint": "PlayerDashboardByGameSplits",
+      "status": "SUCCESS",
+      "num_dataframes": 5,
+      "total_rows": 24,
+      "total_columns": 315,
+      "test_params": {
+        "player_id": "1631055"
+      },
+      "dataframe_shapes": [
+        [
+          1,
+          63
+        ],
+        [
+          2,
+          63
+        ],
+        [
+          4,
+          63
+        ],
+        [
+          6,
+          63
+        ],
+        [
+          11,
+          63
+        ]
+      ],
+      "timestamp": "2025-08-10T12:11:40.600625",
+      "sample_file": "endpoints/tests/test_output/playerdashboardbygamesplits_sample.csv"
+    },
+    {
+      "endpoint": "PlayerDashboardByGeneralSplits",
+      "status": "SUCCESS",
+      "num_dataframes": 7,
+      "total_rows": 17,
+      "total_columns": 441,
+      "test_params": {
+        "player_id": "1631055"
+      },
+      "dataframe_shapes": [
+        [
+          1,
+          63
+        ],
+        [
+          2,
+          63
+        ],
+        [
+          2,
+          63
+        ],
+        [
+          4,
+          63
+        ],
+        [
+          2,
+          63
+        ],
+        [
+          1,
+          63
+        ],
+        [
+          5,
+          63
+        ]
+      ],
+      "timestamp": "2025-08-10T12:11:44.840969",
+      "sample_file": "endpoints/tests/test_output/playerdashboardbygeneralsplits_sample.csv"
+    },
+    {
+      "endpoint": "PlayerDashboardByShootingSplits",
+      "status": "SUCCESS",
+      "num_dataframes": 8,
+      "total_rows": 73,
+      "total_columns": 227,
+      "test_params": {
+        "player_id": "1631055"
+      },
+      "dataframe_shapes": [
+        [
+          1,
+          30
+        ],
+        [
+          9,
+          30
+        ],
+        [
+          5,
+          30
+        ],
+        [
+          7,
+          30
+        ],
+        [
+          2,
+          30
+        ],
+        [
+          8,
+          16
+        ],
+        [
+          33,
+          30
+        ],
+        [
+          8,
+          31
+        ]
+      ],
+      "timestamp": "2025-08-10T12:11:50.119013",
+      "sample_file": "endpoints/tests/test_output/playerdashboardbyshootingsplits_sample.csv"
+    },
+    {
+      "endpoint": "PlayerDashboardByTeamPerformance",
+      "status": "SUCCESS",
+      "num_dataframes": 4,
+      "total_rows": 29,
+      "total_columns": 258,
+      "test_params": {
+        "player_id": "1631055"
+      },
+      "dataframe_shapes": [
+        [
+          1,
+          63
+        ],
+        [
+          10,
+          65
+        ],
+        [
+          9,
+          65
+        ],
+        [
+          9,
+          65
+        ]
+      ],
+      "timestamp": "2025-08-10T12:11:55.671624",
+      "sample_file": "endpoints/tests/test_output/playerdashboardbyteamperformance_sample.csv"
+    },
+    {
+      "endpoint": "PlayerDashboardByYearOverYear",
+      "status": "SUCCESS",
+      "num_dataframes": 2,
+      "total_rows": 4,
+      "total_columns": 132,
+      "test_params": {
+        "player_id": "1631055"
+      },
+      "dataframe_shapes": [
+        [
+          1,
+          66
+        ],
+        [
+          3,
+          66
+        ]
+      ],
+      "timestamp": "2025-08-10T12:12:00.736991",
+      "sample_file": "endpoints/tests/test_output/playerdashboardbyyearoveryear_sample.csv"
+    },
+    {
+      "endpoint": "PlayerDashboardByClutch",
+      "status": "SUCCESS",
+      "num_dataframes": 11,
+      "total_rows": 7,
+      "total_columns": 441,
+      "test_params": {
+        "player_id": "1631055"
+      },
+      "dataframe_shapes": [
+        [
+          1,
+          63
+        ],
+        [
+          1,
+          63
+        ],
+        [
+          1,
+          63
+        ],
+        [
+          1,
+          63
+        ],
+        [
+          0,
+          63
+        ],
+        [
+          0,
+          63
+        ],
+        [
+          1,
+          63
+        ],
+        [
+          1,
+          63
+        ],
+        [
+          1,
+          63
+        ],
+        [
+          0,
+          63
+        ],
+        [
+          0,
+          63
+        ]
+      ],
+      "timestamp": "2025-08-10T12:12:08.454851",
+      "sample_file": "endpoints/tests/test_output/playerdashboardbyclutch_sample.csv"
+    },
+    {
+      "endpoint": "PlayerDashboardByLastNGames",
+      "status": "SUCCESS",
+      "num_dataframes": 6,
+      "total_rows": 8,
+      "total_columns": 378,
+      "test_params": {
+        "player_id": "1631055"
+      },
+      "dataframe_shapes": [
+        [
+          1,
+          63
+        ],
+        [
+          1,
+          63
+        ],
+        [
+          1,
+          63
+        ],
+        [
+          1,
+          63
+        ],
+        [
+          1,
+          63
+        ],
+        [
+          3,
+          63
+        ]
+      ],
+      "timestamp": "2025-08-10T12:12:15.379331",
+      "sample_file": "endpoints/tests/test_output/playerdashboardbylastngames_sample.csv"
+    },
+    {
+      "endpoint": "PlayerGameLogs",
+      "status": "SUCCESS",
+      "num_dataframes": 1,
+      "total_rows": 8355,
+      "total_columns": 70,
+      "test_params": {
+        "season_nullable": "2023-24",
+        "date_from_nullable": "01/01/2024",
+        "date_to_nullable": "01/31/2024"
+      },
+      "dataframe_shapes": [
+        [
+          8355,
+          70
+        ]
+      ],
+      "timestamp": "2025-08-10T12:12:32.599921",
+      "sample_file": "endpoints/tests/test_output/playergamelogs_sample.csv"
+    },
+    {
+      "endpoint": "LeagueDashPlayerBioStats",
+      "status": "SUCCESS",
+      "num_dataframes": 1,
+      "total_rows": 569,
+      "total_columns": 23,
+      "test_params": {},
+      "dataframe_shapes": [
+        [
+          569,
+          23
+        ]
+      ],
+      "timestamp": "2025-08-10T12:12:33.261412",
+      "sample_file": "endpoints/tests/test_output/leaguedashplayerbiostats_sample.csv"
+    },
+    {
+      "endpoint": "LeagueGameFinder",
+      "status": "SUCCESS",
+      "num_dataframes": 1,
+      "total_rows": 30000,
+      "total_columns": 28,
+      "test_params": {},
+      "dataframe_shapes": [
+        [
+          30000,
+          28
+        ]
+      ],
+      "timestamp": "2025-08-10T12:12:34.215802",
+      "sample_file": "endpoints/tests/test_output/leaguegamefinder_sample.csv"
+    }
+  ],
+  "failed_tests": [
+    {
+      "endpoint": "BoxScoreSimilarityScore",
+      "status": "FAILED",
+      "error": "Endpoint class BoxScoreSimilarityScore not found or not callable in nba_api",
+      "test_params": {
+        "game_id": "0022400917"
+      },
+      "timestamp": "2025-08-10T12:10:14.970226"
+    },
+    {
+      "endpoint": "PlayerNextNGames",
+      "status": "FAILED",
+      "error": "'NextNGames'",
+      "test_params": {
+        "player_id": "1631055"
+      },
+      "timestamp": "2025-08-10T12:12:17.815492"
+    },
+    {
+      "endpoint": "PlayerVsPlayer",
+      "status": "FAILED",
+      "error": "PlayerVsPlayer.__init__() missing 1 required positional argument: 'vs_player_id'",
+      "test_params": {
+        "player_id": "1631055"
+      },
+      "timestamp": "2025-08-10T12:12:18.428906"
+    },
+    {
+      "endpoint": "PlayerDashPtPass",
+      "status": "FAILED",
+      "error": "PlayerDashPtPass.__init__() missing 1 required positional argument: 'team_id'",
+      "test_params": {
+        "player_id": "1631055"
+      },
+      "timestamp": "2025-08-10T12:12:19.029525"
+    },
+    {
+      "endpoint": "PlayerDashPtReb",
+      "status": "FAILED",
+      "error": "PlayerDashPtReb.__init__() missing 1 required positional argument: 'team_id'",
+      "test_params": {
+        "player_id": "1631055"
+      },
+      "timestamp": "2025-08-10T12:12:19.629939"
+    },
+    {
+      "endpoint": "PlayerDashPtShotDefend",
+      "status": "FAILED",
+      "error": "PlayerDashPtShotDefend.__init__() missing 1 required positional argument: 'team_id'",
+      "test_params": {
+        "player_id": "1631055"
+      },
+      "timestamp": "2025-08-10T12:12:20.230512"
+    },
+    {
+      "endpoint": "PlayerDashPtShots",
+      "status": "FAILED",
+      "error": "PlayerDashPtShots.__init__() missing 1 required positional argument: 'team_id'",
+      "test_params": {
+        "player_id": "1631055"
+      },
+      "timestamp": "2025-08-10T12:12:20.831061"
+    },
+    {
+      "endpoint": "CommonTeamRoster",
+      "status": "FAILED",
+      "error": "'Coaches'",
+      "test_params": {
+        "team_id": "1610612737"
+      },
+      "timestamp": "2025-08-10T12:12:21.490663"
+    }
+  ]
+}

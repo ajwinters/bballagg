@@ -24,15 +24,15 @@ from config.nba_endpoints_config import ALL_ENDPOINTS
 class FinalDataCollector:
     """Final production-ready NBA data collection system with all fixes"""
     
-    def __init__(self, data_dir='data', output_dir='production_data_final'):
+    def __init__(self, data_dir='masters/data/comprehensive', output_dir='endpoints/data/production'):
         self.data_dir = data_dir
         self.output_dir = output_dir
         os.makedirs(output_dir, exist_ok=True)
         
         # Load master tables with proper data types
-        self.master_games = pd.read_csv(f'{data_dir}/comprehensive_master_games.csv', dtype={'GAME_ID': str})
-        self.master_players = pd.read_csv(f'{data_dir}/comprehensive_master_players.csv') 
-        self.master_teams = pd.read_csv(f'{data_dir}/master_teams.csv')
+        self.master_games = pd.read_csv(f'{data_dir}/games.csv', dtype={'GAME_ID': str})
+        self.master_players = pd.read_csv(f'{data_dir}/players.csv') 
+        self.master_teams = pd.read_csv(f'{data_dir}/teams.csv')
         
         # Collection tracking
         self.successful_collections = 0
