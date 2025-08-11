@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # NBA Data Collection System
 
 Simple, automated NBA data collection using Windows Task Scheduler.
@@ -37,3 +38,5 @@ The system automatically detects which leagues are active and collects according
 - ✅ WNBA season active - collecting daily games
 - ⏸️ NBA season inactive - will resume in October
 - ⏸️ G-League season inactive - will resume in November
+=======
+>>>>>>> 19d8ffac5b5d40dbee755e1410861659a1445302
