@@ -61,7 +61,6 @@ configure_nba_api_timeout()
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..', 'src'))
 import allintwo
-from rds_connection_manager import RDSConnectionManager
 
 
 class NBAEndpointProcessor:
@@ -90,13 +89,20 @@ class NBAEndpointProcessor:
     def get_master_data(self, table_name):
         """Fetch data from league-specific master tables"""
         try:
-            df = allintwo.fetch_table_to_dataframe(self.conn, table_name)
-            if df is not None:
-                logger.info(f"Fetched {len(df)} records from {table_name}")
-                return df
-            else:
-                logger.warning(f"No data found in {table_name}")
-                return None
+            # Use connection manager's get_cursor method
+            with self.conn_manager.get_cursor() as cursor:
+                cursor.execute(f"SELECT * FROM {table_name}")
+                columns = [desc[0] for desc in cursor.description]
+                rows = cursor.fetchall()
+                
+                if rows:
+                    import pandas as pd
+                    df = pd.DataFrame(rows, columns=columns)
+                    logger.info(f"Fetched {len(df)} records from {table_name}")
+                    return df
+                else:
+                    logger.warning(f"No data found in {table_name}")
+                    return None
         except Exception as e:
             logger.error(f"Failed to fetch master data from {table_name}: {str(e)}")
             return None
@@ -146,10 +152,9 @@ class NBAEndpointProcessor:
     def get_missing_parameters(self, table_name, parameter_name, all_parameters):
         """Get parameters missing from existing endpoint table (incremental approach)"""
         try:
-            existing_data = allintwo.fetch_table_to_dataframe(self.conn, table_name)
-            
-            if existing_data is not None and parameter_name in existing_data.columns:
-                existing_params = set(existing_data[parameter_name].unique())
+            with self.conn_manager.get_cursor() as cursor:
+                cursor.execute(f"SELECT DISTINCT {parameter_name} FROM {table_name}")
+                existing_params = set(row[0] for row in cursor.fetchall())
                 all_params = set(all_parameters)
                 missing = list(all_params - existing_params)
                 
@@ -162,24 +167,22 @@ class NBAEndpointProcessor:
                 
                 logger.info(f"Table {table_name}: {len(missing)} missing parameters out of {len(all_parameters)} total")
                 return missing
-            else:
-                logger.info(f"Table {table_name} doesn't exist or missing column {parameter_name}, processing all {len(all_parameters)} parameters")
-                return all_parameters
                 
         except Exception as e:
             logger.warning(f"Could not check existing data for {table_name}: {str(e)}")
+            logger.info(f"Processing all {len(all_parameters)} parameters")
             return all_parameters
 
     def make_nba_api_call_with_retry(self, endpoint_class, param_key, param_value, max_retries=3):
         """
         Make NBA API call with robust timeout and retry handling
-        Enhanced with idle state recovery
+        Enhanced with sleep/wake cycle detection and optimized for speed
         """
-        retry_delay = 2
+        retry_delay = 1  # Reduced from 2 to 1 second
         
         for retry_attempt in range(max_retries):
             try:
-                # Ensure database connection is healthy before API call
+                # Check for sleep/wake cycles and ensure database connection is healthy
                 self.conn.ensure_connection()
                 
                 # Create endpoint instance with parameters
@@ -192,47 +195,53 @@ class NBAEndpointProcessor:
                 
             except AttributeError as e:
                 if "'NoneType' object has no attribute 'keys'" in str(e):
+                    # Don't retry for None responses - they won't get better
+                    # This is often for old games that don't have this type of data
                     error_msg = "NBA API returned None"
-                    return None, error_msg  # Don't retry for None responses
+                    return None, error_msg  # Fast fail - no retries
                 else:
                     raise e  # Re-raise other AttributeErrors
                     
             except Exception as e:
                 error_str = str(e)
                 
-                # Check for timeout-related errors (including idle-state timeouts)
+                # Check for timeout-related errors (including sleep/wake state issues)
                 if any(timeout_indicator in error_str for timeout_indicator in 
                       ["Read timed out", "HTTPSConnectionPool", "Connection timeout", "timeout", 
-                       "Connection reset", "Connection aborted", "SSL", "Network is unreachable"]):
+                       "Connection reset", "Connection aborted", "SSL", "Network is unreachable",
+                       "Connection refused", "No route to host", "Network unreachable"]):
                     
                     if retry_attempt < max_retries - 1:
-                        # Log with more context about potential idle state
-                        logger.warning(f"NBA API timeout/network issue for {param_value} (attempt {retry_attempt + 1}/{max_retries})")
+                        # Enhanced logging for sleep/wake related issues
+                        logger.warning(f"[NETWORK] Network/timeout error for {param_value} (attempt {retry_attempt + 1}/{max_retries})")
                         logger.warning(f"   Error: {error_str}")
-                        logger.warning(f"   This could be due to idle connection state - retrying in {retry_delay}s...")
+                        logger.warning(f"   [INFO] This could be due to PC sleep/wake cycle - forcing connection refresh...")
                         
-                        # Longer delay for potential idle state recovery
+                        # Shorter delay for faster processing
+                        logger.warning(f"[NETWORK] Network/timeout error for {param_value} (attempt {retry_attempt + 1}/{max_retries})")
+                        logger.warning(f"   [INFO] Retrying in {retry_delay}s...")
                         time.sleep(retry_delay)
-                        retry_delay *= 2  # Exponential backoff
+                        retry_delay = min(retry_delay * 1.5, 8)  # Slower growth, max 8s delay
                         
-                        # Force database connection refresh on network errors
+                        # Force connection refresh on network errors (sleep/wake recovery)
                         try:
                             self.conn.ensure_connection()
-                        except:
-                            logger.warning("   Database connection refresh attempted")
+                            logger.warning(f"   [SUCCESS] Connection refresh completed")
+                        except Exception as conn_error:
+                            logger.warning(f"   [WARNING] Connection refresh failed: {conn_error}")
                         
                         continue
                     else:
-                        error_msg = f"NBA API timeout/network error after {max_retries} attempts (possible idle state issue): {error_str}"
+                        error_msg = f"Network/timeout error after {max_retries} attempts (likely sleep/wake issue): {error_str}"
                         return None, error_msg
                         
                 # Check for rate limiting
                 elif "429" in error_str or "rate limit" in error_str.lower():
                     if retry_attempt < max_retries - 1:
-                        wait_time = retry_delay * 3  # Longer wait for rate limiting
-                        logger.warning(f"NBA API rate limited for {param_value} - waiting {wait_time}s before retry...")
+                        wait_time = retry_delay * 2  # Reduced from 3 to 2
+                        logger.warning(f"[RATE_LIMIT] NBA API rate limited for {param_value} - waiting {wait_time}s...")
                         time.sleep(wait_time)
-                        retry_delay *= 2
+                        retry_delay = min(retry_delay * 1.5, 8)  # Controlled growth
                         continue
                     else:
                         error_msg = f"NBA API rate limited after {max_retries} attempts: {error_str}"
@@ -274,10 +283,9 @@ class NBAEndpointProcessor:
                 );
             """
             
-            cursor = self.conn.cursor()
-            cursor.execute(create_query)
-            self.conn.commit()
-            logger.info("Failed calls tracking table created/verified")
+            with self.conn_manager.get_cursor() as cursor:
+                cursor.execute(create_query)
+                logger.info("Failed calls tracking table created/verified")
             
         except Exception as e:
             logger.error(f"Failed to create failed calls table: {str(e)}")
@@ -296,9 +304,8 @@ class NBAEndpointProcessor:
                     error_message = EXCLUDED.error_message;
             """
             
-            cursor = self.conn.cursor()
-            cursor.execute(insert_query, (endpoint_name, table_name, parameter_name, str(parameter_value), str(error_message)[:500]))
-            self.conn.commit()
+            with self.conn_manager.get_cursor() as cursor:
+                cursor.execute(insert_query, (endpoint_name, table_name, parameter_name, str(parameter_value), str(error_message)[:500]))
             
         except Exception as e:
             logger.error(f"Failed to save failed call record: {str(e)}")
@@ -363,8 +370,20 @@ class NBAEndpointProcessor:
                     # Create table if it doesn't exist
                     cleaned_df = allintwo.clean_column_names(df)
                     try:
-                        allintwo.create_table(self.conn, table_name, cleaned_df)
-                        logger.info(f"Table {table_name} created/verified")
+                        # Use connection manager for table creation
+                        with self.conn_manager.get_cursor() as cursor:
+                            # Create table using pandas to_sql method
+                            import pandas as pd
+                            from sqlalchemy import create_engine
+                            
+                            # Create SQLAlchemy engine from connection manager config
+                            db_config = self.conn_manager.db_config
+                            engine_url = f"postgresql://{db_config['user']}:{db_config['password']}@{db_config['host']}:{db_config['port']}/{db_config['database']}"
+                            engine = create_engine(engine_url)
+                            
+                            # Create table schema only (no data insertion yet)
+                            cleaned_df.head(0).to_sql(table_name, engine, if_exists='append', index=False)
+                            logger.info(f"Table {table_name} created/verified")
                     except Exception as e:
                         logger.error(f"Failed to create table {table_name}: {str(e)}")
                         continue
@@ -381,6 +400,7 @@ class NBAEndpointProcessor:
                     # Process missing parameters incrementally
                     success_count = 0
                     error_count = 0
+                    start_time = time.time()  # Track processing start time
                     
                     logger.info(f"Processing {len(missing_params)} missing parameters for {table_name}")
                     
@@ -388,7 +408,7 @@ class NBAEndpointProcessor:
                         try:
                             # Periodic connection health check (every 100 calls)
                             if i > 0 and i % 100 == 0:
-                                logger.info(f"🔍 Performing connection health check at {i}/{len(missing_params)} processed...")
+                                logger.info(f"[CHECK] Performing connection health check at {i}/{len(missing_params)} processed...")
                                 self.conn.ensure_connection()
                             
                             logger.debug(f"Processing {param_value} ({i+1}/{len(missing_params)})")
@@ -421,8 +441,24 @@ class NBAEndpointProcessor:
                             # Get the specific dataframe for this table
                             if df_index < len(dataframes) and not dataframes[df_index].empty:
                                 df_to_insert = allintwo.clean_column_names(dataframes[df_index])
-                                allintwo.insert_dataframe_to_rds(self.conn, df_to_insert, table_name)
-                                success_count += 1
+                                
+                                # Insert data using connection manager
+                                try:
+                                    from sqlalchemy import create_engine
+                                    
+                                    # Create SQLAlchemy engine
+                                    db_config = self.conn_manager.db_config
+                                    engine_url = f"postgresql://{db_config['user']}:{db_config['password']}@{db_config['host']}:{db_config['port']}/{db_config['database']}"
+                                    engine = create_engine(engine_url)
+                                    
+                                    # Insert the dataframe
+                                    df_to_insert.to_sql(table_name, engine, if_exists='append', index=False)
+                                    success_count += 1
+                                    # Log successful insertion
+                                    logger.info(f"[SUCCESS] Inserted {len(df_to_insert)} rows for game {param_value}")
+                                except Exception as insert_error:
+                                    logger.error(f"Failed to insert data for {param_value}: {insert_error}")
+                                    self.track_failed_call(table_name, param_key, param_value, str(insert_error))
                             else:
                                 logger.warning(f"No data returned for {param_value}")
                                 
@@ -431,9 +467,11 @@ class NBAEndpointProcessor:
                             # Rate limiting
                             time.sleep(self.rate_limit)
                             
-                            # Progress reporting
-                            if (i + 1) % 50 == 0:
-                                logger.info(f"Progress: {i+1}/{len(missing_params)} ({success_count} success, {error_count} errors)")
+                            # Progress reporting - more frequent updates
+                            if (i + 1) % 25 == 0:  # Every 25 instead of 50
+                                elapsed_time = time.time() - start_time if 'start_time' in locals() else 0
+                                rate = (i + 1) / elapsed_time if elapsed_time > 0 else 0
+                                logger.info(f"[PROGRESS] {i+1}/{len(missing_params)} ({success_count} success, {error_count} errors) - {rate:.1f} calls/min")
                                 
                         except Exception as e:
                             logger.error(f"Error processing {param_value}: {str(e)}")
@@ -509,81 +547,85 @@ def main():
     try:
         import sys
         import os
-        sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..', 'src'))
+        # Import and initialize the enhanced RDS connection manager
         from rds_connection_manager import RDSConnectionManager
-        conn_manager = RDSConnectionManager(
-            'thebigone', 
-            'ajwin', 
-            'CharlesBark!23', 
-            'nba-rds-instance.c9wwc0ukkiu5.us-east-1.rds.amazonaws.com',
-            connection_timeout=30,
-            max_retries=3,
-            retry_delay=5
-        )
-        conn_manager.connect()
-        logger.info("✅ Connected to RDS database with robust connection management")
+        
+        # Set environment variables for database connection
+        os.environ['DB_HOST'] = 'nba-rds-instance.c9wwc0ukkiu5.us-east-1.rds.amazonaws.com'
+        os.environ['DB_NAME'] = 'thebigone'
+        os.environ['DB_USER'] = 'ajwin'
+        os.environ['DB_PASSWORD'] = 'CharlesBark!23'
+        os.environ['DB_PORT'] = '5432'
+        
+        conn_manager = RDSConnectionManager(max_retries=3, retry_delay=5)
+        
+        # Test connection
+        if not conn_manager.ensure_connection():
+            logger.error("[FAILED] Could not establish database connection")
+            return
+        logger.info("[SUCCESS] Connected to RDS database with robust connection management")
     except Exception as e:
         logger.error(f"Database connection failed: {str(e)}")
         return
     
     # Create NBA processor (league-specific) with faster rate limiting for full processing
-    processor = NBAEndpointProcessor(conn_manager, league='NBA', rate_limit=0.6)
+    processor = NBAEndpointProcessor(conn_manager, league='NBA', rate_limit=0.3)  # Reduced from 0.6 to 0.3
     
     # Create failed calls tracking table
     processor.create_failed_calls_table()
     
-    logger.info("🚀 Starting COMPREHENSIVE NBA endpoint processing...")
-    logger.info("🎯 This will process ALL configured endpoints with full data")
-    logger.info("⏸️  You can interrupt anytime - system will resume where it left off")
+    logger.info("[START] Starting COMPREHENSIVE NBA endpoint processing...")
+    logger.info("[TARGET] This will process ALL configured endpoints with full data")
+    logger.info("[RESUME] You can interrupt anytime - system will resume where it left off")
     logger.info("="*60)
     
     try:
         all_results = {}
         
         # PHASE 1: HIGH PRIORITY GAME-BASED ENDPOINTS (Core game data)
-        logger.info("🏀 PHASE 1: High Priority Game-Based Endpoints")
+        logger.info("[PHASE 1] High Priority Game-Based Endpoints")
         logger.info("="*60)
         game_high_results = processor.process_endpoints_by_category('game_based', priority='high')
         all_results.update(game_high_results)
         
         # PHASE 2: HIGH PRIORITY PLAYER-BASED ENDPOINTS (Core player data)
-        logger.info("\n👥 PHASE 2: High Priority Player-Based Endpoints") 
+        logger.info("\n[PHASE 2] High Priority Player-Based Endpoints") 
         logger.info("="*60)
         player_high_results = processor.process_endpoints_by_category('player_based', priority='high')
         all_results.update(player_high_results)
         
         # PHASE 3: HIGH PRIORITY TEAM-BASED ENDPOINTS (Core team data)
-        logger.info("\n🏟️  PHASE 3: High Priority Team-Based Endpoints")
+        logger.info("\n[PHASE 3] High Priority Team-Based Endpoints")
         logger.info("="*60)
         team_high_results = processor.process_endpoints_by_category('team_based', priority='high')
         all_results.update(team_high_results)
         
         # PHASE 4: MEDIUM PRIORITY GAME-BASED ENDPOINTS (Extended game data)
-        logger.info("\n🎮 PHASE 4: Medium Priority Game-Based Endpoints")
+        logger.info("\n[PHASE 4] Medium Priority Game-Based Endpoints")
         logger.info("="*60)
         game_medium_results = processor.process_endpoints_by_category('game_based', priority='medium')
         all_results.update(game_medium_results)
         
         # PHASE 5: MEDIUM PRIORITY PLAYER-BASED ENDPOINTS (Extended player data)
-        logger.info("\n👤 PHASE 5: Medium Priority Player-Based Endpoints")
+        logger.info("\n[PHASE 5] Medium Priority Player-Based Endpoints")
         logger.info("="*60)
         player_medium_results = processor.process_endpoints_by_category('player_based', priority='medium')
         all_results.update(player_medium_results)
         
         # PHASE 6: MEDIUM PRIORITY TEAM-BASED ENDPOINTS (Extended team data)
-        logger.info("\n🏀 PHASE 6: Medium Priority Team-Based Endpoints")
+        logger.info("\n[PHASE 6] Medium Priority Team-Based Endpoints")
         logger.info("="*60)
         team_medium_results = processor.process_endpoints_by_category('team_based', priority='medium')
         all_results.update(team_medium_results)
         
         # PHASE 7: LEAGUE-BASED ENDPOINTS (League-wide data)
-        logger.info("\n🏆 PHASE 7: League-Based Endpoints")
+        logger.info("\n[PHASE 7] League-Based Endpoints")
         logger.info("="*60)
         league_results = processor.process_endpoints_by_category('league_based')
         all_results.update(league_results)
         
         # PHASE 8: LOW PRIORITY ENDPOINTS (Nice-to-have data)
-        logger.info("\n📈 PHASE 8: Low Priority Endpoints")
+        logger.info("\n[PHASE 8] Low Priority Endpoints")
         logger.info("="*60)
         low_priority_results = {}
         for category in ['game_based', 'player_based', 'team_based']:
@@ -592,33 +634,33 @@ def main():
         all_results.update(low_priority_results)
         
     except KeyboardInterrupt:
-        logger.info("\n⏸️  PROCESSING INTERRUPTED BY USER")
-        logger.info("💡 No worries! System can resume from where it left off")
-        logger.info("💡 Just run the script again - it will skip completed work")
+        logger.info("\n[PAUSE] PROCESSING INTERRUPTED BY USER")
+        logger.info("[INFO] No worries! System can resume from where it left off")
+        logger.info("[INFO] Just run the script again - it will skip completed work")
     except Exception as e:
         logger.error(f"Unexpected error during processing: {str(e)}")
-        logger.info("💡 System can resume from where it left off - just run again!")
+        logger.info("[INFO] System can resume from where it left off - just run again!")
     
     # FINAL COMPREHENSIVE SUMMARY
     logger.info("\n" + "="*60)
-    logger.info("📊 COMPREHENSIVE PROCESSING SUMMARY")
+    logger.info("[SUMMARY] COMPREHENSIVE PROCESSING SUMMARY")
     logger.info("="*60)
     
     # Processing statistics
     summary = processor.get_processing_summary()
-    logger.info(f"🔢 Total API calls made: {summary['total_processed']:,}")
-    logger.info(f"❌ Total errors encountered: {summary['total_errors']:,}")
-    logger.info(f"✅ Overall success rate: {summary['success_rate']:.1f}%")
+    logger.info(f"[COUNT] Total API calls made: {summary['total_processed']:,}")
+    logger.info(f"[ERROR] Total errors encountered: {summary['total_errors']:,}")
+    logger.info(f"[SUCCESS] Overall success rate: {summary['success_rate']:.1f}%")
     
     # Endpoint results summary
     if all_results:
-        logger.info(f"\n🎯 ENDPOINT PROCESSING RESULTS:")
+        logger.info(f"\n[RESULTS] ENDPOINT PROCESSING RESULTS:")
         successful_endpoints = 0
         failed_endpoints = 0
         total_time = 0
         
         for endpoint, result in all_results.items():
-            status = "✅" if result['success'] else "❌"
+            status = "[SUCCESS]" if result['success'] else "[FAILED]"
             logger.info(f"   {status} {endpoint}: {result['duration']:.1f}s")
             
             if result['success']:
@@ -627,39 +669,39 @@ def main():
                 failed_endpoints += 1
             total_time += result['duration']
         
-        logger.info(f"\n📈 FINAL STATISTICS:")
-        logger.info(f"   ✅ Successful endpoints: {successful_endpoints}")
-        logger.info(f"   ❌ Failed endpoints: {failed_endpoints}")
-        logger.info(f"   🎯 Endpoint success rate: {successful_endpoints/(successful_endpoints+failed_endpoints)*100:.1f}%")
-        logger.info(f"   ⏱️  Total processing time: {total_time/60:.1f} minutes")
+        logger.info(f"\n[STATS] FINAL STATISTICS:")
+        logger.info(f"   [SUCCESS] Successful endpoints: {successful_endpoints}")
+        logger.info(f"   [FAILED] Failed endpoints: {failed_endpoints}")
+        logger.info(f"   [RATE] Endpoint success rate: {successful_endpoints/(successful_endpoints+failed_endpoints)*100:.1f}%")
+        logger.info(f"   [TIME] Total processing time: {total_time/60:.1f} minutes")
         
         # Database summary
         try:
             cursor = conn_manager.cursor()
             cursor.execute("SELECT COUNT(*) FROM information_schema.tables WHERE table_name LIKE 'nba_%';")
             table_count = cursor.fetchone()[0]
-            logger.info(f"   📊 Total NBA tables created: {table_count}")
+            logger.info(f"   [TABLES] Total NBA tables created: {table_count}")
             cursor.close()
         except:
             pass
     
     # Show failed calls summary
     if processor.failed_calls:
-        logger.info(f"\n⚠️  FAILED CALLS SUMMARY:")
+        logger.info(f"\n[WARNING] FAILED CALLS SUMMARY:")
         total_failed = 0
         for key, failed_params in processor.failed_calls.items():
             failed_count = len(failed_params)
             total_failed += failed_count
             logger.info(f"   {key}: {failed_count} failed parameters")
         logger.info(f"   Total failed parameter calls: {total_failed}")
-        logger.info(f"   💡 Failed calls are tracked and will be skipped on retry")
+        logger.info(f"   [INFO] Failed calls are tracked and will be skipped on retry")
     
-    logger.info(f"\n🎉 COMPREHENSIVE NBA DATA COLLECTION COMPLETE!")
-    logger.info(f"📚 Check 'nba_endpoint_processor.log' for detailed processing log")
-    logger.info(f"🔄 System is fully resumable - can continue from any interruption point")
+    logger.info(f"\n[COMPLETE] COMPREHENSIVE NBA DATA COLLECTION COMPLETE!")
+    logger.info(f"[LOG] Check 'nba_endpoint_processor.log' for detailed processing log")
+    logger.info(f"[RESUME] System is fully resumable - can continue from any interruption point")
     
-    conn_manager.close()
-    logger.info("✅ Database connection closed")
+    conn_manager.close_connection()
+    logger.info("[SUCCESS] Database connection closed")
 
 
 if __name__ == "__main__":

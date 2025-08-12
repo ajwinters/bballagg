@@ -1,0 +1,1131 @@
+2025-08-12 18:37:49,402 - INFO - Processing game_based endpoints with priority high
+2025-08-12 18:37:49,402 - INFO - Found 9 endpoints to process
+2025-08-12 18:37:49,402 - INFO - Starting BoxScoreAdvancedV3...
+2025-08-12 18:37:49,408 - INFO - Processing endpoint: BoxScoreAdvancedV3 for NBA
+2025-08-12 18:37:50,050 - INFO - Fetched 52782 records from nba_games
+2025-08-12 18:37:50,057 - INFO - Found 52782 unique game IDs for NBA
+2025-08-12 18:37:50,064 - INFO - Testing BoxScoreAdvancedV3 structure with first parameter...
+2025-08-12 18:37:50,259 - INFO - Endpoint BoxScoreAdvancedV3 returns 2 dataframes
+2025-08-12 18:37:50,259 - INFO - Processing dataframe 0: nba_boxscoreadvancedv3_playerstats
+2025-08-12 18:37:50,423 - INFO - Table nba_boxscoreadvancedv3_playerstats created/verified
+2025-08-12 18:37:51,079 - INFO - Table nba_boxscoreadvancedv3_playerstats: 50716 missing parameters out of 52782 total
+2025-08-12 18:37:51,097 - INFO - Processing 50716 missing parameters for nba_boxscoreadvancedv3_playerstats
+2025-08-12 18:38:05,309 - WARNING - API call failed for 0029100926: NBA API returned None
+2025-08-12 18:38:05,309 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029100926 - NBA API returned None
+2025-08-12 18:38:07,421 - WARNING - API call failed for 0029000964: NBA API returned None
+2025-08-12 18:38:07,421 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029000964 - NBA API returned None
+2025-08-12 18:38:13,029 - WARNING - API call failed for 0028500056: NBA API returned None
+2025-08-12 18:38:13,029 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028500056 - NBA API returned None
+2025-08-12 18:38:27,899 - WARNING - API call failed for 0028400928: NBA API returned None
+2025-08-12 18:38:27,899 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028400928 - NBA API returned None
+2025-08-12 18:39:04,733 - WARNING - API call failed for 0028500531: NBA API returned None
+2025-08-12 18:39:04,733 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028500531 - NBA API returned None
+2025-08-12 18:39:07,279 - WARNING - API call failed for 0029300631: NBA API returned None
+2025-08-12 18:39:07,280 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029300631 - NBA API returned None
+2025-08-12 18:39:16,969 - WARNING - API call failed for 0029300514: NBA API returned None
+2025-08-12 18:39:16,969 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029300514 - NBA API returned None
+2025-08-12 18:39:37,549 - WARNING - API call failed for 0028600369: NBA API returned None
+2025-08-12 18:39:37,549 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028600369 - NBA API returned None
+2025-08-12 18:39:50,789 - WARNING - API call failed for 0028700631: NBA API returned None
+2025-08-12 18:39:50,789 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028700631 - NBA API returned None
+2025-08-12 18:39:57,529 - WARNING - API call failed for 0029001067: NBA API returned None
+2025-08-12 18:39:57,529 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029001067 - NBA API returned None
+2025-08-12 18:39:59,669 - WARNING - API call failed for 0029000440: NBA API returned None
+2025-08-12 18:39:59,669 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029000440 - NBA API returned None
+2025-08-12 18:40:13,599 - WARNING - API call failed for 0029000829: NBA API returned None
+2025-08-12 18:40:13,599 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029000829 - NBA API returned None
+2025-08-12 18:40:29,979 - WARNING - API call failed for 0029100213: NBA API returned None
+2025-08-12 18:40:29,979 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029100213 - NBA API returned None
+2025-08-12 19:02:20,113 - ERROR - Database connection failed: RDSConnectionManager.__init__() got an unexpected keyword argument 'connection_timeout'
+2025-08-12 19:03:16,379 - INFO - [INIT] RDS Connection Manager initialized with ASCII logging
+2025-08-12 19:03:16,379 - WARNING - [RECONNECT] Connection lost - attempting to reconnect...
+2025-08-12 19:03:16,379 - INFO - [RECONNECT] Reconnection attempt 1/3
+2025-08-12 19:03:16,388 - INFO - [CONNECT] Creating new database connection...
+2025-08-12 19:03:16,742 - INFO - [SUCCESS] Database connection established
+2025-08-12 19:03:16,742 - INFO - [SUCCESS] Reconnection successful
+2025-08-12 19:03:16,742 - INFO - [SUCCESS] Connected to RDS database with robust connection management
+2025-08-12 19:03:16,748 - ERROR - Failed to create failed calls table: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:03:16,748 - INFO - [START] Starting COMPREHENSIVE NBA endpoint processing...
+2025-08-12 19:03:16,748 - INFO - [TARGET] This will process ALL configured endpoints with full data
+2025-08-12 19:03:16,748 - INFO - [RESUME] You can interrupt anytime - system will resume where it left off
+2025-08-12 19:03:16,748 - INFO - ============================================================
+2025-08-12 19:03:16,748 - INFO - [PHASE 1] High Priority Game-Based Endpoints
+2025-08-12 19:03:16,748 - INFO - ============================================================
+2025-08-12 19:03:16,748 - INFO - Processing game_based endpoints with priority high
+2025-08-12 19:03:16,748 - INFO - Found 9 endpoints to process
+2025-08-12 19:03:16,748 - INFO - Starting BoxScoreAdvancedV3...
+2025-08-12 19:03:16,749 - INFO - Processing endpoint: BoxScoreAdvancedV3 for NBA
+2025-08-12 19:03:16,749 - ERROR - Failed to fetch master data from nba_games: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:03:16,749 - WARNING - No parameter values found for from_mastergames in NBA
+2025-08-12 19:03:16,749 - INFO - Completed BoxScoreAdvancedV3 in 0.00 seconds
+2025-08-12 19:03:16,749 - INFO - Starting BoxScoreFourFactorsV3...
+2025-08-12 19:03:16,749 - INFO - Processing endpoint: BoxScoreFourFactorsV3 for NBA
+2025-08-12 19:03:16,749 - ERROR - Failed to fetch master data from nba_games: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:03:16,749 - WARNING - No parameter values found for from_mastergames in NBA
+2025-08-12 19:03:16,749 - INFO - Completed BoxScoreFourFactorsV3 in 0.00 seconds
+2025-08-12 19:03:16,749 - INFO - Starting BoxScoreMiscV3...
+2025-08-12 19:03:16,749 - INFO - Processing endpoint: BoxScoreMiscV3 for NBA
+2025-08-12 19:03:16,749 - ERROR - Failed to fetch master data from nba_games: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:03:16,749 - WARNING - No parameter values found for from_mastergames in NBA
+2025-08-12 19:03:16,749 - INFO - Completed BoxScoreMiscV3 in 0.00 seconds
+2025-08-12 19:03:16,749 - INFO - Starting BoxScorePlayerTrackV3...
+2025-08-12 19:03:16,749 - INFO - Processing endpoint: BoxScorePlayerTrackV3 for NBA
+2025-08-12 19:03:16,749 - ERROR - Failed to fetch master data from nba_games: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:03:16,749 - WARNING - No parameter values found for from_mastergames in NBA
+2025-08-12 19:03:16,749 - INFO - Completed BoxScorePlayerTrackV3 in 0.00 seconds
+2025-08-12 19:03:16,749 - INFO - Starting BoxScoreScoringV3...
+2025-08-12 19:03:16,749 - INFO - Processing endpoint: BoxScoreScoringV3 for NBA
+2025-08-12 19:03:16,749 - ERROR - Failed to fetch master data from nba_games: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:03:16,749 - WARNING - No parameter values found for from_mastergames in NBA
+2025-08-12 19:03:16,749 - INFO - Completed BoxScoreScoringV3 in 0.00 seconds
+2025-08-12 19:03:16,749 - INFO - Starting BoxScoreSummaryV2...
+2025-08-12 19:03:16,749 - INFO - Processing endpoint: BoxScoreSummaryV2 for NBA
+2025-08-12 19:03:16,749 - ERROR - Failed to fetch master data from nba_games: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:03:16,749 - WARNING - No parameter values found for from_mastergames in NBA
+2025-08-12 19:03:16,749 - INFO - Completed BoxScoreSummaryV2 in 0.00 seconds
+2025-08-12 19:03:16,749 - INFO - Starting BoxScoreTraditionalV3...
+2025-08-12 19:03:16,749 - INFO - Processing endpoint: BoxScoreTraditionalV3 for NBA
+2025-08-12 19:03:16,749 - ERROR - Failed to fetch master data from nba_games: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:03:16,749 - WARNING - No parameter values found for from_mastergames in NBA
+2025-08-12 19:03:16,749 - INFO - Completed BoxScoreTraditionalV3 in 0.00 seconds
+2025-08-12 19:03:16,749 - INFO - Starting BoxScoreUsageV3...
+2025-08-12 19:03:16,749 - INFO - Processing endpoint: BoxScoreUsageV3 for NBA
+2025-08-12 19:03:16,749 - ERROR - Failed to fetch master data from nba_games: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:03:16,749 - WARNING - No parameter values found for from_mastergames in NBA
+2025-08-12 19:03:16,749 - INFO - Completed BoxScoreUsageV3 in 0.00 seconds
+2025-08-12 19:03:16,749 - INFO - Starting PlayByPlayV3...
+2025-08-12 19:03:16,749 - INFO - Processing endpoint: PlayByPlayV3 for NBA
+2025-08-12 19:03:16,749 - ERROR - Failed to fetch master data from nba_games: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:03:16,749 - WARNING - No parameter values found for from_mastergames in NBA
+2025-08-12 19:03:16,749 - INFO - Completed PlayByPlayV3 in 0.00 seconds
+2025-08-12 19:03:16,749 - INFO - 
+[PHASE 2] High Priority Player-Based Endpoints
+2025-08-12 19:03:16,749 - INFO - ============================================================
+2025-08-12 19:03:16,749 - INFO - Processing player_based endpoints with priority high
+2025-08-12 19:03:16,749 - INFO - Found 4 endpoints to process
+2025-08-12 19:03:16,749 - INFO - Starting CommonPlayerInfo...
+2025-08-12 19:03:16,749 - INFO - Processing endpoint: CommonPlayerInfo for NBA
+2025-08-12 19:03:16,754 - ERROR - Failed to fetch master data from nba_players: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:03:16,754 - WARNING - No parameter values found for from_masterplayers in NBA
+2025-08-12 19:03:16,754 - INFO - Completed CommonPlayerInfo in 0.00 seconds
+2025-08-12 19:03:16,754 - INFO - Starting PlayerGameLog...
+2025-08-12 19:03:16,754 - INFO - Processing endpoint: PlayerGameLog for NBA
+2025-08-12 19:03:16,754 - ERROR - Failed to fetch master data from nba_players: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:03:16,754 - WARNING - No parameter values found for from_masterplayers in NBA
+2025-08-12 19:03:16,754 - INFO - Completed PlayerGameLog in 0.00 seconds
+2025-08-12 19:03:16,754 - INFO - Starting PlayerDashboardByShootingSplits...
+2025-08-12 19:03:16,754 - INFO - Processing endpoint: PlayerDashboardByShootingSplits for NBA
+2025-08-12 19:03:16,754 - ERROR - Failed to fetch master data from nba_players: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:03:16,754 - WARNING - No parameter values found for from_masterplayers in NBA
+2025-08-12 19:03:16,754 - INFO - Completed PlayerDashboardByShootingSplits in 0.00 seconds
+2025-08-12 19:03:16,754 - INFO - Starting PlayerDashboardByClutch...
+2025-08-12 19:03:16,754 - INFO - Processing endpoint: PlayerDashboardByClutch for NBA
+2025-08-12 19:03:16,755 - ERROR - Failed to fetch master data from nba_players: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:03:16,755 - WARNING - No parameter values found for from_masterplayers in NBA
+2025-08-12 19:03:16,755 - INFO - Completed PlayerDashboardByClutch in 0.00 seconds
+2025-08-12 19:03:16,755 - INFO - 
+[PHASE 3] High Priority Team-Based Endpoints
+2025-08-12 19:03:16,755 - INFO - ============================================================
+2025-08-12 19:03:16,755 - INFO - Processing team_based endpoints with priority high
+2025-08-12 19:03:16,755 - INFO - Found 1 endpoints to process
+2025-08-12 19:03:16,755 - INFO - Starting CommonTeamRoster...
+2025-08-12 19:03:16,755 - INFO - Processing endpoint: CommonTeamRoster for NBA
+2025-08-12 19:03:16,755 - ERROR - Failed to fetch master data from nba_teams: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:03:16,755 - WARNING - No parameter values found for from_masterteams in NBA
+2025-08-12 19:03:16,755 - INFO - Completed CommonTeamRoster in 0.00 seconds
+2025-08-12 19:03:16,756 - INFO - 
+[PHASE 4] Medium Priority Game-Based Endpoints
+2025-08-12 19:03:16,756 - INFO - ============================================================
+2025-08-12 19:03:16,756 - INFO - Processing game_based endpoints with priority medium
+2025-08-12 19:03:16,756 - INFO - Found 10 endpoints to process
+2025-08-12 19:03:16,756 - INFO - Starting BoxScoreAdvancedV2...
+2025-08-12 19:03:16,756 - INFO - Processing endpoint: BoxScoreAdvancedV2 for NBA
+2025-08-12 19:03:16,756 - ERROR - Failed to fetch master data from nba_games: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:03:16,756 - WARNING - No parameter values found for from_mastergames in NBA
+2025-08-12 19:03:16,756 - INFO - Completed BoxScoreAdvancedV2 in 0.00 seconds
+2025-08-12 19:03:16,756 - INFO - Starting BoxScoreDefensiveV2...
+2025-08-12 19:03:16,756 - INFO - Processing endpoint: BoxScoreDefensiveV2 for NBA
+2025-08-12 19:03:16,756 - ERROR - Failed to fetch master data from nba_games: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:03:16,757 - WARNING - No parameter values found for from_mastergames in NBA
+2025-08-12 19:03:16,757 - INFO - Completed BoxScoreDefensiveV2 in 0.00 seconds
+2025-08-12 19:03:16,757 - INFO - Starting BoxScoreFourFactorsV2...
+2025-08-12 19:03:16,757 - INFO - Processing endpoint: BoxScoreFourFactorsV2 for NBA
+2025-08-12 19:03:16,757 - ERROR - Failed to fetch master data from nba_games: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:03:16,757 - WARNING - No parameter values found for from_mastergames in NBA
+2025-08-12 19:03:16,757 - INFO - Completed BoxScoreFourFactorsV2 in 0.00 seconds
+2025-08-12 19:03:16,757 - INFO - Starting BoxScoreMatchupsV3...
+2025-08-12 19:03:16,757 - INFO - Processing endpoint: BoxScoreMatchupsV3 for NBA
+2025-08-12 19:03:16,757 - ERROR - Failed to fetch master data from nba_games: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:03:16,757 - WARNING - No parameter values found for from_mastergames in NBA
+2025-08-12 19:03:16,757 - INFO - Completed BoxScoreMatchupsV3 in 0.00 seconds
+2025-08-12 19:03:16,758 - INFO - Starting BoxScoreMiscV2...
+2025-08-12 19:03:16,758 - INFO - Processing endpoint: BoxScoreMiscV2 for NBA
+2025-08-12 19:03:16,758 - ERROR - Failed to fetch master data from nba_games: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:03:16,758 - WARNING - No parameter values found for from_mastergames in NBA
+2025-08-12 19:03:16,758 - INFO - Completed BoxScoreMiscV2 in 0.00 seconds
+2025-08-12 19:03:16,758 - INFO - Starting BoxScorePlayerTrackV2...
+2025-08-12 19:03:16,758 - INFO - Processing endpoint: BoxScorePlayerTrackV2 for NBA
+2025-08-12 19:03:16,758 - ERROR - Failed to fetch master data from nba_games: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:03:16,758 - WARNING - No parameter values found for from_mastergames in NBA
+2025-08-12 19:03:16,758 - INFO - Completed BoxScorePlayerTrackV2 in 0.00 seconds
+2025-08-12 19:03:16,758 - INFO - Starting BoxScoreScoringV2...
+2025-08-12 19:03:16,758 - INFO - Processing endpoint: BoxScoreScoringV2 for NBA
+2025-08-12 19:03:16,758 - ERROR - Failed to fetch master data from nba_games: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:03:16,758 - WARNING - No parameter values found for from_mastergames in NBA
+2025-08-12 19:03:16,758 - INFO - Completed BoxScoreScoringV2 in 0.00 seconds
+2025-08-12 19:03:16,758 - INFO - Starting BoxScoreTraditionalV2...
+2025-08-12 19:03:16,758 - INFO - Processing endpoint: BoxScoreTraditionalV2 for NBA
+2025-08-12 19:03:16,758 - ERROR - Failed to fetch master data from nba_games: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:03:16,758 - WARNING - No parameter values found for from_mastergames in NBA
+2025-08-12 19:03:16,758 - INFO - Completed BoxScoreTraditionalV2 in 0.00 seconds
+2025-08-12 19:03:16,759 - INFO - Starting BoxScoreUsageV2...
+2025-08-12 19:03:16,759 - INFO - Processing endpoint: BoxScoreUsageV2 for NBA
+2025-08-12 19:03:16,759 - ERROR - Failed to fetch master data from nba_games: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:03:16,759 - WARNING - No parameter values found for from_mastergames in NBA
+2025-08-12 19:03:16,759 - INFO - Completed BoxScoreUsageV2 in 0.00 seconds
+2025-08-12 19:03:16,759 - INFO - Starting GameRotation...
+2025-08-12 19:03:16,759 - INFO - Processing endpoint: GameRotation for NBA
+2025-08-12 19:03:16,759 - ERROR - Failed to fetch master data from nba_games: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:03:16,759 - WARNING - No parameter values found for from_mastergames in NBA
+2025-08-12 19:03:16,759 - INFO - Completed GameRotation in 0.00 seconds
+2025-08-12 19:03:16,760 - INFO - 
+[PHASE 5] Medium Priority Player-Based Endpoints
+2025-08-12 19:03:16,760 - INFO - ============================================================
+2025-08-12 19:03:16,760 - INFO - Processing player_based endpoints with priority medium
+2025-08-12 19:03:16,760 - INFO - Found 8 endpoints to process
+2025-08-12 19:03:16,760 - INFO - Starting PlayerDashboardByGameSplits...
+2025-08-12 19:03:16,760 - INFO - Processing endpoint: PlayerDashboardByGameSplits for NBA
+2025-08-12 19:03:16,760 - ERROR - Failed to fetch master data from nba_players: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:03:16,760 - WARNING - No parameter values found for from_masterplayers in NBA
+2025-08-12 19:03:16,760 - INFO - Completed PlayerDashboardByGameSplits in 0.00 seconds
+2025-08-12 19:03:16,760 - INFO - Starting PlayerDashboardByGeneralSplits...
+2025-08-12 19:03:16,760 - INFO - Processing endpoint: PlayerDashboardByGeneralSplits for NBA
+2025-08-12 19:03:16,760 - ERROR - Failed to fetch master data from nba_players: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:03:16,761 - WARNING - No parameter values found for from_masterplayers in NBA
+2025-08-12 19:03:16,761 - INFO - Completed PlayerDashboardByGeneralSplits in 0.00 seconds
+2025-08-12 19:03:16,761 - INFO - Starting PlayerDashboardByTeamPerformance...
+2025-08-12 19:03:16,761 - INFO - Processing endpoint: PlayerDashboardByTeamPerformance for NBA
+2025-08-12 19:03:16,762 - ERROR - Failed to fetch master data from nba_players: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:03:16,762 - WARNING - No parameter values found for from_masterplayers in NBA
+2025-08-12 19:03:16,762 - INFO - Completed PlayerDashboardByTeamPerformance in 0.00 seconds
+2025-08-12 19:03:16,762 - INFO - Starting PlayerDashboardByYearOverYear...
+2025-08-12 19:03:16,762 - INFO - Processing endpoint: PlayerDashboardByYearOverYear for NBA
+2025-08-12 19:03:16,762 - ERROR - Failed to fetch master data from nba_players: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:03:16,762 - WARNING - No parameter values found for from_masterplayers in NBA
+2025-08-12 19:03:16,762 - INFO - Completed PlayerDashboardByYearOverYear in 0.00 seconds
+2025-08-12 19:03:16,762 - INFO - Starting PlayerDashboardByLastNGames...
+2025-08-12 19:03:16,762 - INFO - Processing endpoint: PlayerDashboardByLastNGames for NBA
+2025-08-12 19:03:16,762 - ERROR - Failed to fetch master data from nba_players: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:03:16,762 - WARNING - No parameter values found for from_masterplayers in NBA
+2025-08-12 19:03:16,762 - INFO - Completed PlayerDashboardByLastNGames in 0.00 seconds
+2025-08-12 19:03:16,762 - INFO - Starting PlayerDashPtPass...
+2025-08-12 19:03:16,763 - INFO - Processing endpoint: PlayerDashPtPass for NBA
+2025-08-12 19:03:16,763 - ERROR - Failed to fetch master data from nba_players: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:03:16,763 - WARNING - No parameter values found for from_masterplayers in NBA
+2025-08-12 19:03:16,763 - INFO - Completed PlayerDashPtPass in 0.00 seconds
+2025-08-12 19:03:16,763 - INFO - Starting PlayerDashPtReb...
+2025-08-12 19:03:16,763 - INFO - Processing endpoint: PlayerDashPtReb for NBA
+2025-08-12 19:03:16,763 - ERROR - Failed to fetch master data from nba_players: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:03:16,763 - WARNING - No parameter values found for from_masterplayers in NBA
+2025-08-12 19:03:16,763 - INFO - Completed PlayerDashPtReb in 0.00 seconds
+2025-08-12 19:03:16,763 - INFO - Starting PlayerDashPtShots...
+2025-08-12 19:03:16,763 - INFO - Processing endpoint: PlayerDashPtShots for NBA
+2025-08-12 19:03:16,763 - ERROR - Failed to fetch master data from nba_players: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:03:16,764 - WARNING - No parameter values found for from_masterplayers in NBA
+2025-08-12 19:03:16,764 - INFO - Completed PlayerDashPtShots in 0.00 seconds
+2025-08-12 19:03:16,764 - INFO - 
+[PHASE 6] Medium Priority Team-Based Endpoints
+2025-08-12 19:03:16,764 - INFO - ============================================================
+2025-08-12 19:03:16,764 - INFO - Processing team_based endpoints with priority medium
+2025-08-12 19:03:16,764 - INFO - Found 0 endpoints to process
+2025-08-12 19:03:16,764 - INFO - 
+[PHASE 7] League-Based Endpoints
+2025-08-12 19:03:16,764 - INFO - ============================================================
+2025-08-12 19:03:16,764 - INFO - Processing league_based endpoints
+2025-08-12 19:03:16,764 - INFO - Found 3 endpoints to process
+2025-08-12 19:03:16,764 - INFO - Starting PlayerGameLogs...
+2025-08-12 19:03:16,764 - INFO - Processing endpoint: PlayerGameLogs for NBA
+2025-08-12 19:03:16,764 - WARNING - No parameter values found for dynamic_date_range in NBA
+2025-08-12 19:03:16,764 - INFO - Completed PlayerGameLogs in 0.00 seconds
+2025-08-12 19:03:16,764 - INFO - Starting LeagueDashPlayerBioStats...
+2025-08-12 19:03:16,765 - INFO - Processing endpoint: LeagueDashPlayerBioStats for NBA
+2025-08-12 19:03:16,765 - INFO - Testing LeagueDashPlayerBioStats structure with first parameter...
+2025-08-12 19:03:17,057 - INFO - Endpoint LeagueDashPlayerBioStats returns 1 dataframes
+2025-08-12 19:03:17,058 - INFO - Processing dataframe 0: nba_leaguedashplayerbiostats_leaguedashplayerbiostats
+2025-08-12 19:03:17,058 - ERROR - Failed to create table nba_leaguedashplayerbiostats_leaguedashplayerbiostats: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:03:17,058 - INFO - Completed LeagueDashPlayerBioStats in 0.29 seconds
+2025-08-12 19:03:17,058 - INFO - Starting LeagueGameFinder...
+2025-08-12 19:03:17,058 - INFO - Processing endpoint: LeagueGameFinder for NBA
+2025-08-12 19:03:17,059 - WARNING - No parameter values found for 00 in NBA
+2025-08-12 19:03:17,059 - INFO - Completed LeagueGameFinder in 0.00 seconds
+2025-08-12 19:03:17,059 - INFO - 
+[PHASE 8] Low Priority Endpoints
+2025-08-12 19:03:17,059 - INFO - ============================================================
+2025-08-12 19:03:17,059 - INFO - Processing game_based endpoints with priority low
+2025-08-12 19:03:17,059 - INFO - Found 3 endpoints to process
+2025-08-12 19:03:17,059 - INFO - Starting BoxScoreHustleV2...
+2025-08-12 19:03:17,059 - INFO - Processing endpoint: BoxScoreHustleV2 for NBA
+2025-08-12 19:03:17,059 - ERROR - Failed to fetch master data from nba_games: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:03:17,059 - WARNING - No parameter values found for from_mastergames in NBA
+2025-08-12 19:03:17,059 - INFO - Completed BoxScoreHustleV2 in 0.00 seconds
+2025-08-12 19:03:17,059 - INFO - Starting BoxScoreSimilarityScore...
+2025-08-12 19:03:17,059 - INFO - Processing endpoint: BoxScoreSimilarityScore for NBA
+2025-08-12 19:03:17,059 - ERROR - Endpoint BoxScoreSimilarityScore not found in NBA API
+2025-08-12 19:03:17,059 - INFO - Completed BoxScoreSimilarityScore in 0.00 seconds
+2025-08-12 19:03:17,059 - INFO - Starting HustleStatsBoxScore...
+2025-08-12 19:03:17,059 - INFO - Processing endpoint: HustleStatsBoxScore for NBA
+2025-08-12 19:03:17,060 - ERROR - Failed to fetch master data from nba_games: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:03:17,060 - WARNING - No parameter values found for from_mastergames in NBA
+2025-08-12 19:03:17,060 - INFO - Completed HustleStatsBoxScore in 0.00 seconds
+2025-08-12 19:03:17,060 - INFO - Processing player_based endpoints with priority low
+2025-08-12 19:03:17,060 - INFO - Found 3 endpoints to process
+2025-08-12 19:03:17,060 - INFO - Starting PlayerNextNGames...
+2025-08-12 19:03:17,060 - INFO - Processing endpoint: PlayerNextNGames for NBA
+2025-08-12 19:03:17,060 - ERROR - Failed to fetch master data from nba_players: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:03:17,060 - WARNING - No parameter values found for from_masterplayers in NBA
+2025-08-12 19:03:17,061 - INFO - Completed PlayerNextNGames in 0.00 seconds
+2025-08-12 19:03:17,061 - INFO - Starting PlayerVsPlayer...
+2025-08-12 19:03:17,061 - INFO - Processing endpoint: PlayerVsPlayer for NBA
+2025-08-12 19:03:17,061 - ERROR - Failed to fetch master data from nba_players: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:03:17,061 - WARNING - No parameter values found for from_masterplayers in NBA
+2025-08-12 19:03:17,061 - INFO - Completed PlayerVsPlayer in 0.00 seconds
+2025-08-12 19:03:17,061 - INFO - Starting PlayerDashPtShotDefend...
+2025-08-12 19:03:17,061 - INFO - Processing endpoint: PlayerDashPtShotDefend for NBA
+2025-08-12 19:03:17,061 - ERROR - Failed to fetch master data from nba_players: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:03:17,061 - WARNING - No parameter values found for from_masterplayers in NBA
+2025-08-12 19:03:17,061 - INFO - Completed PlayerDashPtShotDefend in 0.00 seconds
+2025-08-12 19:03:17,061 - INFO - Processing team_based endpoints with priority low
+2025-08-12 19:03:17,061 - INFO - Found 0 endpoints to process
+2025-08-12 19:03:17,061 - INFO - 
+============================================================
+2025-08-12 19:03:17,061 - INFO - [SUMMARY] COMPREHENSIVE PROCESSING SUMMARY
+2025-08-12 19:03:17,061 - INFO - ============================================================
+2025-08-12 19:03:17,061 - INFO - [COUNT] Total API calls made: 0
+2025-08-12 19:03:17,061 - INFO - [ERROR] Total errors encountered: 0
+2025-08-12 19:03:17,061 - INFO - [SUCCESS] Overall success rate: 0.0%
+2025-08-12 19:03:17,061 - INFO - 
+[RESULTS] ENDPOINT PROCESSING RESULTS:
+2025-08-12 19:03:17,061 - INFO -    [FAILED] BoxScoreAdvancedV3: 0.0s
+2025-08-12 19:03:17,061 - INFO -    [FAILED] BoxScoreFourFactorsV3: 0.0s
+2025-08-12 19:03:17,061 - INFO -    [FAILED] BoxScoreMiscV3: 0.0s
+2025-08-12 19:03:17,061 - INFO -    [FAILED] BoxScorePlayerTrackV3: 0.0s
+2025-08-12 19:03:17,061 - INFO -    [FAILED] BoxScoreScoringV3: 0.0s
+2025-08-12 19:03:17,061 - INFO -    [FAILED] BoxScoreSummaryV2: 0.0s
+2025-08-12 19:03:17,063 - INFO -    [FAILED] BoxScoreTraditionalV3: 0.0s
+2025-08-12 19:03:17,063 - INFO -    [FAILED] BoxScoreUsageV3: 0.0s
+2025-08-12 19:03:17,063 - INFO -    [FAILED] PlayByPlayV3: 0.0s
+2025-08-12 19:03:17,063 - INFO -    [FAILED] CommonPlayerInfo: 0.0s
+2025-08-12 19:03:17,063 - INFO -    [FAILED] PlayerGameLog: 0.0s
+2025-08-12 19:03:17,063 - INFO -    [FAILED] PlayerDashboardByShootingSplits: 0.0s
+2025-08-12 19:03:17,063 - INFO -    [FAILED] PlayerDashboardByClutch: 0.0s
+2025-08-12 19:03:17,063 - INFO -    [FAILED] CommonTeamRoster: 0.0s
+2025-08-12 19:03:17,063 - INFO -    [FAILED] BoxScoreAdvancedV2: 0.0s
+2025-08-12 19:03:17,063 - INFO -    [FAILED] BoxScoreDefensiveV2: 0.0s
+2025-08-12 19:03:17,063 - INFO -    [FAILED] BoxScoreFourFactorsV2: 0.0s
+2025-08-12 19:03:17,063 - INFO -    [FAILED] BoxScoreMatchupsV3: 0.0s
+2025-08-12 19:03:17,063 - INFO -    [FAILED] BoxScoreMiscV2: 0.0s
+2025-08-12 19:03:17,063 - INFO -    [FAILED] BoxScorePlayerTrackV2: 0.0s
+2025-08-12 19:03:17,063 - INFO -    [FAILED] BoxScoreScoringV2: 0.0s
+2025-08-12 19:03:17,063 - INFO -    [FAILED] BoxScoreTraditionalV2: 0.0s
+2025-08-12 19:03:17,063 - INFO -    [FAILED] BoxScoreUsageV2: 0.0s
+2025-08-12 19:03:17,065 - INFO -    [FAILED] GameRotation: 0.0s
+2025-08-12 19:03:17,065 - INFO -    [FAILED] PlayerDashboardByGameSplits: 0.0s
+2025-08-12 19:03:17,065 - INFO -    [FAILED] PlayerDashboardByGeneralSplits: 0.0s
+2025-08-12 19:03:17,065 - INFO -    [FAILED] PlayerDashboardByTeamPerformance: 0.0s
+2025-08-12 19:03:17,065 - INFO -    [FAILED] PlayerDashboardByYearOverYear: 0.0s
+2025-08-12 19:03:17,065 - INFO -    [FAILED] PlayerDashboardByLastNGames: 0.0s
+2025-08-12 19:03:17,065 - INFO -    [FAILED] PlayerDashPtPass: 0.0s
+2025-08-12 19:03:17,065 - INFO -    [FAILED] PlayerDashPtReb: 0.0s
+2025-08-12 19:03:17,065 - INFO -    [FAILED] PlayerDashPtShots: 0.0s
+2025-08-12 19:03:17,065 - INFO -    [FAILED] PlayerGameLogs: 0.0s
+2025-08-12 19:03:17,065 - INFO -    [SUCCESS] LeagueDashPlayerBioStats: 0.3s
+2025-08-12 19:03:17,065 - INFO -    [FAILED] LeagueGameFinder: 0.0s
+2025-08-12 19:03:17,065 - INFO -    [FAILED] BoxScoreHustleV2: 0.0s
+2025-08-12 19:03:17,065 - INFO -    [FAILED] BoxScoreSimilarityScore: 0.0s
+2025-08-12 19:03:17,066 - INFO -    [FAILED] HustleStatsBoxScore: 0.0s
+2025-08-12 19:03:17,066 - INFO -    [FAILED] PlayerNextNGames: 0.0s
+2025-08-12 19:03:17,066 - INFO -    [FAILED] PlayerVsPlayer: 0.0s
+2025-08-12 19:03:17,066 - INFO -    [FAILED] PlayerDashPtShotDefend: 0.0s
+2025-08-12 19:03:17,066 - INFO - 
+[STATS] FINAL STATISTICS:
+2025-08-12 19:03:17,066 - INFO -    [SUCCESS] Successful endpoints: 1
+2025-08-12 19:03:17,066 - INFO -    [FAILED] Failed endpoints: 40
+2025-08-12 19:03:17,066 - INFO -    [RATE] Endpoint success rate: 2.4%
+2025-08-12 19:03:17,066 - INFO -    [TIME] Total processing time: 0.0 minutes
+2025-08-12 19:03:17,066 - INFO - 
+[COMPLETE] COMPREHENSIVE NBA DATA COLLECTION COMPLETE!
+2025-08-12 19:03:17,066 - INFO - [LOG] Check 'nba_endpoint_processor.log' for detailed processing log
+2025-08-12 19:03:17,066 - INFO - [RESUME] System is fully resumable - can continue from any interruption point
+2025-08-12 19:06:05,504 - INFO - [INIT] RDS Connection Manager initialized with ASCII logging
+2025-08-12 19:06:05,504 - WARNING - [RECONNECT] Connection lost - attempting to reconnect...
+2025-08-12 19:06:05,504 - INFO - [RECONNECT] Reconnection attempt 1/3
+2025-08-12 19:06:05,504 - INFO - [CONNECT] Creating new database connection...
+2025-08-12 19:06:05,829 - INFO - [SUCCESS] Database connection established
+2025-08-12 19:06:05,829 - INFO - [SUCCESS] Reconnection successful
+2025-08-12 19:06:05,829 - INFO - [SUCCESS] Connected to RDS database with robust connection management
+2025-08-12 19:06:05,901 - INFO - Failed calls tracking table created/verified
+2025-08-12 19:06:05,932 - INFO - [START] Starting COMPREHENSIVE NBA endpoint processing...
+2025-08-12 19:06:05,932 - INFO - [TARGET] This will process ALL configured endpoints with full data
+2025-08-12 19:06:05,932 - INFO - [RESUME] You can interrupt anytime - system will resume where it left off
+2025-08-12 19:06:05,932 - INFO - ============================================================
+2025-08-12 19:06:05,932 - INFO - [PHASE 1] High Priority Game-Based Endpoints
+2025-08-12 19:06:05,932 - INFO - ============================================================
+2025-08-12 19:06:05,932 - INFO - Processing game_based endpoints with priority high
+2025-08-12 19:06:05,932 - INFO - Found 9 endpoints to process
+2025-08-12 19:06:05,932 - INFO - Starting BoxScoreAdvancedV3...
+2025-08-12 19:06:05,932 - INFO - Processing endpoint: BoxScoreAdvancedV3 for NBA
+2025-08-12 19:06:07,650 - INFO - Fetched 52782 records from nba_games
+2025-08-12 19:06:07,689 - INFO - Found 52782 unique game IDs for NBA
+2025-08-12 19:06:07,700 - INFO - Testing BoxScoreAdvancedV3 structure with first parameter...
+2025-08-12 19:06:07,880 - INFO - Endpoint BoxScoreAdvancedV3 returns 2 dataframes
+2025-08-12 19:06:07,880 - INFO - Processing dataframe 0: nba_boxscoreadvancedv3_playerstats
+2025-08-12 19:06:09,079 - INFO - Table nba_boxscoreadvancedv3_playerstats created/verified
+2025-08-12 19:06:09,113 - WARNING - Could not check existing data for nba_boxscoreadvancedv3_playerstats: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:06:09,113 - INFO - Processing 52782 missing parameters for nba_boxscoreadvancedv3_playerstats
+2025-08-12 19:06:09,219 - ERROR - Error processing 0022301197: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:06:09,219 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0022301197 - 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:06:09,219 - ERROR - Failed to save failed call record: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:06:10,536 - ERROR - Error processing 0022301199: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:06:10,536 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0022301199 - 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:06:10,536 - ERROR - Failed to save failed call record: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:06:11,833 - ERROR - Error processing 0022301187: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:06:11,833 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0022301187 - 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:06:11,833 - ERROR - Failed to save failed call record: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:06:13,189 - ERROR - Error processing 0022301186: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:06:13,189 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0022301186 - 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:06:13,189 - ERROR - Failed to save failed call record: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:06:14,499 - ERROR - Error processing 0022301190: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:06:14,499 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0022301190 - 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:06:14,499 - ERROR - Failed to save failed call record: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:06:15,794 - ERROR - Error processing 0022301189: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:06:15,794 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0022301189 - 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:06:15,794 - ERROR - Failed to save failed call record: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:06:17,082 - ERROR - Error processing 0022301192: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:06:17,082 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0022301192 - 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:06:17,082 - ERROR - Failed to save failed call record: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:06:18,384 - ERROR - Error processing 0022301194: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:06:18,384 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0022301194 - 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:06:18,384 - ERROR - Failed to save failed call record: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:06:19,739 - ERROR - Error processing 0022301195: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:06:19,739 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0022301195 - 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:06:19,739 - ERROR - Failed to save failed call record: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:06:21,029 - ERROR - Error processing 0022301198: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:06:21,029 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0022301198 - 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:06:21,029 - ERROR - Failed to save failed call record: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:06:22,329 - ERROR - Error processing 0022301200: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:06:22,329 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0022301200 - 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:06:22,329 - ERROR - Failed to save failed call record: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:06:23,619 - ERROR - Error processing 0022301188: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:06:23,619 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0022301188 - 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:06:23,626 - ERROR - Failed to save failed call record: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:06:24,919 - ERROR - Error processing 0022301193: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:06:24,919 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0022301193 - 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:06:24,919 - ERROR - Failed to save failed call record: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:06:26,249 - ERROR - Error processing 0022301196: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:06:26,249 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0022301196 - 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:06:26,249 - ERROR - Failed to save failed call record: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:06:27,529 - ERROR - Error processing 0022301191: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:06:27,529 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0022301191 - 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:06:27,529 - ERROR - Failed to save failed call record: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:06:28,869 - ERROR - Error processing 0022301172: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:06:28,869 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0022301172 - 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:06:28,869 - ERROR - Failed to save failed call record: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:06:29,778 - INFO - 
+[PAUSE] PROCESSING INTERRUPTED BY USER
+2025-08-12 19:06:29,778 - INFO - [INFO] No worries! System can resume from where it left off
+2025-08-12 19:06:29,778 - INFO - [INFO] Just run the script again - it will skip completed work
+2025-08-12 19:06:29,779 - INFO - 
+============================================================
+2025-08-12 19:06:29,779 - INFO - [SUMMARY] COMPREHENSIVE PROCESSING SUMMARY
+2025-08-12 19:06:29,779 - INFO - ============================================================
+2025-08-12 19:06:29,779 - INFO - [COUNT] Total API calls made: 0
+2025-08-12 19:06:29,779 - INFO - [ERROR] Total errors encountered: 16
+2025-08-12 19:06:29,779 - INFO - [SUCCESS] Overall success rate: -1600.0%
+2025-08-12 19:06:29,779 - INFO - 
+[WARNING] FAILED CALLS SUMMARY:
+2025-08-12 19:06:29,779 - INFO -    nba_boxscoreadvancedv3_playerstats_gameid: 16 failed parameters
+2025-08-12 19:06:29,779 - INFO -    Total failed parameter calls: 16
+2025-08-12 19:06:29,779 - INFO -    [INFO] Failed calls are tracked and will be skipped on retry
+2025-08-12 19:06:29,779 - INFO - 
+[COMPLETE] COMPREHENSIVE NBA DATA COLLECTION COMPLETE!
+2025-08-12 19:06:29,779 - INFO - [LOG] Check 'nba_endpoint_processor.log' for detailed processing log
+2025-08-12 19:06:29,779 - INFO - [RESUME] System is fully resumable - can continue from any interruption point
+2025-08-12 19:06:29,779 - INFO - [CLOSED] Database connection closed
+2025-08-12 19:06:29,779 - INFO - [SUCCESS] Database connection closed
+2025-08-12 19:08:52,619 - INFO - [INIT] RDS Connection Manager initialized with ASCII logging
+2025-08-12 19:08:52,619 - WARNING - [RECONNECT] Connection lost - attempting to reconnect...
+2025-08-12 19:08:52,619 - INFO - [RECONNECT] Reconnection attempt 1/3
+2025-08-12 19:08:52,619 - INFO - [CONNECT] Creating new database connection...
+2025-08-12 19:08:52,953 - INFO - [SUCCESS] Database connection established
+2025-08-12 19:08:52,953 - INFO - [SUCCESS] Reconnection successful
+2025-08-12 19:08:52,953 - INFO - [SUCCESS] Connected to RDS database with robust connection management
+2025-08-12 19:08:53,039 - INFO - Failed calls tracking table created/verified
+2025-08-12 19:08:53,073 - INFO - [START] Starting COMPREHENSIVE NBA endpoint processing...
+2025-08-12 19:08:53,073 - INFO - [TARGET] This will process ALL configured endpoints with full data
+2025-08-12 19:08:53,073 - INFO - [RESUME] You can interrupt anytime - system will resume where it left off
+2025-08-12 19:08:53,073 - INFO - ============================================================
+2025-08-12 19:08:53,073 - INFO - [PHASE 1] High Priority Game-Based Endpoints
+2025-08-12 19:08:53,073 - INFO - ============================================================
+2025-08-12 19:08:53,073 - INFO - Processing game_based endpoints with priority high
+2025-08-12 19:08:53,073 - INFO - Found 9 endpoints to process
+2025-08-12 19:08:53,073 - INFO - Starting BoxScoreAdvancedV3...
+2025-08-12 19:08:53,073 - INFO - Processing endpoint: BoxScoreAdvancedV3 for NBA
+2025-08-12 19:08:53,868 - INFO - Fetched 52782 records from nba_games
+2025-08-12 19:08:53,903 - INFO - Found 52782 unique game IDs for NBA
+2025-08-12 19:08:53,910 - INFO - Testing BoxScoreAdvancedV3 structure with first parameter...
+2025-08-12 19:08:54,069 - INFO - Endpoint BoxScoreAdvancedV3 returns 2 dataframes
+2025-08-12 19:08:54,069 - INFO - Processing dataframe 0: nba_boxscoreadvancedv3_playerstats
+2025-08-12 19:08:55,280 - INFO - Table nba_boxscoreadvancedv3_playerstats created/verified
+2025-08-12 19:08:55,429 - INFO - Table nba_boxscoreadvancedv3_playerstats: 50668 missing parameters out of 52782 total
+2025-08-12 19:08:55,462 - INFO - Processing 50668 missing parameters for nba_boxscoreadvancedv3_playerstats
+2025-08-12 19:09:23,319 - WARNING - API call failed for 0029500806: NBA API returned None
+2025-08-12 19:09:23,319 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029500806 - NBA API returned None
+2025-08-12 19:09:23,319 - ERROR - Failed to save failed call record: 'psycopg2.extensions.cursor' object is not callable
+2025-08-12 19:09:35,509 - INFO - 
+[PAUSE] PROCESSING INTERRUPTED BY USER
+2025-08-12 19:09:35,509 - INFO - [INFO] No worries! System can resume from where it left off
+2025-08-12 19:09:35,509 - INFO - [INFO] Just run the script again - it will skip completed work
+2025-08-12 19:09:35,509 - INFO - 
+============================================================
+2025-08-12 19:09:35,509 - INFO - [SUMMARY] COMPREHENSIVE PROCESSING SUMMARY
+2025-08-12 19:09:35,509 - INFO - ============================================================
+2025-08-12 19:09:35,509 - INFO - [COUNT] Total API calls made: 8
+2025-08-12 19:09:35,509 - INFO - [ERROR] Total errors encountered: 1
+2025-08-12 19:09:35,509 - INFO - [SUCCESS] Overall success rate: 87.5%
+2025-08-12 19:09:35,509 - INFO - 
+[WARNING] FAILED CALLS SUMMARY:
+2025-08-12 19:09:35,509 - INFO -    nba_boxscoreadvancedv3_playerstats_gameid: 1 failed parameters
+2025-08-12 19:09:35,509 - INFO -    Total failed parameter calls: 1
+2025-08-12 19:09:35,509 - INFO -    [INFO] Failed calls are tracked and will be skipped on retry
+2025-08-12 19:09:35,509 - INFO - 
+[COMPLETE] COMPREHENSIVE NBA DATA COLLECTION COMPLETE!
+2025-08-12 19:09:35,509 - INFO - [LOG] Check 'nba_endpoint_processor.log' for detailed processing log
+2025-08-12 19:09:35,509 - INFO - [RESUME] System is fully resumable - can continue from any interruption point
+2025-08-12 19:09:35,509 - INFO - [CLOSED] Database connection closed
+2025-08-12 19:09:35,509 - INFO - [SUCCESS] Database connection closed
+2025-08-12 19:10:24,059 - INFO - [INIT] RDS Connection Manager initialized with ASCII logging
+2025-08-12 19:10:24,059 - WARNING - [RECONNECT] Connection lost - attempting to reconnect...
+2025-08-12 19:10:24,059 - INFO - [RECONNECT] Reconnection attempt 1/3
+2025-08-12 19:10:24,059 - INFO - [CONNECT] Creating new database connection...
+2025-08-12 19:10:24,493 - INFO - [SUCCESS] Database connection established
+2025-08-12 19:10:24,493 - INFO - [SUCCESS] Reconnection successful
+2025-08-12 19:10:24,493 - INFO - [SUCCESS] Connected to RDS database with robust connection management
+2025-08-12 19:10:24,588 - INFO - Failed calls tracking table created/verified
+2025-08-12 19:10:24,619 - INFO - [START] Starting COMPREHENSIVE NBA endpoint processing...
+2025-08-12 19:10:24,619 - INFO - [TARGET] This will process ALL configured endpoints with full data
+2025-08-12 19:10:24,619 - INFO - [RESUME] You can interrupt anytime - system will resume where it left off
+2025-08-12 19:10:24,619 - INFO - ============================================================
+2025-08-12 19:10:24,619 - INFO - [PHASE 1] High Priority Game-Based Endpoints
+2025-08-12 19:10:24,619 - INFO - ============================================================
+2025-08-12 19:10:24,619 - INFO - Processing game_based endpoints with priority high
+2025-08-12 19:10:24,619 - INFO - Found 9 endpoints to process
+2025-08-12 19:10:24,619 - INFO - Starting BoxScoreAdvancedV3...
+2025-08-12 19:10:24,619 - INFO - Processing endpoint: BoxScoreAdvancedV3 for NBA
+2025-08-12 19:10:25,351 - INFO - Fetched 52782 records from nba_games
+2025-08-12 19:10:25,389 - INFO - Found 52782 unique game IDs for NBA
+2025-08-12 19:10:25,395 - INFO - Testing BoxScoreAdvancedV3 structure with first parameter...
+2025-08-12 19:10:25,579 - INFO - Endpoint BoxScoreAdvancedV3 returns 2 dataframes
+2025-08-12 19:10:25,579 - INFO - Processing dataframe 0: nba_boxscoreadvancedv3_playerstats
+2025-08-12 19:10:26,660 - INFO - Table nba_boxscoreadvancedv3_playerstats created/verified
+2025-08-12 19:10:26,833 - INFO - Table nba_boxscoreadvancedv3_playerstats: 50660 missing parameters out of 52782 total
+2025-08-12 19:10:26,859 - INFO - Processing 50660 missing parameters for nba_boxscoreadvancedv3_playerstats
+2025-08-12 19:10:32,999 - WARNING - API call failed for 0028700583: NBA API returned None
+2025-08-12 19:10:32,999 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028700583 - NBA API returned None
+2025-08-12 19:10:35,640 - WARNING - API call failed for 0029400039: NBA API returned None
+2025-08-12 19:10:35,640 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029400039 - NBA API returned None
+2025-08-12 19:10:41,275 - WARNING - API call failed for 0028600775: NBA API returned None
+2025-08-12 19:10:41,275 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028600775 - NBA API returned None
+2025-08-12 19:11:17,578 - WARNING - API call failed for 0028600104: NBA API returned None
+2025-08-12 19:11:17,578 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028600104 - NBA API returned None
+2025-08-12 19:11:51,939 - WARNING - API call failed for 0028700769: NBA API returned None
+2025-08-12 19:11:51,939 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028700769 - NBA API returned None
+2025-08-12 19:12:39,360 - WARNING - API call failed for 0028600593: NBA API returned None
+2025-08-12 19:12:39,360 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028600593 - NBA API returned None
+2025-08-12 19:12:47,249 - WARNING - API call failed for 0028700909: NBA API returned None
+2025-08-12 19:12:47,249 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028700909 - NBA API returned None
+2025-08-12 19:12:57,499 - WARNING - API call failed for 0028800361: NBA API returned None
+2025-08-12 19:12:57,499 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028800361 - NBA API returned None
+2025-08-12 19:13:13,819 - WARNING - API call failed for 0028400527: NBA API returned None
+2025-08-12 19:13:13,819 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028400527 - NBA API returned None
+2025-08-12 19:13:20,580 - WARNING - API call failed for 0029200868: NBA API returned None
+2025-08-12 19:13:20,580 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029200868 - NBA API returned None
+2025-08-12 19:13:22,739 - WARNING - API call failed for 0028700728: NBA API returned None
+2025-08-12 19:13:22,739 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028700728 - NBA API returned None
+2025-08-12 19:13:24,224 - WARNING - API call failed for 0028800062: NBA API returned None
+2025-08-12 19:13:24,224 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028800062 - NBA API returned None
+2025-08-12 19:13:32,929 - WARNING - API call failed for 0028300335: NBA API returned None
+2025-08-12 19:13:32,929 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028300335 - NBA API returned None
+2025-08-12 19:13:34,689 - WARNING - API call failed for 0029400413: NBA API returned None
+2025-08-12 19:13:34,689 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029400413 - NBA API returned None
+2025-08-12 19:13:44,159 - WARNING - API call failed for 0029400869: NBA API returned None
+2025-08-12 19:13:44,159 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029400869 - NBA API returned None
+2025-08-12 19:13:56,859 - WARNING - API call failed for 0029000624: NBA API returned None
+2025-08-12 19:13:56,859 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029000624 - NBA API returned None
+2025-08-12 19:14:07,574 - INFO - Progress: 50/50660 (34 success, 16 errors)
+2025-08-12 19:14:21,308 - WARNING - API call failed for 0028700703: NBA API returned None
+2025-08-12 19:14:21,309 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028700703 - NBA API returned None
+2025-08-12 19:14:22,758 - WARNING - API call failed for 0028400744: NBA API returned None
+2025-08-12 19:14:22,758 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028400744 - NBA API returned None
+2025-08-12 19:14:53,190 - WARNING - API call failed for 0029400249: NBA API returned None
+2025-08-12 19:14:53,190 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029400249 - NBA API returned None
+2025-08-12 19:15:01,905 - WARNING - API call failed for 0029400301: NBA API returned None
+2025-08-12 19:15:01,905 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029400301 - NBA API returned None
+2025-08-12 19:15:06,780 - WARNING - API call failed for 0028800793: NBA API returned None
+2025-08-12 19:15:06,780 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028800793 - NBA API returned None
+2025-08-12 19:15:20,219 - WARNING - API call failed for 0048700058: NBA API returned None
+2025-08-12 19:15:20,219 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0048700058 - NBA API returned None
+2025-08-12 19:15:21,639 - WARNING - API call failed for 0029400946: NBA API returned None
+2025-08-12 19:15:21,639 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029400946 - NBA API returned None
+2025-08-12 19:15:26,780 - WARNING - API call failed for 0029200805: NBA API returned None
+2025-08-12 19:15:26,780 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029200805 - NBA API returned None
+2025-08-12 19:15:35,833 - WARNING - API call failed for 0028500935: NBA API returned None
+2025-08-12 19:15:35,833 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028500935 - NBA API returned None
+2025-08-12 19:15:43,599 - WARNING - API call failed for 0028500942: NBA API returned None
+2025-08-12 19:15:43,599 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028500942 - NBA API returned None
+2025-08-12 19:15:50,152 - WARNING - API call failed for 0028800100: NBA API returned None
+2025-08-12 19:15:50,152 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028800100 - NBA API returned None
+2025-08-12 19:15:52,070 - WARNING - API call failed for 0028400719: NBA API returned None
+2025-08-12 19:15:52,070 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028400719 - NBA API returned None
+2025-08-12 19:15:58,162 - INFO - 
+[PAUSE] PROCESSING INTERRUPTED BY USER
+2025-08-12 19:15:58,162 - INFO - [INFO] No worries! System can resume from where it left off
+2025-08-12 19:15:58,162 - INFO - [INFO] Just run the script again - it will skip completed work
+2025-08-12 19:15:58,162 - INFO - 
+============================================================
+2025-08-12 19:15:58,162 - INFO - [SUMMARY] COMPREHENSIVE PROCESSING SUMMARY
+2025-08-12 19:15:58,162 - INFO - ============================================================
+2025-08-12 19:15:58,162 - INFO - [COUNT] Total API calls made: 59
+2025-08-12 19:15:58,162 - INFO - [ERROR] Total errors encountered: 28
+2025-08-12 19:15:58,162 - INFO - [SUCCESS] Overall success rate: 52.5%
+2025-08-12 19:15:58,162 - INFO - 
+[WARNING] FAILED CALLS SUMMARY:
+2025-08-12 19:15:58,162 - INFO -    nba_boxscoreadvancedv3_playerstats_gameid: 28 failed parameters
+2025-08-12 19:15:58,162 - INFO -    Total failed parameter calls: 28
+2025-08-12 19:15:58,162 - INFO -    [INFO] Failed calls are tracked and will be skipped on retry
+2025-08-12 19:15:58,164 - INFO - 
+[COMPLETE] COMPREHENSIVE NBA DATA COLLECTION COMPLETE!
+2025-08-12 19:15:58,164 - INFO - [LOG] Check 'nba_endpoint_processor.log' for detailed processing log
+2025-08-12 19:15:58,164 - INFO - [RESUME] System is fully resumable - can continue from any interruption point
+2025-08-12 19:15:58,164 - INFO - [CLOSED] Database connection closed
+2025-08-12 19:15:58,164 - INFO - [SUCCESS] Database connection closed
+2025-08-12 19:18:27,081 - INFO - [INIT] RDS Connection Manager initialized with ASCII logging
+2025-08-12 19:18:27,081 - WARNING - [RECONNECT] Connection lost - attempting to reconnect...
+2025-08-12 19:18:27,081 - INFO - [RECONNECT] Reconnection attempt 1/3
+2025-08-12 19:18:27,081 - INFO - [CONNECT] Creating new database connection...
+2025-08-12 19:18:27,439 - INFO - [SUCCESS] Database connection established
+2025-08-12 19:18:27,439 - INFO - [SUCCESS] Reconnection successful
+2025-08-12 19:18:27,439 - INFO - [SUCCESS] Connected to RDS database with robust connection management
+2025-08-12 19:18:27,520 - INFO - Failed calls tracking table created/verified
+2025-08-12 19:18:27,550 - INFO - [START] Starting COMPREHENSIVE NBA endpoint processing...
+2025-08-12 19:18:27,550 - INFO - [TARGET] This will process ALL configured endpoints with full data
+2025-08-12 19:18:27,550 - INFO - [RESUME] You can interrupt anytime - system will resume where it left off
+2025-08-12 19:18:27,550 - INFO - ============================================================
+2025-08-12 19:18:27,550 - INFO - [PHASE 1] High Priority Game-Based Endpoints
+2025-08-12 19:18:27,551 - INFO - ============================================================
+2025-08-12 19:18:27,551 - INFO - Processing game_based endpoints with priority high
+2025-08-12 19:18:27,551 - INFO - Found 9 endpoints to process
+2025-08-12 19:18:27,551 - INFO - Starting BoxScoreAdvancedV3...
+2025-08-12 19:18:27,551 - INFO - Processing endpoint: BoxScoreAdvancedV3 for NBA
+2025-08-12 19:18:28,170 - INFO - Fetched 52782 records from nba_games
+2025-08-12 19:18:28,206 - INFO - Found 52782 unique game IDs for NBA
+2025-08-12 19:18:28,209 - INFO - Testing BoxScoreAdvancedV3 structure with first parameter...
+2025-08-12 19:18:28,370 - INFO - Endpoint BoxScoreAdvancedV3 returns 2 dataframes
+2025-08-12 19:18:28,371 - INFO - Processing dataframe 0: nba_boxscoreadvancedv3_playerstats
+2025-08-12 19:18:29,503 - INFO - Table nba_boxscoreadvancedv3_playerstats created/verified
+2025-08-12 19:18:29,639 - INFO - Table nba_boxscoreadvancedv3_playerstats: 50601 missing parameters out of 52782 total
+2025-08-12 19:18:29,670 - INFO - Processing 50601 missing parameters for nba_boxscoreadvancedv3_playerstats
+2025-08-12 19:18:43,071 - WARNING - API call failed for 0029200329: NBA API returned None
+2025-08-12 19:18:43,072 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029200329 - NBA API returned None
+2025-08-12 19:19:39,805 - WARNING - API call failed for 0028700560: NBA API returned None
+2025-08-12 19:19:39,805 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028700560 - NBA API returned None
+2025-08-12 19:19:57,329 - WARNING - API call failed for 0028400369: NBA API returned None
+2025-08-12 19:19:57,329 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028400369 - NBA API returned None
+2025-08-12 19:20:05,515 - WARNING - API call failed for 0029200183: NBA API returned None
+2025-08-12 19:20:05,515 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029200183 - NBA API returned None
+2025-08-12 19:20:36,529 - WARNING - API call failed for 0028800428: NBA API returned None
+2025-08-12 19:20:36,529 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028800428 - NBA API returned None
+2025-08-12 19:20:46,289 - WARNING - API call failed for 0028600500: NBA API returned None
+2025-08-12 19:20:46,289 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028600500 - NBA API returned None
+2025-08-12 19:20:47,988 - WARNING - API call failed for 0029200200: NBA API returned None
+2025-08-12 19:20:47,989 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029200200 - NBA API returned None
+2025-08-12 19:21:26,869 - WARNING - API call failed for 0028800984: NBA API returned None
+2025-08-12 19:21:26,869 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028800984 - NBA API returned None
+2025-08-12 19:21:28,479 - WARNING - API call failed for 0028900649: NBA API returned None
+2025-08-12 19:21:28,479 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028900649 - NBA API returned None
+2025-08-12 19:21:30,570 - WARNING - API call failed for 0029400377: NBA API returned None
+2025-08-12 19:21:30,570 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029400377 - NBA API returned None
+2025-08-12 19:21:44,219 - INFO - 
+[PAUSE] PROCESSING INTERRUPTED BY USER
+2025-08-12 19:21:44,219 - INFO - [INFO] No worries! System can resume from where it left off
+2025-08-12 19:21:44,219 - INFO - [INFO] Just run the script again - it will skip completed work
+2025-08-12 19:21:44,221 - INFO - 
+============================================================
+2025-08-12 19:21:44,221 - INFO - [SUMMARY] COMPREHENSIVE PROCESSING SUMMARY
+2025-08-12 19:21:44,221 - INFO - ============================================================
+2025-08-12 19:21:44,221 - INFO - [COUNT] Total API calls made: 32
+2025-08-12 19:21:44,221 - INFO - [ERROR] Total errors encountered: 10
+2025-08-12 19:21:44,221 - INFO - [SUCCESS] Overall success rate: 68.8%
+2025-08-12 19:21:44,221 - INFO - 
+[WARNING] FAILED CALLS SUMMARY:
+2025-08-12 19:21:44,221 - INFO -    nba_boxscoreadvancedv3_playerstats_gameid: 10 failed parameters
+2025-08-12 19:21:44,221 - INFO -    Total failed parameter calls: 10
+2025-08-12 19:21:44,221 - INFO -    [INFO] Failed calls are tracked and will be skipped on retry
+2025-08-12 19:21:44,221 - INFO - 
+[COMPLETE] COMPREHENSIVE NBA DATA COLLECTION COMPLETE!
+2025-08-12 19:21:44,221 - INFO - [LOG] Check 'nba_endpoint_processor.log' for detailed processing log
+2025-08-12 19:21:44,221 - INFO - [RESUME] System is fully resumable - can continue from any interruption point
+2025-08-12 19:21:44,224 - INFO - [CLOSED] Database connection closed
+2025-08-12 19:21:44,224 - INFO - [SUCCESS] Database connection closed
+2025-08-12 19:25:11,628 - INFO - [INIT] RDS Connection Manager initialized with ASCII logging
+2025-08-12 19:25:11,628 - WARNING - [RECONNECT] Connection lost - attempting to reconnect...
+2025-08-12 19:25:11,629 - INFO - [RECONNECT] Reconnection attempt 1/3
+2025-08-12 19:25:11,629 - INFO - [CONNECT] Creating new database connection...
+2025-08-12 19:25:11,969 - INFO - [SUCCESS] Database connection established
+2025-08-12 19:25:11,969 - INFO - [SUCCESS] Reconnection successful
+2025-08-12 19:25:11,971 - INFO - [SUCCESS] Connected to RDS database with robust connection management
+2025-08-12 19:25:12,053 - INFO - Failed calls tracking table created/verified
+2025-08-12 19:25:12,081 - INFO - [START] Starting COMPREHENSIVE NBA endpoint processing...
+2025-08-12 19:25:12,081 - INFO - [TARGET] This will process ALL configured endpoints with full data
+2025-08-12 19:25:12,081 - INFO - [RESUME] You can interrupt anytime - system will resume where it left off
+2025-08-12 19:25:12,081 - INFO - ============================================================
+2025-08-12 19:25:12,081 - INFO - [PHASE 1] High Priority Game-Based Endpoints
+2025-08-12 19:25:12,081 - INFO - ============================================================
+2025-08-12 19:25:12,081 - INFO - Processing game_based endpoints with priority high
+2025-08-12 19:25:12,081 - INFO - Found 9 endpoints to process
+2025-08-12 19:25:12,081 - INFO - Starting BoxScoreAdvancedV3...
+2025-08-12 19:25:12,081 - INFO - Processing endpoint: BoxScoreAdvancedV3 for NBA
+2025-08-12 19:25:12,733 - INFO - Fetched 52782 records from nba_games
+2025-08-12 19:25:12,771 - INFO - Found 52782 unique game IDs for NBA
+2025-08-12 19:25:12,779 - INFO - Testing BoxScoreAdvancedV3 structure with first parameter...
+2025-08-12 19:25:12,981 - INFO - Endpoint BoxScoreAdvancedV3 returns 2 dataframes
+2025-08-12 19:25:12,981 - INFO - Processing dataframe 0: nba_boxscoreadvancedv3_playerstats
+2025-08-12 19:25:13,979 - INFO - Table nba_boxscoreadvancedv3_playerstats created/verified
+2025-08-12 19:25:14,124 - INFO - Table nba_boxscoreadvancedv3_playerstats: 50569 missing parameters out of 52782 total
+2025-08-12 19:25:14,158 - INFO - Processing 50569 missing parameters for nba_boxscoreadvancedv3_playerstats
+2025-08-12 19:25:44,643 - WARNING - API call failed for 0028800375: NBA API returned None
+2025-08-12 19:25:44,643 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028800375 - NBA API returned None
+2025-08-12 19:26:19,166 - WARNING - [NETWORK] Network/timeout error for 0020600159 (attempt 1/3)
+2025-08-12 19:26:19,166 - WARNING -    Error: HTTPSConnectionPool(host='stats.nba.com', port=443): Read timed out. (read timeout=30)
+2025-08-12 19:26:19,166 - WARNING -    [INFO] This could be due to PC sleep/wake cycle - forcing connection refresh...
+2025-08-12 19:26:19,166 - WARNING - [NETWORK] Network/timeout error for 0020600159 (attempt 1/3)
+2025-08-12 19:26:19,167 - WARNING -    [INFO] Retrying in 1s...
+2025-08-12 19:26:20,201 - WARNING -    [SUCCESS] Connection refresh completed
+2025-08-12 19:26:26,592 - WARNING - API call failed for 0028400173: NBA API returned None
+2025-08-12 19:26:26,593 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028400173 - NBA API returned None
+2025-08-12 19:27:14,949 - WARNING - [NETWORK] Network/timeout error for 0049400023 (attempt 1/3)
+2025-08-12 19:27:14,949 - WARNING -    Error: HTTPSConnectionPool(host='stats.nba.com', port=443): Read timed out. (read timeout=30)
+2025-08-12 19:27:14,949 - WARNING -    [INFO] This could be due to PC sleep/wake cycle - forcing connection refresh...
+2025-08-12 19:27:14,949 - WARNING - [NETWORK] Network/timeout error for 0049400023 (attempt 1/3)
+2025-08-12 19:27:14,949 - WARNING -    [INFO] Retrying in 1s...
+2025-08-12 19:27:15,978 - WARNING -    [SUCCESS] Connection refresh completed
+2025-08-12 19:27:27,473 - WARNING - API call failed for 0049400023: NBA API returned None
+2025-08-12 19:27:27,474 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0049400023 - NBA API returned None
+2025-08-12 19:27:33,835 - WARNING - API call failed for 0048300048: NBA API returned None
+2025-08-12 19:27:33,835 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0048300048 - NBA API returned None
+2025-08-12 19:27:40,585 - WARNING - API call failed for 0028600300: NBA API returned None
+2025-08-12 19:27:40,586 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028600300 - NBA API returned None
+2025-08-12 19:27:42,023 - WARNING - API call failed for 0029000485: NBA API returned None
+2025-08-12 19:27:42,023 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029000485 - NBA API returned None
+2025-08-12 19:28:08,680 - INFO - [PROGRESS] 25/50569 (19 success, 6 errors) - 0.1 calls/min
+2025-08-12 19:28:13,413 - WARNING - API call failed for 0028600699: NBA API returned None
+2025-08-12 19:28:13,413 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028600699 - NBA API returned None
+2025-08-12 19:28:25,795 - WARNING - API call failed for 0029400337: NBA API returned None
+2025-08-12 19:28:25,795 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029400337 - NBA API returned None
+2025-08-12 19:28:30,482 - WARNING - API call failed for 0028500612: NBA API returned None
+2025-08-12 19:28:30,483 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028500612 - NBA API returned None
+2025-08-12 19:28:52,195 - WARNING - API call failed for 0029200847: NBA API returned None
+2025-08-12 19:28:52,195 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029200847 - NBA API returned None
+2025-08-12 19:29:02,280 - WARNING - API call failed for 0028800018: NBA API returned None
+2025-08-12 19:29:02,281 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028800018 - NBA API returned None
+2025-08-12 19:29:11,481 - WARNING - API call failed for 0029300031: NBA API returned None
+2025-08-12 19:29:11,481 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029300031 - NBA API returned None
+2025-08-12 19:29:33,428 - WARNING - API call failed for 0029000549: NBA API returned None
+2025-08-12 19:29:33,428 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029000549 - NBA API returned None
+2025-08-12 19:29:36,749 - INFO - [PROGRESS] 50/50569 (37 success, 13 errors) - 0.2 calls/min
+2025-08-12 19:29:48,985 - WARNING - API call failed for 0029100750: NBA API returned None
+2025-08-12 19:29:48,985 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029100750 - NBA API returned None
+2025-08-12 19:29:56,762 - WARNING - API call failed for 0048500211: NBA API returned None
+2025-08-12 19:29:56,762 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0048500211 - NBA API returned None
+2025-08-12 19:29:58,308 - WARNING - API call failed for 0029300607: NBA API returned None
+2025-08-12 19:29:58,308 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029300607 - NBA API returned None
+2025-08-12 19:30:05,596 - WARNING - API call failed for 0029300028: NBA API returned None
+2025-08-12 19:30:05,596 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029300028 - NBA API returned None
+2025-08-12 19:30:19,421 - WARNING - API call failed for 0028900863: NBA API returned None
+2025-08-12 19:30:19,421 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028900863 - NBA API returned None
+2025-08-12 19:30:27,740 - WARNING - API call failed for 0028400193: NBA API returned None
+2025-08-12 19:30:27,740 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028400193 - NBA API returned None
+2025-08-12 19:30:46,159 - WARNING - API call failed for 0029000880: NBA API returned None
+2025-08-12 19:30:46,159 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029000880 - NBA API returned None
+2025-08-12 19:30:53,043 - INFO - [PROGRESS] 75/50569 (55 success, 20 errors) - 0.2 calls/min
+2025-08-12 19:31:03,699 - WARNING - API call failed for 0028800752: NBA API returned None
+2025-08-12 19:31:03,699 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028800752 - NBA API returned None
+2025-08-12 19:31:08,859 - WARNING - API call failed for 0029100720: NBA API returned None
+2025-08-12 19:31:08,859 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029100720 - NBA API returned None
+2025-08-12 19:31:46,500 - WARNING - [NETWORK] Network/timeout error for 0029600871 (attempt 1/3)
+2025-08-12 19:31:46,500 - WARNING -    Error: HTTPSConnectionPool(host='stats.nba.com', port=443): Read timed out. (read timeout=30)
+2025-08-12 19:31:46,500 - WARNING -    [INFO] This could be due to PC sleep/wake cycle - forcing connection refresh...
+2025-08-12 19:31:46,500 - WARNING - [NETWORK] Network/timeout error for 0029600871 (attempt 1/3)
+2025-08-12 19:31:46,501 - WARNING -    [INFO] Retrying in 1s...
+2025-08-12 19:31:47,532 - WARNING -    [SUCCESS] Connection refresh completed
+2025-08-12 19:32:02,755 - WARNING - API call failed for 0048600014: NBA API returned None
+2025-08-12 19:32:02,755 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0048600014 - NBA API returned None
+2025-08-12 19:32:24,510 - WARNING - API call failed for 0028400338: NBA API returned None
+2025-08-12 19:32:24,510 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028400338 - NBA API returned None
+2025-08-12 19:32:31,839 - WARNING - API call failed for 0028400728: NBA API returned None
+2025-08-12 19:32:31,839 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028400728 - NBA API returned None
+2025-08-12 19:32:43,948 - WARNING - API call failed for 0028700588: NBA API returned None
+2025-08-12 19:32:43,949 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028700588 - NBA API returned None
+2025-08-12 19:32:51,255 - INFO - [PROGRESS] 100/50569 (74 success, 26 errors) - 0.2 calls/min
+2025-08-12 19:32:51,255 - INFO - [CHECK] Performing connection health check at 100/50569 processed...
+2025-08-12 19:32:56,511 - WARNING - API call failed for 0029001100: NBA API returned None
+2025-08-12 19:32:56,511 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029001100 - NBA API returned None
+2025-08-12 19:32:58,692 - WARNING - API call failed for 0029100610: NBA API returned None
+2025-08-12 19:32:58,692 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029100610 - NBA API returned None
+2025-08-12 19:33:00,680 - WARNING - API call failed for 0029300044: NBA API returned None
+2025-08-12 19:33:00,681 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029300044 - NBA API returned None
+2025-08-12 19:33:23,181 - WARNING - API call failed for 0029300708: NBA API returned None
+2025-08-12 19:33:23,181 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029300708 - NBA API returned None
+2025-08-12 19:33:24,667 - WARNING - API call failed for 0028800844: NBA API returned None
+2025-08-12 19:33:24,667 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028800844 - NBA API returned None
+2025-08-12 19:33:26,024 - WARNING - API call failed for 0028500840: NBA API returned None
+2025-08-12 19:33:26,024 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028500840 - NBA API returned None
+2025-08-12 19:33:28,755 - WARNING - API call failed for 0029300491: NBA API returned None
+2025-08-12 19:33:28,756 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029300491 - NBA API returned None
+2025-08-12 19:33:36,851 - WARNING - API call failed for 0029200874: NBA API returned None
+2025-08-12 19:33:36,852 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029200874 - NBA API returned None
+2025-08-12 19:33:38,189 - WARNING - API call failed for 0029000261: NBA API returned None
+2025-08-12 19:33:38,189 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029000261 - NBA API returned None
+2025-08-12 19:33:39,619 - WARNING - API call failed for 0029200769: NBA API returned None
+2025-08-12 19:33:39,619 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029200769 - NBA API returned None
+2025-08-12 19:33:45,268 - WARNING - API call failed for 0029100574: NBA API returned None
+2025-08-12 19:33:45,268 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029100574 - NBA API returned None
+2025-08-12 19:33:59,732 - INFO - [PROGRESS] 125/50569 (88 success, 37 errors) - 0.2 calls/min
+2025-08-12 19:34:03,865 - WARNING - API call failed for 0028300400: NBA API returned None
+2025-08-12 19:34:03,866 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028300400 - NBA API returned None
+2025-08-12 19:34:10,768 - WARNING - API call failed for 0029100539: NBA API returned None
+2025-08-12 19:34:10,768 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029100539 - NBA API returned None
+2025-08-12 19:34:21,195 - WARNING - API call failed for 0028300762: NBA API returned None
+2025-08-12 19:34:21,195 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028300762 - NBA API returned None
+2025-08-12 19:34:22,977 - WARNING - API call failed for 0048600004: NBA API returned None
+2025-08-12 19:34:22,977 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0048600004 - NBA API returned None
+2025-08-12 19:34:48,619 - WARNING - API call failed for 0029300786: NBA API returned None
+2025-08-12 19:34:48,619 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029300786 - NBA API returned None
+2025-08-12 19:34:50,602 - WARNING - API call failed for 0028400366: NBA API returned None
+2025-08-12 19:34:50,602 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028400366 - NBA API returned None
+2025-08-12 19:34:59,545 - WARNING - API call failed for 0028800055: NBA API returned None
+2025-08-12 19:34:59,545 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028800055 - NBA API returned None
+2025-08-12 19:35:01,055 - WARNING - API call failed for 0028500030: NBA API returned None
+2025-08-12 19:35:01,055 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028500030 - NBA API returned None
+2025-08-12 19:35:08,672 - WARNING - API call failed for 0028900838: NBA API returned None
+2025-08-12 19:35:08,672 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028900838 - NBA API returned None
+2025-08-12 19:35:54,641 - INFO - [PROGRESS] 150/50569 (104 success, 46 errors) - 0.2 calls/min
+2025-08-12 19:36:28,695 - WARNING - API call failed for 0029400747: NBA API returned None
+2025-08-12 19:36:28,695 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029400747 - NBA API returned None
+2025-08-12 19:36:39,871 - WARNING - API call failed for 0028900302: NBA API returned None
+2025-08-12 19:36:39,871 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028900302 - NBA API returned None
+2025-08-12 19:36:41,905 - WARNING - API call failed for 0028600317: NBA API returned None
+2025-08-12 19:36:41,905 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028600317 - NBA API returned None
+2025-08-12 19:37:00,932 - WARNING - API call failed for 0029100626: NBA API returned None
+2025-08-12 19:37:00,932 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029100626 - NBA API returned None
+2025-08-12 19:37:32,567 - WARNING - API call failed for 0029100941: NBA API returned None
+2025-08-12 19:37:32,568 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029100941 - NBA API returned None
+2025-08-12 19:37:36,247 - INFO - [PROGRESS] 175/50569 (124 success, 51 errors) - 0.2 calls/min
+2025-08-12 19:38:18,622 - WARNING - API call failed for 0029500299: NBA API returned None
+2025-08-12 19:38:18,622 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029500299 - NBA API returned None
+2025-08-12 19:38:27,519 - WARNING - API call failed for 0028900669: NBA API returned None
+2025-08-12 19:38:27,519 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028900669 - NBA API returned None
+2025-08-12 19:38:47,469 - WARNING - API call failed for 0029200754: NBA API returned None
+2025-08-12 19:38:47,470 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029200754 - NBA API returned None
+2025-08-12 19:38:52,981 - WARNING - API call failed for 0029300550: NBA API returned None
+2025-08-12 19:38:52,981 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029300550 - NBA API returned None
+2025-08-12 19:38:57,489 - WARNING - API call failed for 0029100032: NBA API returned None
+2025-08-12 19:38:57,489 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029100032 - NBA API returned None
+2025-08-12 19:38:59,017 - WARNING - API call failed for 0029100187: NBA API returned None
+2025-08-12 19:38:59,017 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029100187 - NBA API returned None
+2025-08-12 19:39:21,663 - INFO - [PROGRESS] 200/50569 (143 success, 57 errors) - 0.2 calls/min
+2025-08-12 19:39:21,663 - INFO - [CHECK] Performing connection health check at 200/50569 processed...
+2025-08-12 19:40:09,447 - WARNING - API call failed for 0029300706: NBA API returned None
+2025-08-12 19:40:09,447 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029300706 - NBA API returned None
+2025-08-12 19:40:31,060 - WARNING - API call failed for 0029200545: NBA API returned None
+2025-08-12 19:40:31,060 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029200545 - NBA API returned None
+2025-08-12 19:40:45,960 - WARNING - API call failed for 0028800081: NBA API returned None
+2025-08-12 19:40:45,960 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028800081 - NBA API returned None
+2025-08-12 19:41:39,643 - INFO - [PROGRESS] 225/50569 (165 success, 60 errors) - 0.2 calls/min
+2025-08-12 19:42:01,690 - WARNING - API call failed for 0028500675: NBA API returned None
+2025-08-12 19:42:01,691 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028500675 - NBA API returned None
+2025-08-12 19:43:21,063 - WARNING - API call failed for 0029500727: NBA API returned None
+2025-08-12 19:43:21,063 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029500727 - NBA API returned None
+2025-08-12 19:43:25,618 - WARNING - API call failed for 0028400207: NBA API returned None
+2025-08-12 19:43:25,618 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028400207 - NBA API returned None
+2025-08-12 19:43:27,109 - WARNING - API call failed for 0029301097: NBA API returned None
+2025-08-12 19:43:27,109 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029301097 - NBA API returned None
+2025-08-12 19:43:33,552 - WARNING - API call failed for 0049000013: NBA API returned None
+2025-08-12 19:43:33,552 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0049000013 - NBA API returned None
+2025-08-12 19:43:37,552 - INFO - [PROGRESS] 250/50569 (185 success, 65 errors) - 0.2 calls/min
+2025-08-12 19:43:41,353 - WARNING - API call failed for 0029200334: NBA API returned None
+2025-08-12 19:43:41,353 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029200334 - NBA API returned None
+2025-08-12 19:44:13,739 - WARNING - API call failed for 0029000985: NBA API returned None
+2025-08-12 19:44:13,739 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029000985 - NBA API returned None
+2025-08-12 19:44:27,359 - WARNING - API call failed for 0029100638: NBA API returned None
+2025-08-12 19:44:27,359 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029100638 - NBA API returned None
+2025-08-12 19:44:28,911 - WARNING - API call failed for 0029500023: NBA API returned None
+2025-08-12 19:44:28,912 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029500023 - NBA API returned None
+2025-08-12 19:44:46,550 - WARNING - API call failed for 0029000904: NBA API returned None
+2025-08-12 19:44:46,551 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029000904 - NBA API returned None
+2025-08-12 19:44:51,174 - WARNING - API call failed for 0029300023: NBA API returned None
+2025-08-12 19:44:51,174 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029300023 - NBA API returned None
+2025-08-12 19:44:59,882 - WARNING - API call failed for 0029500617: NBA API returned None
+2025-08-12 19:44:59,882 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029500617 - NBA API returned None
+2025-08-12 19:45:02,464 - WARNING - API call failed for 0049300018: NBA API returned None
+2025-08-12 19:45:02,464 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0049300018 - NBA API returned None
+2025-08-12 19:45:11,346 - INFO - [PROGRESS] 275/50569 (202 success, 73 errors) - 0.2 calls/min
+2025-08-12 19:45:12,597 - WARNING - API call failed for 0028600657: NBA API returned None
+2025-08-12 19:45:12,598 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028600657 - NBA API returned None
+2025-08-12 19:45:15,110 - WARNING - API call failed for 0028500472: NBA API returned None
+2025-08-12 19:45:15,111 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028500472 - NBA API returned None
+2025-08-12 19:45:35,594 - WARNING - API call failed for 0029100272: NBA API returned None
+2025-08-12 19:45:35,595 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029100272 - NBA API returned None
+2025-08-12 19:45:41,032 - WARNING - API call failed for 0029200797: NBA API returned None
+2025-08-12 19:45:41,032 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029200797 - NBA API returned None
+2025-08-12 19:45:42,364 - WARNING - API call failed for 0028300848: NBA API returned None
+2025-08-12 19:45:42,364 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028300848 - NBA API returned None
+2025-08-12 19:45:44,164 - WARNING - API call failed for 0028800134: NBA API returned None
+2025-08-12 19:45:44,165 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028800134 - NBA API returned None
+2025-08-12 19:45:56,602 - WARNING - API call failed for 0029500198: NBA API returned None
+2025-08-12 19:45:56,602 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029500198 - NBA API returned None
+2025-08-12 19:46:02,208 - WARNING - API call failed for 0028400048: NBA API returned None
+2025-08-12 19:46:02,208 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028400048 - NBA API returned None
+2025-08-12 19:46:11,376 - WARNING - API call failed for 0028900799: NBA API returned None
+2025-08-12 19:46:11,376 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028900799 - NBA API returned None
+2025-08-12 19:46:13,305 - WARNING - API call failed for 0029200530: NBA API returned None
+2025-08-12 19:46:13,305 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029200530 - NBA API returned None
+2025-08-12 19:46:23,745 - INFO - [PROGRESS] 300/50569 (217 success, 83 errors) - 0.2 calls/min
+2025-08-12 19:46:23,745 - INFO - [CHECK] Performing connection health check at 300/50569 processed...
+2025-08-12 19:46:25,292 - WARNING - API call failed for 0029300043: NBA API returned None
+2025-08-12 19:46:25,292 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029300043 - NBA API returned None
+2025-08-12 19:47:04,400 - WARNING - API call failed for 0028300135: NBA API returned None
+2025-08-12 19:47:04,401 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028300135 - NBA API returned None
+2025-08-12 19:47:16,348 - WARNING - API call failed for 0028901018: NBA API returned None
+2025-08-12 19:47:16,349 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028901018 - NBA API returned None
+2025-08-12 19:47:31,412 - WARNING - API call failed for 0029200505: NBA API returned None
+2025-08-12 19:47:31,412 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029200505 - NBA API returned None
+2025-08-12 19:47:37,969 - WARNING - API call failed for 0028700260: NBA API returned None
+2025-08-12 19:47:37,970 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028700260 - NBA API returned None
+2025-08-12 19:48:05,641 - INFO - [PROGRESS] 325/50569 (237 success, 88 errors) - 0.2 calls/min
+2025-08-12 19:48:39,633 - WARNING - API call failed for 0029300027: NBA API returned None
+2025-08-12 19:48:39,634 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029300027 - NBA API returned None
+2025-08-12 19:48:47,204 - WARNING - API call failed for 0028700485: NBA API returned None
+2025-08-12 19:48:47,204 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028700485 - NBA API returned None
+2025-08-12 19:48:54,431 - WARNING - API call failed for 0028800569: NBA API returned None
+2025-08-12 19:48:54,431 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028800569 - NBA API returned None
+2025-08-12 19:49:02,008 - WARNING - API call failed for 0029000099: NBA API returned None
+2025-08-12 19:49:02,008 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029000099 - NBA API returned None
+2025-08-12 19:49:07,550 - WARNING - API call failed for 0029000088: NBA API returned None
+2025-08-12 19:49:07,550 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029000088 - NBA API returned None
+2025-08-12 19:49:10,582 - WARNING - API call failed for 0029400786: NBA API returned None
+2025-08-12 19:49:10,582 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029400786 - NBA API returned None
+2025-08-12 19:49:14,250 - WARNING - API call failed for 0049200041: NBA API returned None
+2025-08-12 19:49:14,251 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0049200041 - NBA API returned None
+2025-08-12 19:49:15,650 - WARNING - API call failed for 0028900188: NBA API returned None
+2025-08-12 19:49:15,650 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028900188 - NBA API returned None
+2025-08-12 19:49:17,043 - WARNING - API call failed for 0028900934: NBA API returned None
+2025-08-12 19:49:17,043 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028900934 - NBA API returned None
+2025-08-12 19:49:20,187 - WARNING - API call failed for 0029300323: NBA API returned None
+2025-08-12 19:49:20,187 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029300323 - NBA API returned None
+2025-08-12 19:49:35,691 - INFO - [PROGRESS] 350/50569 (252 success, 98 errors) - 0.2 calls/min
+2025-08-12 19:50:00,572 - WARNING - API call failed for 0049500055: NBA API returned None
+2025-08-12 19:50:00,573 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0049500055 - NBA API returned None
+2025-08-12 19:50:11,447 - WARNING - API call failed for 0029100014: NBA API returned None
+2025-08-12 19:50:11,447 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029100014 - NBA API returned None
+2025-08-12 19:50:29,892 - WARNING - API call failed for 0029200876: NBA API returned None
+2025-08-12 19:50:29,892 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029200876 - NBA API returned None
+2025-08-12 19:50:38,583 - WARNING - API call failed for 0029101051: NBA API returned None
+2025-08-12 19:50:38,583 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029101051 - NBA API returned None
+2025-08-12 19:51:07,260 - INFO - [PROGRESS] 375/50569 (273 success, 102 errors) - 0.2 calls/min
+2025-08-12 19:51:09,323 - WARNING - API call failed for 0028901071: NBA API returned None
+2025-08-12 19:51:09,323 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028901071 - NBA API returned None
+2025-08-12 19:51:11,509 - WARNING - API call failed for 0028600243: NBA API returned None
+2025-08-12 19:51:11,509 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028600243 - NBA API returned None
+2025-08-12 19:51:33,109 - WARNING - API call failed for 0028600056: NBA API returned None
+2025-08-12 19:51:33,112 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028600056 - NBA API returned None
+2025-08-12 19:52:05,055 - WARNING - API call failed for 0048500224: NBA API returned None
+2025-08-12 19:52:05,055 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0048500224 - NBA API returned None
+2025-08-12 19:52:23,790 - INFO - 
+[PAUSE] PROCESSING INTERRUPTED BY USER
+2025-08-12 19:52:23,790 - INFO - [INFO] No worries! System can resume from where it left off
+2025-08-12 19:52:23,790 - INFO - [INFO] Just run the script again - it will skip completed work
+2025-08-12 19:52:23,790 - INFO - 
+============================================================
+2025-08-12 19:52:23,790 - INFO - [SUMMARY] COMPREHENSIVE PROCESSING SUMMARY
+2025-08-12 19:52:23,790 - INFO - ============================================================
+2025-08-12 19:52:23,790 - INFO - [COUNT] Total API calls made: 282
+2025-08-12 19:52:23,790 - INFO - [ERROR] Total errors encountered: 106
+2025-08-12 19:52:23,790 - INFO - [SUCCESS] Overall success rate: 62.4%
+2025-08-12 19:52:23,790 - INFO - 
+[WARNING] FAILED CALLS SUMMARY:
+2025-08-12 19:52:23,790 - INFO -    nba_boxscoreadvancedv3_playerstats_gameid: 106 failed parameters
+2025-08-12 19:52:23,790 - INFO -    Total failed parameter calls: 106
+2025-08-12 19:52:23,790 - INFO -    [INFO] Failed calls are tracked and will be skipped on retry
+2025-08-12 19:52:23,790 - INFO - 
+[COMPLETE] COMPREHENSIVE NBA DATA COLLECTION COMPLETE!
+2025-08-12 19:52:23,790 - INFO - [LOG] Check 'nba_endpoint_processor.log' for detailed processing log
+2025-08-12 19:52:23,790 - INFO - [RESUME] System is fully resumable - can continue from any interruption point
+2025-08-12 19:52:23,790 - INFO - [CLOSED] Database connection closed
+2025-08-12 19:52:23,790 - INFO - [SUCCESS] Database connection closed
+2025-08-12 19:55:54,629 - INFO - [INIT] RDS Connection Manager initialized with ASCII logging
+2025-08-12 19:55:54,629 - WARNING - [RECONNECT] Connection lost - attempting to reconnect...
+2025-08-12 19:55:54,629 - INFO - [RECONNECT] Reconnection attempt 1/3
+2025-08-12 19:55:54,629 - INFO - [CONNECT] Creating new database connection...
+2025-08-12 19:55:54,999 - INFO - [SUCCESS] Database connection established
+2025-08-12 19:55:54,999 - INFO - [SUCCESS] Reconnection successful
+2025-08-12 19:55:54,999 - INFO - [SUCCESS] Connected to RDS database with robust connection management
+2025-08-12 19:55:55,099 - INFO - Failed calls tracking table created/verified
+2025-08-12 19:55:55,129 - INFO - [START] Starting COMPREHENSIVE NBA endpoint processing...
+2025-08-12 19:55:55,129 - INFO - [TARGET] This will process ALL configured endpoints with full data
+2025-08-12 19:55:55,129 - INFO - [RESUME] You can interrupt anytime - system will resume where it left off
+2025-08-12 19:55:55,129 - INFO - ============================================================
+2025-08-12 19:55:55,129 - INFO - [PHASE 1] High Priority Game-Based Endpoints
+2025-08-12 19:55:55,129 - INFO - ============================================================
+2025-08-12 19:55:55,129 - INFO - Processing game_based endpoints with priority high
+2025-08-12 19:55:55,129 - INFO - Found 9 endpoints to process
+2025-08-12 19:55:55,129 - INFO - Starting BoxScoreAdvancedV3...
+2025-08-12 19:55:55,129 - INFO - Processing endpoint: BoxScoreAdvancedV3 for NBA
+2025-08-12 19:55:55,769 - INFO - Fetched 52782 records from nba_games
+2025-08-12 19:55:55,813 - INFO - Found 52782 unique game IDs for NBA
+2025-08-12 19:55:55,820 - INFO - Testing BoxScoreAdvancedV3 structure with first parameter...
+2025-08-12 19:55:56,010 - INFO - Endpoint BoxScoreAdvancedV3 returns 2 dataframes
+2025-08-12 19:55:56,010 - INFO - Processing dataframe 0: nba_boxscoreadvancedv3_playerstats
+2025-08-12 19:55:57,143 - INFO - Table nba_boxscoreadvancedv3_playerstats created/verified
+2025-08-12 19:55:57,283 - INFO - Table nba_boxscoreadvancedv3_playerstats: 50287 missing parameters out of 52782 total
+2025-08-12 19:55:57,309 - INFO - Processing 50287 missing parameters for nba_boxscoreadvancedv3_playerstats
+2025-08-12 19:56:05,470 - WARNING - API call failed for 0028900587: NBA API returned None
+2025-08-12 19:56:05,470 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028900587 - NBA API returned None
+2025-08-12 19:56:12,109 - INFO - [SUCCESS] Inserted 24 rows for game 0020601041
+2025-08-12 19:56:14,472 - WARNING - API call failed for 0028700235: NBA API returned None
+2025-08-12 19:56:14,473 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028700235 - NBA API returned None
+2025-08-12 19:56:20,684 - INFO - [SUCCESS] Inserted 25 rows for game 0021800983
+2025-08-12 19:56:34,601 - WARNING - API call failed for 0029500789: NBA API returned None
+2025-08-12 19:56:34,601 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029500789 - NBA API returned None
+2025-08-12 19:56:37,189 - INFO - [INIT] RDS Connection Manager initialized with ASCII logging
+2025-08-12 19:56:37,189 - WARNING - [RECONNECT] Connection lost - attempting to reconnect...
+2025-08-12 19:56:37,189 - INFO - [RECONNECT] Reconnection attempt 1/3
+2025-08-12 19:56:37,189 - INFO - [CONNECT] Creating new database connection...
+2025-08-12 19:56:37,499 - INFO - [SUCCESS] Database connection established
+2025-08-12 19:56:37,499 - INFO - [SUCCESS] Reconnection successful
+2025-08-12 19:56:37,499 - INFO - [SUCCESS] Connected to RDS database with robust connection management
+2025-08-12 19:56:37,594 - INFO - Failed calls tracking table created/verified
+2025-08-12 19:56:37,618 - INFO - [START] Starting COMPREHENSIVE NBA endpoint processing...
+2025-08-12 19:56:37,618 - INFO - [TARGET] This will process ALL configured endpoints with full data
+2025-08-12 19:56:37,618 - INFO - [RESUME] You can interrupt anytime - system will resume where it left off
+2025-08-12 19:56:37,618 - INFO - ============================================================
+2025-08-12 19:56:37,618 - INFO - [PHASE 1] High Priority Game-Based Endpoints
+2025-08-12 19:56:37,618 - INFO - ============================================================
+2025-08-12 19:56:37,618 - INFO - Processing game_based endpoints with priority high
+2025-08-12 19:56:37,618 - INFO - Found 9 endpoints to process
+2025-08-12 19:56:37,619 - INFO - Starting BoxScoreAdvancedV3...
+2025-08-12 19:56:37,619 - INFO - Processing endpoint: BoxScoreAdvancedV3 for NBA
+2025-08-12 19:56:38,189 - INFO - Fetched 52782 records from nba_games
+2025-08-12 19:56:38,220 - INFO - Found 52782 unique game IDs for NBA
+2025-08-12 19:56:38,229 - INFO - Testing BoxScoreAdvancedV3 structure with first parameter...
+2025-08-12 19:56:38,383 - INFO - Endpoint BoxScoreAdvancedV3 returns 2 dataframes
+2025-08-12 19:56:38,383 - INFO - Processing dataframe 0: nba_boxscoreadvancedv3_playerstats
+2025-08-12 19:56:39,379 - INFO - Table nba_boxscoreadvancedv3_playerstats created/verified
+2025-08-12 19:56:39,523 - INFO - Table nba_boxscoreadvancedv3_playerstats: 50285 missing parameters out of 52782 total
+2025-08-12 19:56:39,564 - INFO - Processing 50285 missing parameters for nba_boxscoreadvancedv3_playerstats
+2025-08-12 19:56:40,250 - WARNING - API call failed for 0028900127: NBA API returned None
+2025-08-12 19:56:40,258 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028900127 - NBA API returned None
+2025-08-12 19:56:43,939 - INFO - [SUCCESS] Inserted 25 rows for game 0041900144
+2025-08-12 19:56:43,942 - INFO - [SUCCESS] Inserted 23 rows for game 0020501219
+2025-08-12 19:56:46,463 - WARNING - API call failed for 0029500485: NBA API returned None
+2025-08-12 19:56:46,463 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029500485 - NBA API returned None
+2025-08-12 19:56:51,616 - INFO - [SUCCESS] Inserted 25 rows for game 0020600768
+2025-08-12 19:56:53,941 - INFO - [SUCCESS] Inserted 24 rows for game 0029700403
+2025-08-12 19:56:58,419 - INFO - [SUCCESS] Inserted 23 rows for game 0040000007
+2025-08-12 19:57:01,808 - INFO - [SUCCESS] Inserted 26 rows for game 0021400067
+2025-08-12 19:57:05,009 - INFO - [SUCCESS] Inserted 24 rows for game 0020100215
+2025-08-12 19:57:06,489 - INFO - [SUCCESS] Inserted 28 rows for game 0022000214
+2025-08-12 19:57:09,458 - INFO - [SUCCESS] Inserted 24 rows for game 0020700838
+2025-08-12 19:57:12,669 - WARNING - API call failed for 0028400409: NBA API returned None
+2025-08-12 19:57:12,669 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028400409 - NBA API returned None
+2025-08-12 19:57:14,494 - INFO - [SUCCESS] Inserted 24 rows for game 0020900135
+2025-08-12 19:57:16,454 - INFO - [SUCCESS] Inserted 24 rows for game 0021000477
+2025-08-12 19:57:19,588 - WARNING - API call failed for 0028800291: NBA API returned None
+2025-08-12 19:57:19,588 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028800291 - NBA API returned None
+2025-08-12 19:57:20,389 - INFO - [SUCCESS] Inserted 25 rows for game 0021700333
+2025-08-12 19:57:23,510 - INFO - [SUCCESS] Inserted 32 rows for game 0010600109
+2025-08-12 19:57:25,091 - WARNING - API call failed for 0028600557: NBA API returned None
+2025-08-12 19:57:25,091 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028600557 - NBA API returned None
+2025-08-12 19:57:25,147 - INFO - [SUCCESS] Inserted 24 rows for game 0020801026
+2025-08-12 19:57:28,741 - INFO - [SUCCESS] Inserted 24 rows for game 0020300461
+2025-08-12 19:57:28,769 - INFO - [SUCCESS] Inserted 26 rows for game 0022100591
+2025-08-12 19:57:31,947 - INFO - [SUCCESS] Inserted 26 rows for game 0021500592
+2025-08-12 19:57:33,786 - INFO - [SUCCESS] Inserted 24 rows for game 0020400255
+2025-08-12 19:57:35,310 - INFO - [SUCCESS] Inserted 26 rows for game 0021600839
+2025-08-12 19:57:35,902 - WARNING - API call failed for 0028500822: NBA API returned None
+2025-08-12 19:57:35,902 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028500822 - NBA API returned None
+2025-08-12 19:57:38,920 - INFO - [SUCCESS] Inserted 24 rows for game 0020500770
+2025-08-12 19:57:39,090 - INFO - [SUCCESS] Inserted 30 rows for game 0011900115
+2025-08-12 19:57:41,571 - WARNING - API call failed for 0028800086: NBA API returned None
+2025-08-12 19:57:41,571 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028800086 - NBA API returned None
+2025-08-12 19:57:44,549 - INFO - [SUCCESS] Inserted 26 rows for game 0021600400
+2025-08-12 19:57:45,461 - INFO - [SUCCESS] Inserted 23 rows for game 0020000475
+2025-08-12 19:57:46,507 - INFO - [SUCCESS] Inserted 27 rows for game 0022400359
+2025-08-12 19:57:48,344 - INFO - [SUCCESS] Inserted 24 rows for game 0029900331
+2025-08-12 19:57:49,771 - WARNING - API call failed for 0028800350: NBA API returned None
+2025-08-12 19:57:49,771 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028800350 - NBA API returned None
+2025-08-12 19:57:51,869 - WARNING - API call failed for 0028300741: NBA API returned None
+2025-08-12 19:57:51,869 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028300741 - NBA API returned None
+2025-08-12 19:57:53,209 - INFO - [SUCCESS] Inserted 24 rows for game 0040400223
+2025-08-12 19:57:55,239 - INFO - [SUCCESS] Inserted 24 rows for game 0029900799
+2025-08-12 19:57:56,270 - INFO - [SUCCESS] Inserted 26 rows for game 0021201052
+2025-08-12 19:57:57,220 - WARNING - API call failed for 0028900243: NBA API returned None
+2025-08-12 19:57:57,220 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028900243 - NBA API returned None
+2025-08-12 19:57:58,133 - WARNING - API call failed for 0029400694: NBA API returned None
+2025-08-12 19:57:58,133 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029400694 - NBA API returned None
+2025-08-12 19:57:59,099 - INFO - [SUCCESS] Inserted 26 rows for game 0022300318
+2025-08-12 19:57:59,406 - INFO - [PROGRESS] 25/50287 (19 success, 6 errors) - 0.2 calls/min
+2025-08-12 19:58:01,839 - INFO - [SUCCESS] Inserted 24 rows for game 0040200233
+2025-08-12 19:58:02,030 - INFO - [SUCCESS] Inserted 24 rows for game 0020600634
+2025-08-12 19:58:04,819 - INFO - [SUCCESS] Inserted 24 rows for game 0020100476
+2025-08-12 19:58:07,568 - WARNING - API call failed for 0028600421: NBA API returned None
+2025-08-12 19:58:07,568 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028600421 - NBA API returned None
+2025-08-12 19:58:08,918 - INFO - [SUCCESS] Inserted 26 rows for game 0041100142
+2025-08-12 19:58:09,796 - WARNING - API call failed for 0028500619: NBA API returned None
+2025-08-12 19:58:09,796 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028500619 - NBA API returned None
+2025-08-12 19:58:11,089 - WARNING - API call failed for 0028800046: NBA API returned None
+2025-08-12 19:58:11,089 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028800046 - NBA API returned None
+2025-08-12 19:58:13,974 - INFO - [SUCCESS] Inserted 22 rows for game 0020800073
+2025-08-12 19:58:13,983 - INFO - [SUCCESS] Inserted 24 rows for game 0020600935
+2025-08-12 19:58:14,284 - INFO - [PROGRESS] 25/50285 (15 success, 10 errors) - 0.3 calls/min
+2025-08-12 19:58:17,965 - INFO - [SUCCESS] Inserted 26 rows for game 0021601206
+2025-08-12 19:58:18,869 - INFO - [SUCCESS] Inserted 24 rows for game 0029601178
+2025-08-12 19:58:22,123 - INFO - [SUCCESS] Inserted 26 rows for game 0021700537
+2025-08-12 19:58:22,130 - INFO - [SUCCESS] Inserted 24 rows for game 0020500203
+2025-08-12 19:58:25,560 - INFO - [SUCCESS] Inserted 22 rows for game 0020000414
+2025-08-12 19:58:28,341 - INFO - [SUCCESS] Inserted 30 rows for game 0042000121
+2025-08-12 19:58:30,098 - INFO - [SUCCESS] Inserted 24 rows for game 0020500215
+2025-08-12 19:58:32,909 - INFO - [SUCCESS] Inserted 26 rows for game 0022000421
+2025-08-12 19:58:36,539 - INFO - [SUCCESS] Inserted 26 rows for game 0021700543
+2025-08-12 19:58:37,612 - INFO - [SUCCESS] Inserted 27 rows for game 0022400801
+2025-08-12 19:58:38,429 - INFO - 
+[PAUSE] PROCESSING INTERRUPTED BY USER
+2025-08-12 19:58:38,429 - INFO - [INFO] No worries! System can resume from where it left off
+2025-08-12 19:58:38,429 - INFO - [INFO] Just run the script again - it will skip completed work
+2025-08-12 19:58:38,442 - INFO - 
+============================================================
+2025-08-12 19:58:38,442 - INFO - [SUMMARY] COMPREHENSIVE PROCESSING SUMMARY
+2025-08-12 19:58:38,442 - INFO - ============================================================
+2025-08-12 19:58:38,442 - INFO - [COUNT] Total API calls made: 19
+2025-08-12 19:58:38,442 - INFO - [ERROR] Total errors encountered: 10
+2025-08-12 19:58:38,442 - INFO - [SUCCESS] Overall success rate: 47.4%
+2025-08-12 19:58:38,442 - INFO - 
+[WARNING] FAILED CALLS SUMMARY:
+2025-08-12 19:58:38,442 - INFO -    nba_boxscoreadvancedv3_playerstats_gameid: 10 failed parameters
+2025-08-12 19:58:38,443 - INFO -    Total failed parameter calls: 10
+2025-08-12 19:58:38,443 - INFO -    [INFO] Failed calls are tracked and will be skipped on retry
+2025-08-12 19:58:38,443 - INFO - 
+[COMPLETE] COMPREHENSIVE NBA DATA COLLECTION COMPLETE!
+2025-08-12 19:58:38,443 - INFO - [LOG] Check 'nba_endpoint_processor.log' for detailed processing log
+2025-08-12 19:58:38,443 - INFO - [RESUME] System is fully resumable - can continue from any interruption point
+2025-08-12 19:58:38,443 - INFO - [CLOSED] Database connection closed
+2025-08-12 19:58:38,443 - INFO - [SUCCESS] Database connection closed
