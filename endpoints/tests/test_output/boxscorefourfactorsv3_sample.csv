@@ -1,6 +1,0 @@
-gameId,teamId,teamCity,teamName,teamTricode,teamSlug,personId,firstName,familyName,nameI,playerSlug,position,comment,jerseyNum,minutes,effectiveFieldGoalPercentage,freeThrowAttemptRate,teamTurnoverPercentage,offensiveReboundPercentage,oppEffectiveFieldGoalPercentage,oppFreeThrowAttemptRate,oppTeamTurnoverPercentage,oppOffensiveReboundPercentage
-0022400917,1610612753,Orlando,Magic,ORL,magic,1630532,Franz,Wagner,F. Wagner,franz-wagner,F,,22,37:55,0.578,0.203,0.132,0.03,0.613,0.306,0.131,0.148
-0022400917,1610612753,Orlando,Magic,ORL,magic,1631094,Paolo,Banchero,P. Banchero,paolo-banchero,F,,5,37:01,0.582,0.262,0.122,0.0,0.619,0.322,0.148,0.154
-0022400917,1610612753,Orlando,Magic,ORL,magic,1628976,Wendell,Carter Jr.,W. Carter Jr.,wendell-carter-jr,C,,34,30:55,0.618,0.235,0.1,0.04,0.58,0.22,0.164,0.182
-0022400917,1610612753,Orlando,Magic,ORL,magic,203484,Kentavious,Caldwell-Pope,K. Caldwell-Pope,kentavious-caldwell-pope,G,,3,36:39,0.598,0.197,0.126,0.0,0.615,0.279,0.122,0.154
-0022400917,1610612753,Orlando,Magic,ORL,magic,1630175,Cole,Anthony,C. Anthony,cole-anthony,G,,50,30:41,0.606,0.231,0.128,0.04,0.571,0.286,0.133,0.13
