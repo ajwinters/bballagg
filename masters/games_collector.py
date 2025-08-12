@@ -96,8 +96,30 @@ class GamesCollector:
         
         return start_date, end_date
     
-    def collect_league_recent_games(self, league_name, days_back=7):
-        """Collect recent games for a specific league"""
+    def get_last_game_date_from_table(self, conn, table_name):
+        """Get the latest game date from the master table for incremental collection"""
+        try:
+            cursor = conn.cursor()
+            query = f"SELECT MAX(game_date) FROM {table_name};"
+            cursor.execute(query)
+            result = cursor.fetchone()[0]
+            
+            if result:
+                # Convert to date if it's a datetime
+                if hasattr(result, 'date'):
+                    return result.date()
+                return result
+            else:
+                # If no data, return a date far in the past to collect all available data
+                return date(2020, 1, 1)  # Start from 2020 for modern data
+                
+        except Exception as e:
+            print(f"   Warning: Could not get last game date from {table_name}: {str(e)}")
+            # Return a reasonable default date
+            return date(2023, 1, 1)
+
+    def collect_league_recent_games(self, league_name, days_back=None):
+        """Collect games for a specific league using incremental approach"""
         league_config = next((l for l in self.leagues if l['name'] == league_name), None)
         if not league_config:
             print(f"❌ Unknown league: {league_name}")
@@ -107,13 +129,6 @@ class GamesCollector:
         table_name = f"{league_config['table_prefix']}_games"
         current_season = self.get_current_season(league_name)
         
-        start_date, end_date = self.get_recent_games_date_range(days_back)
-        
-        print(f"🏀 COLLECTING RECENT {league_name} GAMES")
-        print(f"   Season: {current_season}")
-        print(f"   Date range: {start_date} to {end_date}")
-        print(f"   Target table: {table_name}")
-        
         conn = self.db_manager.connect_to_database()
         if not conn:
             return 0
@@ -121,106 +136,160 @@ class GamesCollector:
         try:
             cursor = conn.cursor()
             
-            # Try multiple methods to get recent games
-            games_data = None
+            # Get the last game date from the table
+            last_game_date = self.get_last_game_date_from_table(conn, table_name)
+            today = date.today()
             
-            # Method 1: Try scoreboard for recent dates
-            games_data = self.get_games_from_scoreboards(league_id, start_date, end_date)
+            # If days_back is provided (for testing/manual runs), use that instead
+            if days_back is not None:
+                start_date = today - timedelta(days=days_back)
+            else:
+                # Use incremental approach: from last game date to today
+                start_date = last_game_date + timedelta(days=1)  # Start from day after last game
             
-            # Method 2: Fallback to game finder
+            end_date = today
+            
+            print(f"🏀 COLLECTING {league_name} GAMES (INCREMENTAL)")
+            print(f"   Season: {current_season}")
+            print(f"   Last game in table: {last_game_date}")
+            print(f"   Collection range: {start_date} to {end_date}")
+            print(f"   Target table: {table_name}")
+            
+            # Skip if no new dates to collect
+            if start_date > end_date:
+                print(f"   ✅ No new games to collect - table is up to date")
+                return 0
+            
+            # Use LeagueGameFinder as primary method
+            games_data = self.get_games_from_finder(league_id, current_season, start_date, end_date)
+            
             if games_data is None or len(games_data) == 0:
-                print("   Trying game finder...")
-                games_data = self.get_games_from_finder(league_id, current_season, start_date, end_date)
-            
-            # Method 3: Fallback to team game logs
-            if games_data is None or len(games_data) == 0:
-                print("   Trying team game logs...")
-                games_data = self.get_games_from_team_logs(league_id, current_season, start_date, end_date)
-            
-            if games_data is None or len(games_data) == 0:
-                print(f"   ⚠️  No recent games found for {league_name}")
+                print(f"   ⚠️  No games found for {league_name} in date range")
                 return 0
             
             # Process and deduplicate games
-            unique_games = self.extract_unique_games(games_data, league_name)
+            unique_games = self.extract_unique_games_from_finder(games_data, league_name)
             
             if len(unique_games) > 0:
                 games_inserted = self.bulk_insert_games(cursor, conn, unique_games, table_name)
-                print(f"   ✅ {games_inserted} recent games processed for {league_name}")
+                print(f"   ✅ {games_inserted} games processed for {league_name}")
                 return games_inserted
             else:
                 print(f"   ⚠️  No unique games to insert for {league_name}")
                 return 0
                 
         except Exception as e:
-            print(f"   ❌ Error collecting recent {league_name} games: {str(e)}")
+            print(f"   ❌ Error collecting {league_name} games: {str(e)}")
             return 0
         finally:
             if conn:
                 conn.close()
     
-    def get_games_from_scoreboards(self, league_id, start_date, end_date):
-        """Get games using daily scoreboards (most recent method)"""
-        all_games = []
-        current_date = start_date
-        
-        try:
-            while current_date <= end_date:
-                print(f"      🔄 Fetching scoreboard for {current_date}...", end=" ")
-                
-                try:
-                    # Try ScoreboardV2 first
-                    scoreboard_data = scoreboardv2.ScoreboardV2(
-                        game_date=current_date.strftime('%m/%d/%Y'),
-                        league_id=league_id
-                    )
-                    
-                    games_df = scoreboard_data.get_data_frames()[0]  # GameHeader
-                    
-                    if len(games_df) > 0:
-                        all_games.append(games_df)
-                        print(f"✅ {len(games_df)} games")
-                    else:
-                        print("📅 No games")
-                    
-                except:
-                    # Fallback to original Scoreboard - but this endpoint doesn't exist
-                    # so we'll skip this fallback
-                    print("📅 No games (fallback failed)")
-                    continue
-                
-                current_date += timedelta(days=1)
-                time.sleep(0.6)  # Rate limiting
-                
-            if all_games:
-                combined_games = pd.concat(all_games, ignore_index=True)
-                return combined_games
-            
-        except Exception as e:
-            print(f"❌ Scoreboard method failed: {str(e)[:50]}...")
-        
-        return None
-    
     def get_games_from_finder(self, league_id, season, start_date, end_date):
-        """Get games using LeagueGameFinder (fallback method)"""
+        """Get games using LeagueGameFinder (primary method)"""
         try:
-            print(f"      🔄 Fetching via game finder...", end=" ")
+            print(f"      🔄 Using LeagueGameFinder for date range...", end=" ")
             
             game_finder = leaguegamefinder.LeagueGameFinder(
                 league_id_nullable=league_id,
                 season_nullable=season,
-                season_type_nullable='Regular Season',
+                season_type_nullable='Regular Season',  # Can be extended to include playoffs
                 date_from_nullable=start_date.strftime('%m/%d/%Y'),
                 date_to_nullable=end_date.strftime('%m/%d/%Y')
             )
             
             games_df = game_finder.get_data_frames()[0]
-            print(f"✅ {len(games_df)} games")
+            print(f"✅ {len(games_df)} games found")
+            
+            # Add rate limiting
+            time.sleep(0.6)
+            
             return games_df
             
         except Exception as e:
-            print(f"❌ Game finder failed: {str(e)[:50]}...")
+            print(f"❌ LeagueGameFinder failed: {str(e)[:100]}...")
             return None
+
+    def extract_unique_games_from_finder(self, games_df, league_name):
+        """Extract unique games from LeagueGameFinder data (1 record per game)"""
+        unique_games = []
+        
+        try:
+            # LeagueGameFinder returns 2 rows per game (one for each team)
+            # We need to deduplicate to get 1 row per game
+            if 'GAME_ID' in games_df.columns:
+                game_groups = games_df.groupby('GAME_ID')
+                
+                for game_id, game_group in game_groups:
+                    try:
+                        # Sort by team to ensure consistent home/away assignment
+                        game_group = game_group.sort_values('TEAM_ID')
+                        
+                        # Get game info (should be same for all records of same game)
+                        first_record = game_group.iloc[0]
+                        
+                        # Extract home and away teams from the two records
+                        if len(game_group) >= 2:
+                            # LeagueGameFinder typically has away team first, home team second
+                            # But we'll determine based on MATCHUP field
+                            home_team_id, away_team_id = self.parse_matchup_from_finder(game_group)
+                        else:
+                            # Single record case - shouldn't happen but handle it
+                            continue
+                        
+                        if not home_team_id or not away_team_id:
+                            continue
+                        
+                        # Extract all relevant fields for the game
+                        game_date = self.safe_get_date(first_record.get('GAME_DATE'))
+                        season_id = str(first_record.get('SEASON_ID', ''))
+                        
+                        unique_game = (
+                            str(game_id),
+                            game_date,
+                            season_id,
+                            str(away_team_id),
+                            str(home_team_id),
+                            str(first_record.get('MATCHUP', ''))
+                        )
+                        
+                        unique_games.append(unique_game)
+                        
+                    except Exception as e:
+                        print(f"      Warning: Error processing game {game_id}: {str(e)}")
+                        continue
+                        
+        except Exception as e:
+            print(f"   Error extracting unique games: {str(e)}")
+        
+        print(f"      Processed {len(unique_games)} unique games from {len(games_df)} records")
+        return unique_games
+
+    def parse_matchup_from_finder(self, game_group):
+        """Parse home/away teams from LeagueGameFinder data"""
+        try:
+            # LeagueGameFinder has MATCHUP field like "LAL @ NYK" or "LAL vs. NYK"
+            # @ indicates away team, vs indicates home team
+            
+            away_team_id = None
+            home_team_id = None
+            
+            for _, row in game_group.iterrows():
+                matchup = str(row.get('MATCHUP', ''))
+                team_id = str(row['TEAM_ID'])
+                
+                if ' @ ' in matchup:
+                    # This team is away (playing @ opponent)
+                    away_team_id = team_id
+                elif ' vs. ' in matchup:
+                    # This team is home (playing vs opponent)
+                    home_team_id = team_id
+            
+            return home_team_id, away_team_id
+            
+        except Exception as e:
+            print(f"      Error parsing matchup: {str(e)}")
+            return None, None
     
     def get_games_from_team_logs(self, league_id, season, start_date, end_date):
         """Get games using team game logs (last resort fallback)"""
@@ -233,85 +302,6 @@ class GamesCollector:
         except Exception as e:
             print(f"❌ Team logs failed: {str(e)[:50]}...")
             return None
-    
-    def extract_unique_games(self, games_df, league_name):
-        """Extract unique games from API data (1 record per game)"""
-        unique_games = []
-        
-        try:
-            # Group by GAME_ID to get unique games
-            if 'GAME_ID' in games_df.columns:
-                game_groups = games_df.groupby('GAME_ID')
-                
-                for game_id, game_group in game_groups:
-                    try:
-                        # Get game info (should be same for all records of same game)
-                        first_record = game_group.iloc[0]
-                        
-                        # Extract matchup to determine home/away teams
-                        home_team_id, away_team_id = self.parse_matchup_from_scoreboard(game_group)
-                        
-                        if not home_team_id or not away_team_id:
-                            continue
-                        
-                        unique_game = (
-                            str(game_id),
-                            self.safe_get_date(first_record.get('GAME_DATE_EST', first_record.get('GAME_DATE'))),
-                            str(first_record.get('SEASON_ID', '')),
-                            str(away_team_id),
-                            str(home_team_id),
-                            str(first_record.get('MATCHUP', ''))
-                        )
-                        
-                        unique_games.append(unique_game)
-                        
-                    except Exception as e:
-                        print(f"Error processing game {game_id}: {str(e)}")
-                        continue
-                        
-        except Exception as e:
-            print(f"Error extracting unique games: {str(e)}")
-        
-        return unique_games
-    
-    def parse_matchup_from_scoreboard(self, game_group):
-        """Parse home/away teams from scoreboard data"""
-        try:
-            # For scoreboard data, we might have home/visitor columns
-            if 'HOME_TEAM_ID' in game_group.columns and 'VISITOR_TEAM_ID' in game_group.columns:
-                first_record = game_group.iloc[0]
-                return str(first_record['HOME_TEAM_ID']), str(first_record['VISITOR_TEAM_ID'])
-            
-            # Fallback to matchup parsing
-            if 'MATCHUP' in game_group.columns:
-                first_record = game_group.iloc[0]
-                matchup = str(first_record['MATCHUP'])
-                
-                if ' @ ' in matchup:
-                    # Away @ Home format
-                    parts = matchup.split(' @ ')
-                    if len(parts) == 2:
-                        away_abbr = parts[0].strip()
-                        home_abbr = parts[1].strip()
-                        
-                        # Get team IDs from the game records
-                        away_team_id = None
-                        home_team_id = None
-                        
-                        for _, row in game_group.iterrows():
-                            team_abbr = str(row.get('TEAM_ABBREVIATION', ''))
-                            if team_abbr == away_abbr:
-                                away_team_id = str(row['TEAM_ID'])
-                            elif team_abbr == home_abbr:
-                                home_team_id = str(row['TEAM_ID'])
-                        
-                        return home_team_id, away_team_id
-            
-            return None, None
-            
-        except Exception as e:
-            print(f"Error parsing matchup: {str(e)}")
-            return None, None
     
     def safe_get_date(self, date_value):
         """Safely convert date value to date object"""
@@ -375,10 +365,10 @@ class GamesCollector:
             conn.rollback()
             return 0
     
-    def collect_active_leagues_games(self, days_back=7):
-        """Collect recent games for all active leagues"""
-        print("🏀 COLLECTING RECENT GAMES FOR ACTIVE LEAGUES")
-        print("=" * 50)
+    def collect_active_leagues_games(self, days_back=None):
+        """Collect games for all active leagues using incremental approach"""
+        print("🏀 COLLECTING GAMES FOR ACTIVE LEAGUES (INCREMENTAL)")
+        print("=" * 60)
         
         total_games = 0
         results = {}
@@ -388,7 +378,7 @@ class GamesCollector:
             
             try:
                 if self.is_season_active(league_name):
-                    print(f"\n{league_name} season is active, collecting recent games...")
+                    print(f"\n{league_name} season is active, collecting games...")
                     games_added = self.collect_league_recent_games(league_name, days_back)
                     total_games += games_added
                     results[league_name] = games_added
@@ -403,7 +393,7 @@ class GamesCollector:
                 print(f"   ❌ Error with {league_name}: {str(e)}")
                 results[league_name] = 0
         
-        print(f"\n✅ RECENT GAMES COLLECTION COMPLETE")
+        print(f"\n✅ INCREMENTAL GAMES COLLECTION COMPLETE")
         print(f"   Total games updated: {total_games}")
         
         for league, count in results.items():
@@ -416,11 +406,11 @@ class GamesCollector:
 
 
 def main():
-    """Test the games collector"""
+    """Test the games collector with new incremental approach"""
     collector = GamesCollector()
     
-    print("🧪 TESTING GAMES COLLECTOR")
-    print("=" * 40)
+    print("🧪 TESTING INCREMENTAL GAMES COLLECTOR")
+    print("=" * 50)
     
     # Test season checking
     print("\n1. Checking which leagues are active...")
@@ -430,14 +420,19 @@ def main():
         season = collector.get_current_season(league_name)
         print(f"   {league_name}: {'Active' if is_active else 'Inactive'} (Season: {season})")
     
-    # Test recent games for one league
-    print("\n2. Testing NBA recent games collection...")
-    nba_result = collector.collect_league_recent_games('NBA', days_back=3)
+    # Test incremental collection for one league
+    print("\n2. Testing incremental NBA games collection...")
+    nba_result = collector.collect_league_recent_games('NBA')  # No days_back = incremental
     
-    print(f"\n3. Testing all active leagues...")
-    all_results = collector.collect_active_leagues_games(days_back=3)
+    print(f"\n3. Testing incremental collection for all leagues...")
+    all_results = collector.collect_active_leagues_games()  # Incremental approach
+    
+    print(f"\n4. Testing with manual date range (3 days back)...")
+    manual_results = collector.collect_active_leagues_games(days_back=3)  # Override for testing
     
     print(f"\n✅ Testing complete!")
+    print(f"📊 Incremental results: {all_results}")
+    print(f"📊 Manual results: {manual_results}")
 
 
 if __name__ == "__main__":
