@@ -2401,3 +2401,187 @@
 2025-08-12 18:51:42,337 - INFO - ============================================================
 2025-08-12 18:51:42,340 - INFO -    nba_boxscoreadvancedv3_playerstats_gameid: 8 failed parameters
 2025-08-12 18:51:42,340 - INFO -    Total failed parameter calls: 8
+2025-08-15 15:38:55,319 - INFO - [INIT] RDS Connection Manager initialized with ASCII logging
+2025-08-15 15:38:55,319 - WARNING - [RECONNECT] Connection lost - attempting to reconnect...
+2025-08-15 15:38:55,319 - INFO - [RECONNECT] Reconnection attempt 1/3
+2025-08-15 15:38:55,319 - INFO - [CONNECT] Creating new database connection...
+2025-08-15 15:39:16,452 - ERROR - [ERROR] Connection failed (attempt 1): connection to server at "nba-rds-instance.c9wwc0ukkiu5.us-east-1.rds.amazonaws.com" (44.208.170.145), port 5432 failed: Connection timed out (0x0000274C/10060)
+	Is the server running on that host and accepting TCP/IP connections?
+
+2025-08-15 15:39:16,452 - WARNING - [WAIT] Waiting 5 seconds before next attempt...
+2025-08-15 15:39:21,453 - INFO - [RECONNECT] Reconnection attempt 2/3
+2025-08-15 15:39:21,453 - INFO - [CONNECT] Creating new database connection...
+2025-08-15 15:39:42,596 - ERROR - [ERROR] Connection failed (attempt 2): connection to server at "nba-rds-instance.c9wwc0ukkiu5.us-east-1.rds.amazonaws.com" (44.208.170.145), port 5432 failed: Connection timed out (0x0000274C/10060)
+	Is the server running on that host and accepting TCP/IP connections?
+
+2025-08-15 15:39:42,596 - WARNING - [WAIT] Waiting 5 seconds before next attempt...
+2025-08-15 15:39:47,597 - INFO - [RECONNECT] Reconnection attempt 3/3
+2025-08-15 15:39:47,597 - INFO - [CONNECT] Creating new database connection...
+2025-08-15 15:40:08,706 - ERROR - [ERROR] Connection failed (attempt 3): connection to server at "nba-rds-instance.c9wwc0ukkiu5.us-east-1.rds.amazonaws.com" (44.208.170.145), port 5432 failed: Connection timed out (0x0000274C/10060)
+	Is the server running on that host and accepting TCP/IP connections?
+
+2025-08-15 15:40:08,706 - ERROR - [FAILED] All reconnection attempts failed
+2025-08-15 15:40:08,706 - ERROR - [FAILED] Could not establish database connection
+2025-08-15 15:46:17,943 - INFO - [INIT] RDS Connection Manager initialized with ASCII logging
+2025-08-15 15:46:17,943 - WARNING - [RECONNECT] Connection lost - attempting to reconnect...
+2025-08-15 15:46:17,943 - INFO - [RECONNECT] Reconnection attempt 1/3
+2025-08-15 15:46:17,943 - INFO - [CONNECT] Creating new database connection...
+2025-08-15 15:46:18,318 - INFO - [SUCCESS] Database connection established
+2025-08-15 15:46:18,318 - INFO - [SUCCESS] Reconnection successful
+2025-08-15 15:46:18,318 - INFO - [SUCCESS] Connected to RDS database with robust connection management
+2025-08-15 15:46:18,420 - INFO - Failed calls tracking table created/verified
+2025-08-15 15:46:18,454 - INFO - [START] Starting COMPREHENSIVE NBA endpoint processing...
+2025-08-15 15:46:18,454 - INFO - [TARGET] This will process ALL configured endpoints with full data
+2025-08-15 15:46:18,454 - INFO - [RESUME] You can interrupt anytime - system will resume where it left off
+2025-08-15 15:46:18,454 - INFO - ============================================================
+2025-08-15 15:46:18,454 - INFO - [PHASE 1] High Priority Game-Based Endpoints
+2025-08-15 15:46:18,454 - INFO - ============================================================
+2025-08-15 15:46:18,454 - INFO - Processing game_based endpoints with priority high
+2025-08-15 15:46:18,454 - INFO - Found 9 endpoints to process
+2025-08-15 15:46:18,454 - INFO - Starting BoxScoreAdvancedV3...
+2025-08-15 15:46:18,454 - INFO - Processing endpoint: BoxScoreAdvancedV3 for NBA
+2025-08-15 15:46:19,044 - INFO - Fetched 52782 records from nba_games
+2025-08-15 15:46:19,089 - INFO - Found 52782 unique game IDs for NBA
+2025-08-15 15:46:19,098 - INFO - Testing BoxScoreAdvancedV3 structure with first parameter...
+2025-08-15 15:46:27,385 - INFO - Endpoint BoxScoreAdvancedV3 returns 2 dataframes
+2025-08-15 15:46:27,385 - INFO - Processing dataframe 0: nba_boxscoreadvancedv3_playerstats
+2025-08-15 15:46:28,411 - INFO - Table nba_boxscoreadvancedv3_playerstats created/verified
+2025-08-15 15:46:28,612 - INFO - Table nba_boxscoreadvancedv3_playerstats: 50228 missing parameters out of 52782 total
+2025-08-15 15:46:28,634 - INFO - Processing 50228 missing parameters for nba_boxscoreadvancedv3_playerstats
+2025-08-15 15:46:31,766 - INFO - [SUCCESS] Inserted 26 rows for game 0041800175
+2025-08-15 15:46:39,479 - INFO - [SUCCESS] Inserted 28 rows for game 0022001070
+2025-08-15 15:46:43,549 - INFO - [SUCCESS] Inserted 25 rows for game 0021500753
+2025-08-15 15:46:49,553 - INFO - [SUCCESS] Inserted 26 rows for game 0022100940
+2025-08-15 15:46:52,358 - WARNING - API call failed for 0049500031: NBA API returned None
+2025-08-15 15:46:52,358 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0049500031 - NBA API returned None
+2025-08-15 15:46:56,698 - INFO - [SUCCESS] Inserted 24 rows for game 0021800670
+2025-08-15 15:46:56,831 - INFO - 
+[PAUSE] PROCESSING INTERRUPTED BY USER
+2025-08-15 15:46:56,831 - INFO - [INFO] No worries! System can resume from where it left off
+2025-08-15 15:46:56,831 - INFO - [INFO] Just run the script again - it will skip completed work
+2025-08-15 15:46:56,831 - INFO - 
+============================================================
+2025-08-15 15:46:56,831 - INFO - [SUMMARY] COMPREHENSIVE PROCESSING SUMMARY
+2025-08-15 15:46:56,831 - INFO - ============================================================
+2025-08-15 15:46:56,831 - INFO - [COUNT] Total API calls made: 5
+2025-08-15 15:46:56,831 - INFO - [ERROR] Total errors encountered: 1
+2025-08-15 15:46:56,831 - INFO - [SUCCESS] Overall success rate: 80.0%
+2025-08-15 15:46:56,831 - INFO - 
+[WARNING] FAILED CALLS SUMMARY:
+2025-08-15 15:46:56,831 - INFO -    nba_boxscoreadvancedv3_playerstats_gameid: 1 failed parameters
+2025-08-15 15:46:56,845 - INFO -    Total failed parameter calls: 1
+2025-08-15 15:46:56,845 - INFO -    [INFO] Failed calls are tracked and will be skipped on retry
+2025-08-15 15:46:56,845 - INFO - 
+[COMPLETE] COMPREHENSIVE NBA DATA COLLECTION COMPLETE!
+2025-08-15 15:46:56,845 - INFO - [LOG] Check 'nba_endpoint_processor.log' for detailed processing log
+2025-08-15 15:46:56,845 - INFO - [RESUME] System is fully resumable - can continue from any interruption point
+2025-08-15 15:46:56,845 - INFO - [CLOSED] Database connection closed
+2025-08-15 15:46:56,845 - INFO - [SUCCESS] Database connection closed
+2025-08-15 15:46:59,253 - INFO - [INIT] RDS Connection Manager initialized with ASCII logging
+2025-08-15 15:46:59,253 - WARNING - [RECONNECT] Connection lost - attempting to reconnect...
+2025-08-15 15:46:59,253 - INFO - [RECONNECT] Reconnection attempt 1/3
+2025-08-15 15:46:59,253 - INFO - [CONNECT] Creating new database connection...
+2025-08-15 15:46:59,505 - INFO - [SUCCESS] Database connection established
+2025-08-15 15:46:59,505 - INFO - [SUCCESS] Reconnection successful
+2025-08-15 15:46:59,505 - INFO - [SUCCESS] Connected to RDS database with robust connection management
+2025-08-15 15:46:59,605 - INFO - Failed calls tracking table created/verified
+2025-08-15 15:46:59,640 - INFO - [START] Starting COMPREHENSIVE NBA endpoint processing...
+2025-08-15 15:46:59,640 - INFO - [TARGET] This will process ALL configured endpoints with full data
+2025-08-15 15:46:59,640 - INFO - [RESUME] You can interrupt anytime - system will resume where it left off
+2025-08-15 15:46:59,640 - INFO - ============================================================
+2025-08-15 15:46:59,640 - INFO - [PHASE 1] High Priority Game-Based Endpoints
+2025-08-15 15:46:59,640 - INFO - ============================================================
+2025-08-15 15:46:59,640 - INFO - Processing game_based endpoints with priority high
+2025-08-15 15:46:59,640 - INFO - Found 9 endpoints to process
+2025-08-15 15:46:59,640 - INFO - Starting BoxScoreAdvancedV3...
+2025-08-15 15:46:59,640 - INFO - Processing endpoint: BoxScoreAdvancedV3 for NBA
+2025-08-15 15:47:00,228 - INFO - Fetched 52782 records from nba_games
+2025-08-15 15:47:00,274 - INFO - Found 52782 unique game IDs for NBA
+2025-08-15 15:47:00,274 - INFO - Testing BoxScoreAdvancedV3 structure with first parameter...
+2025-08-15 15:47:00,422 - INFO - Endpoint BoxScoreAdvancedV3 returns 2 dataframes
+2025-08-15 15:47:00,422 - INFO - Processing dataframe 0: nba_boxscoreadvancedv3_playerstats
+2025-08-15 15:47:01,277 - INFO - Table nba_boxscoreadvancedv3_playerstats created/verified
+2025-08-15 15:47:01,422 - INFO - Table nba_boxscoreadvancedv3_playerstats: 50223 missing parameters out of 52782 total
+2025-08-15 15:47:01,444 - INFO - Processing 50223 missing parameters for nba_boxscoreadvancedv3_playerstats
+2025-08-15 15:47:04,562 - INFO - [SUCCESS] Inserted 26 rows for game 0021300998
+2025-08-15 15:47:10,863 - WARNING - API call failed for 0029300665: NBA API returned None
+2025-08-15 15:47:10,863 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029300665 - NBA API returned None
+2025-08-15 15:47:13,832 - WARNING - API call failed for 0028700848: NBA API returned None
+2025-08-15 15:47:13,832 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028700848 - NBA API returned None
+2025-08-15 15:47:17,461 - INFO - [SUCCESS] Inserted 23 rows for game 0020600823
+2025-08-15 15:47:20,517 - INFO - [SUCCESS] Inserted 24 rows for game 0020900139
+2025-08-15 15:47:23,889 - INFO - [SUCCESS] Inserted 26 rows for game 0021700919
+2025-08-15 15:47:29,800 - INFO - [SUCCESS] Inserted 27 rows for game 0022300486
+2025-08-15 15:47:32,081 - WARNING - API call failed for 0029000715: NBA API returned None
+2025-08-15 15:47:32,081 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029000715 - NBA API returned None
+2025-08-15 15:47:32,902 - INFO - [SUCCESS] Inserted 26 rows for game 0022300174
+2025-08-15 15:47:37,646 - INFO - [SUCCESS] Inserted 24 rows for game 0049900015
+2025-08-15 15:47:43,166 - INFO - [SUCCESS] Inserted 24 rows for game 0021500542
+2025-08-15 15:47:46,777 - WARNING - API call failed for 0028600202: NBA API returned None
+2025-08-15 15:47:46,777 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028600202 - NBA API returned None
+2025-08-15 15:47:50,176 - INFO - 
+[PAUSE] PROCESSING INTERRUPTED BY USER
+2025-08-15 15:47:50,176 - INFO - [INFO] No worries! System can resume from where it left off
+2025-08-15 15:47:50,176 - INFO - [INFO] Just run the script again - it will skip completed work
+2025-08-15 15:47:50,176 - INFO - 
+============================================================
+2025-08-15 15:47:50,176 - INFO - [SUMMARY] COMPREHENSIVE PROCESSING SUMMARY
+2025-08-15 15:47:50,176 - INFO - ============================================================
+2025-08-15 15:47:50,176 - INFO - [COUNT] Total API calls made: 8
+2025-08-15 15:47:50,176 - INFO - [ERROR] Total errors encountered: 4
+2025-08-15 15:47:50,176 - INFO - [SUCCESS] Overall success rate: 50.0%
+2025-08-15 15:47:50,176 - INFO - 
+[WARNING] FAILED CALLS SUMMARY:
+2025-08-15 15:47:50,176 - INFO -    nba_boxscoreadvancedv3_playerstats_gameid: 4 failed parameters
+2025-08-15 15:47:50,176 - INFO -    Total failed parameter calls: 4
+2025-08-15 15:47:50,176 - INFO -    [INFO] Failed calls are tracked and will be skipped on retry
+2025-08-15 15:47:50,176 - INFO - 
+[COMPLETE] COMPREHENSIVE NBA DATA COLLECTION COMPLETE!
+2025-08-15 15:47:50,176 - INFO - [LOG] Check 'nba_endpoint_processor.log' for detailed processing log
+2025-08-15 15:47:50,176 - INFO - [RESUME] System is fully resumable - can continue from any interruption point
+2025-08-15 15:47:50,176 - INFO - [CLOSED] Database connection closed
+2025-08-15 15:47:50,176 - INFO - [SUCCESS] Database connection closed
+2025-08-15 15:48:58,654 - INFO - [INIT] RDS Connection Manager initialized with ASCII logging
+2025-08-15 15:48:58,654 - WARNING - [RECONNECT] Connection lost - attempting to reconnect...
+2025-08-15 15:48:58,654 - INFO - [RECONNECT] Reconnection attempt 1/3
+2025-08-15 15:48:58,654 - INFO - [CONNECT] Creating new database connection...
+2025-08-15 15:48:59,268 - INFO - [SUCCESS] Database connection established
+2025-08-15 15:48:59,268 - INFO - [SUCCESS] Reconnection successful
+2025-08-15 15:48:59,268 - INFO - [SUCCESS] Connected to RDS database with robust connection management
+2025-08-15 15:48:59,387 - INFO - Failed calls tracking table created/verified
+2025-08-15 15:48:59,423 - INFO - [START] Starting COMPREHENSIVE NBA endpoint processing...
+2025-08-15 15:48:59,423 - INFO - [TARGET] This will process ALL configured endpoints with full data
+2025-08-15 15:48:59,423 - INFO - [RESUME] You can interrupt anytime - system will resume where it left off
+2025-08-15 15:48:59,423 - INFO - ============================================================
+2025-08-15 15:48:59,423 - INFO - [PHASE 1] High Priority Game-Based Endpoints
+2025-08-15 15:48:59,423 - INFO - ============================================================
+2025-08-15 15:48:59,423 - INFO - Processing game_based endpoints with priority high
+2025-08-15 15:48:59,423 - INFO - Found 9 endpoints to process
+2025-08-15 15:48:59,423 - INFO - Starting BoxScoreAdvancedV3...
+2025-08-15 15:48:59,423 - INFO - Processing endpoint: BoxScoreAdvancedV3 for NBA
+2025-08-15 15:49:06,653 - INFO - Fetched 52782 records from nba_games
+2025-08-15 15:49:06,703 - INFO - Found 52782 unique game IDs for NBA
+2025-08-15 15:49:06,703 - INFO - Testing BoxScoreAdvancedV3 structure with first parameter...
+2025-08-15 15:49:06,981 - INFO - Endpoint BoxScoreAdvancedV3 returns 2 dataframes
+2025-08-15 15:49:06,981 - INFO - Processing dataframe 0: nba_boxscoreadvancedv3_playerstats
+2025-08-15 15:49:07,945 - INFO - Table nba_boxscoreadvancedv3_playerstats created/verified
+2025-08-15 15:49:08,192 - INFO - Table nba_boxscoreadvancedv3_playerstats: 50215 missing parameters out of 52782 total
+2025-08-15 15:49:08,237 - INFO - Processing 50215 missing parameters for nba_boxscoreadvancedv3_playerstats
+2025-08-15 15:49:11,489 - INFO - [SUCCESS] Inserted 30 rows for game 0042400102
+2025-08-15 15:49:15,916 - INFO - 
+[PAUSE] PROCESSING INTERRUPTED BY USER
+2025-08-15 15:49:15,932 - INFO - [INFO] No worries! System can resume from where it left off
+2025-08-15 15:49:15,932 - INFO - [INFO] Just run the script again - it will skip completed work
+2025-08-15 15:49:15,932 - INFO - 
+============================================================
+2025-08-15 15:49:15,936 - INFO - [SUMMARY] COMPREHENSIVE PROCESSING SUMMARY
+2025-08-15 15:49:15,936 - INFO - ============================================================
+2025-08-15 15:49:15,936 - INFO - [COUNT] Total API calls made: 1
+2025-08-15 15:49:15,936 - INFO - [ERROR] Total errors encountered: 0
+2025-08-15 15:49:15,936 - INFO - [SUCCESS] Overall success rate: 100.0%
+2025-08-15 15:49:15,936 - INFO - 
+[COMPLETE] COMPREHENSIVE NBA DATA COLLECTION COMPLETE!
+2025-08-15 15:49:15,936 - INFO - [LOG] Check 'nba_endpoint_processor.log' for detailed processing log
+2025-08-15 15:49:15,936 - INFO - [RESUME] System is fully resumable - can continue from any interruption point
+2025-08-15 15:49:15,936 - INFO - [CLOSED] Database connection closed
+2025-08-15 15:49:15,936 - INFO - [SUCCESS] Database connection closed

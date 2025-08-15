@@ -50,8 +50,19 @@ class RDSConnectionManager:
             'database': os.getenv('DB_NAME', 'nba_data'),
             'user': os.getenv('DB_USER', 'postgres'),
             'password': os.getenv('DB_PASSWORD', ''),
-            'port': int(os.getenv('DB_PORT', 5432))
+            'port': int(os.getenv('DB_PORT', 5432)),
+            'sslmode': os.getenv('DB_SSLMODE', 'require'),
+            'connect_timeout': 60,
+            'application_name': 'nba_data_collector',
+            # Add SSL parameters for HPC compatibility
+            'sslcert': os.getenv('PGSSLCERT', ''),
+            'sslkey': os.getenv('PGSSLKEY', ''),
+            'sslrootcert': os.getenv('PGSSLROOTCERT', ''),
+            'sslcrl': os.getenv('PGSSLCRL', '')
         }
+        
+        # Remove empty SSL parameters to avoid psycopg2 issues
+        self.db_config = {k: v for k, v in self.db_config.items() if v != ''}
         
         logger.info("[INIT] RDS Connection Manager initialized with ASCII logging")
     
