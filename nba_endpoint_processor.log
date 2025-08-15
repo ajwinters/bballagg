@@ -1129,6 +1129,7 @@
 2025-08-12 19:58:38,443 - INFO - [RESUME] System is fully resumable - can continue from any interruption point
 2025-08-12 19:58:38,443 - INFO - [CLOSED] Database connection closed
 2025-08-12 19:58:38,443 - INFO - [SUCCESS] Database connection closed
+<<<<<<< HEAD
 2025-08-12 19:58:40,509 - WARNING - API call failed for 0029100499: NBA API returned None
 2025-08-12 19:58:40,509 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029100499 - NBA API returned None
 2025-08-12 19:58:42,871 - WARNING - API call failed for 0028900269: NBA API returned None
@@ -1151,3 +1152,5 @@
 2025-08-12 19:59:21,830 - INFO - [SUCCESS] Inserted 24 rows for game 0021100647
 2025-08-12 19:59:23,859 - WARNING - API call failed for 0029000021: NBA API returned None
 2025-08-12 19:59:23,859 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029000021 - NBA API returned None
+=======
+>>>>>>> 73e5d06891430cd40d84d98aa315846ae073ba8b
