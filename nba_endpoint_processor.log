@@ -1137,3 +1137,17 @@
 2025-08-12 19:58:47,362 - INFO - [SUCCESS] Inserted 28 rows for game 0022400784
 2025-08-12 19:58:48,392 - INFO - [SUCCESS] Inserted 27 rows for game 0022401156
 2025-08-12 19:58:49,484 - INFO - [SUCCESS] Inserted 27 rows for game 0022400400
+2025-08-12 19:58:52,464 - INFO - [SUCCESS] Inserted 24 rows for game 0029900778
+2025-08-12 19:58:56,023 - INFO - [SUCCESS] Inserted 28 rows for game 0022100892
+2025-08-12 19:59:00,444 - INFO - [SUCCESS] Inserted 24 rows for game 0029800453
+2025-08-12 19:59:05,603 - INFO - [SUCCESS] Inserted 24 rows for game 0020600962
+2025-08-12 19:59:07,868 - WARNING - API call failed for 0028900139: NBA API returned None
+2025-08-12 19:59:07,869 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028900139 - NBA API returned None
+2025-08-12 19:59:13,222 - INFO - [SUCCESS] Inserted 26 rows for game 0021200739
+2025-08-12 19:59:16,158 - INFO - [SUCCESS] Inserted 26 rows for game 0021700015
+2025-08-12 19:59:17,169 - INFO - [SUCCESS] Inserted 27 rows for game 0022401045
+2025-08-12 19:59:18,875 - WARNING - API call failed for 0028300130: NBA API returned None
+2025-08-12 19:59:18,875 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0028300130 - NBA API returned None
+2025-08-12 19:59:21,830 - INFO - [SUCCESS] Inserted 24 rows for game 0021100647
+2025-08-12 19:59:23,859 - WARNING - API call failed for 0029000021: NBA API returned None
+2025-08-12 19:59:23,859 - WARNING - Failed call tracked: nba_boxscoreadvancedv3_playerstats with gameid=0029000021 - NBA API returned None
