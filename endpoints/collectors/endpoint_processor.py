@@ -27,7 +27,7 @@ logger = logging.getLogger(__name__)
 # Import our modules
 import nba_api.stats.endpoints as nbaapi
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'config'))
-from nba_endpoints_config import ALL_ENDPOINTS, get_endpoints_by_priority, get_endpoints_by_category
+from config.nba_endpoints_config import ALL_ENDPOINTS, get_endpoints_by_priority, get_endpoints_by_category
 
 # Configure NBA API timeout settings
 import requests
@@ -51,8 +51,8 @@ def configure_nba_api_timeout():
     session.mount("http://", adapter)
     session.mount("https://", adapter)
     
-    # Set longer timeout (60 seconds instead of default 30)
-    session.timeout = 60
+    # Note: 'timeout' should be set per request, not on the session object.
+    # To use a longer timeout, pass 'timeout=60' when making requests.
     
     return session
 
