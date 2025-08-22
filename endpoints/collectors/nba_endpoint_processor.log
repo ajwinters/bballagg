@@ -3173,3 +3173,58 @@
 2025-08-22 17:52:35,030 - INFO - [RESUME] System is fully resumable - can continue from any interruption point
 2025-08-22 17:52:35,031 - INFO - [CLOSED] Database connection closed
 2025-08-22 17:52:35,031 - INFO - [SUCCESS] Database connection closed
+2025-08-22 18:36:57,800 - INFO - [INIT] RDS Connection Manager initialized with ASCII logging
+2025-08-22 18:36:57,802 - WARNING - [RECONNECT] Connection lost - attempting to reconnect...
+2025-08-22 18:36:57,802 - INFO - [RECONNECT] Reconnection attempt 1/3
+2025-08-22 18:36:57,802 - INFO - [CONNECT] Creating new database connection...
+2025-08-22 18:36:58,253 - INFO - [SUCCESS] Database connection established
+2025-08-22 18:36:58,253 - INFO - [SUCCESS] Reconnection successful
+2025-08-22 18:36:58,253 - INFO - [SUCCESS] Connected to RDS database
+2025-08-22 18:36:58,366 - INFO - Failed calls tracking table created/verified
+2025-08-22 18:36:58,405 - INFO - No specific endpoint specified. Available endpoints (41):
+2025-08-22 18:36:58,422 - INFO -    1. BoxScoreAdvancedV2
+2025-08-22 18:36:58,423 - INFO -    2. BoxScoreAdvancedV3
+2025-08-22 18:36:58,423 - INFO -    3. BoxScoreDefensiveV2
+2025-08-22 18:36:58,423 - INFO -    4. BoxScoreFourFactorsV2
+2025-08-22 18:36:58,425 - INFO -    5. BoxScoreFourFactorsV3
+2025-08-22 18:36:58,427 - INFO -    6. BoxScoreHustleV2
+2025-08-22 18:36:58,427 - INFO -    7. BoxScoreMatchupsV3
+2025-08-22 18:36:58,427 - INFO -    8. BoxScoreMiscV2
+2025-08-22 18:36:58,427 - INFO -    9. BoxScoreMiscV3
+2025-08-22 18:36:58,429 - INFO -   10. BoxScorePlayerTrackV2
+2025-08-22 18:36:58,429 - INFO -   11. BoxScorePlayerTrackV3
+2025-08-22 18:36:58,429 - INFO -   12. BoxScoreScoringV2
+2025-08-22 18:36:58,431 - INFO -   13. BoxScoreScoringV3
+2025-08-22 18:36:58,431 - INFO -   14. BoxScoreSimilarityScore
+2025-08-22 18:36:58,431 - INFO -   15. BoxScoreSummaryV2
+2025-08-22 18:36:58,431 - INFO -   16. BoxScoreTraditionalV2
+2025-08-22 18:36:58,433 - INFO -   17. BoxScoreTraditionalV3
+2025-08-22 18:36:58,433 - INFO -   18. BoxScoreUsageV2
+2025-08-22 18:36:58,433 - INFO -   19. BoxScoreUsageV3
+2025-08-22 18:36:58,433 - INFO -   20. CommonPlayerInfo
+2025-08-22 18:36:58,433 - INFO -   ... and 21 more
+2025-08-22 18:36:58,433 - INFO - 
+Use --endpoint <name> to process a specific endpoint
+2025-08-22 18:36:58,433 - ERROR - No endpoints to process. Use --endpoint <name> or see available endpoints above.
+2025-08-22 18:36:58,433 - INFO - [CLOSED] Database connection closed
+2025-08-22 18:37:11,238 - INFO - [DRY-RUN] Processing configuration:
+2025-08-22 18:37:11,238 - INFO -   Endpoint: BoxScoreAdvancedV3
+2025-08-22 18:37:11,238 - INFO -   Endpoints: None
+2025-08-22 18:37:11,238 - INFO -   Category: None
+2025-08-22 18:37:11,238 - INFO -   Priority: None
+2025-08-22 18:37:11,238 - INFO -   Parameter range: None-None
+2025-08-22 18:37:11,238 - INFO -   Parameter limit: None
+2025-08-22 18:37:11,238 - INFO -   Rate limit: 0.3
+2025-08-22 18:37:11,238 - INFO -   Node ID: test_node
+2025-08-22 18:37:11,247 - INFO - [INIT] RDS Connection Manager initialized with ASCII logging
+2025-08-22 18:37:11,247 - WARNING - [RECONNECT] Connection lost - attempting to reconnect...
+2025-08-22 18:37:11,247 - INFO - [RECONNECT] Reconnection attempt 1/3
+2025-08-22 18:37:11,247 - INFO - [CONNECT] Creating new database connection...
+2025-08-22 18:37:11,947 - INFO - [SUCCESS] Database connection established
+2025-08-22 18:37:11,947 - INFO - [SUCCESS] Reconnection successful
+2025-08-22 18:37:11,947 - INFO - [SUCCESS] Connected to RDS database (Node: test_node)
+2025-08-22 18:37:12,086 - INFO - Failed calls tracking table created/verified
+2025-08-22 18:37:12,132 - INFO - [START] Processing 1 endpoint(s) on node test_node
+2025-08-22 18:37:12,135 - INFO - [DRY-RUN] Endpoints that would be processed:
+2025-08-22 18:37:12,137 - INFO -   - BoxScoreAdvancedV3 (high priority)
+2025-08-22 18:37:12,137 - INFO - [CLOSED] Database connection closed

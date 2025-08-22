@@ -1,0 +1,7 @@
+{
+  "host": "nba-rds-instance.c9wwc0ukkiu5.us-east-1.rds.amazonaws.com",
+  "name": "thebigone",
+  "user": "ajwin",
+  "password": "CharlesBark!23",
+  "port": "5432"
+}

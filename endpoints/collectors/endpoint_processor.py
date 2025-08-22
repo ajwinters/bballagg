@@ -10,8 +10,10 @@ import pandas as pd
 import time
 import sys
 import os
+import argparse
 from datetime import datetime, timedelta
 import logging
+import json
 
 # Setup logging
 logging.basicConfig(
@@ -27,7 +29,15 @@ logger = logging.getLogger(__name__)
 # Import our modules
 import nba_api.stats.endpoints as nbaapi
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'config'))
-from config.nba_endpoints_config import ALL_ENDPOINTS, get_endpoints_by_priority, get_endpoints_by_category
+try:
+    from nba_endpoints_config import ALL_ENDPOINTS, get_endpoints_by_priority, get_endpoints_by_category
+except ImportError:
+    # Fallback for different import path
+    import sys
+    import os
+    config_path = os.path.join(os.path.dirname(__file__), '..', 'config')
+    sys.path.insert(0, config_path)
+    from nba_endpoints_config import ALL_ENDPOINTS, get_endpoints_by_priority, get_endpoints_by_category
 
 # Configure NBA API timeout settings
 import requests
@@ -541,8 +551,326 @@ class NBAEndpointProcessor:
         }
 
 
+def parse_arguments():
+    """Parse command line arguments for distributed processing"""
+    parser = argparse.ArgumentParser(description='NBA Endpoint Processor - Distributed Version')
+    
+    # Endpoint specification options
+    parser.add_argument('--endpoint', type=str, help='Single endpoint to process (e.g., BoxScoreAdvancedV3)')
+    parser.add_argument('--endpoints', type=str, nargs='+', help='List of endpoints to process')
+    parser.add_argument('--category', type=str, choices=['game_based', 'player_based', 'team_based', 'league_based'], 
+                       help='Process all endpoints in a category')
+    parser.add_argument('--priority', type=str, choices=['high', 'medium', 'low'], 
+                       help='Process endpoints by priority level')
+    parser.add_argument('--config-file', type=str, help='JSON file with endpoint configuration')
+    
+    # Parameter filtering options
+    parser.add_argument('--param-start', type=int, help='Start index for parameter list (0-based)')
+    parser.add_argument('--param-end', type=int, help='End index for parameter list (0-based, exclusive)')
+    parser.add_argument('--param-limit', type=int, help='Maximum number of parameters to process')
+    parser.add_argument('--param-list', type=str, nargs='+', help='Specific parameter values to process')
+    
+    # Processing options
+    parser.add_argument('--rate-limit', type=float, default=0.3, 
+                       help='Seconds between API calls (default: 0.3)')
+    parser.add_argument('--dry-run', action='store_true', 
+                       help='Show what would be processed without executing')
+    parser.add_argument('--node-id', type=str, help='Unique identifier for this processing node')
+    
+    # Database options
+    parser.add_argument('--db-config', type=str, help='JSON file with database configuration')
+    
+    return parser.parse_args()
+
+
+def load_config_from_file(config_file):
+    """Load processing configuration from JSON file"""
+    try:
+        with open(config_file, 'r') as f:
+            config = json.load(f)
+        logger.info(f"Loaded configuration from {config_file}")
+        return config
+    except Exception as e:
+        logger.error(f"Failed to load config file {config_file}: {str(e)}")
+        return None
+
+
+def get_endpoints_to_process(args, all_endpoints=None):
+    """Determine which endpoints to process based on arguments"""
+    # Import here to avoid circular imports
+    try:
+        from nba_endpoints_config import get_endpoint_by_name, get_endpoints_by_priority, get_endpoints_by_category, list_all_endpoint_names
+    except ImportError:
+        import sys
+        import os
+        config_path = os.path.join(os.path.dirname(__file__), '..', 'config')
+        sys.path.insert(0, config_path)
+        from nba_endpoints_config import get_endpoint_by_name, get_endpoints_by_priority, get_endpoints_by_category, list_all_endpoint_names
+    
+    endpoints_to_process = []
+    
+    if args.config_file:
+        # Load from configuration file (legacy support)
+        config = load_config_from_file(args.config_file)
+        if config and 'endpoints' in config:
+            # Convert endpoint names to endpoint configs
+            for endpoint_name in config['endpoints']:
+                endpoint_config = get_endpoint_by_name(endpoint_name)
+                if endpoint_config:
+                    endpoints_to_process.append(endpoint_config)
+                else:
+                    logger.warning(f"Endpoint '{endpoint_name}' not found in configuration")
+            return endpoints_to_process
+    
+    if args.endpoint:
+        # Single endpoint - look it up by name
+        endpoint_config = get_endpoint_by_name(args.endpoint)
+        if endpoint_config:
+            endpoints_to_process.append(endpoint_config)
+        else:
+            logger.error(f"Endpoint '{args.endpoint}' not found!")
+            logger.error(f"Available endpoints: {', '.join(list_all_endpoint_names()[:10])}...")
+            return []
+    
+    elif args.endpoints:
+        # Multiple specific endpoints - look each up by name
+        for endpoint_name in args.endpoints:
+            endpoint_config = get_endpoint_by_name(endpoint_name)
+            if endpoint_config:
+                endpoints_to_process.append(endpoint_config)
+            else:
+                logger.warning(f"Endpoint '{endpoint_name}' not found, skipping")
+    
+    elif args.category and args.priority:
+        # Category + priority filter
+        endpoints_to_process = get_endpoints_by_category(args.category)
+        endpoints_to_process = [ep for ep in endpoints_to_process if ep.get('priority') == args.priority]
+    
+    elif args.category:
+        # All endpoints in category
+        endpoints_to_process = get_endpoints_by_category(args.category)
+    
+    elif args.priority:
+        # All endpoints with priority
+        endpoints_to_process = get_endpoints_by_priority(args.priority)
+    
+    else:
+        # Default: show available endpoints instead of processing all
+        available_endpoints = list_all_endpoint_names()
+        logger.info(f"No specific endpoint specified. Available endpoints ({len(available_endpoints)}):")
+        for i, name in enumerate(available_endpoints[:20], 1):
+            logger.info(f"  {i:2d}. {name}")
+        if len(available_endpoints) > 20:
+            logger.info(f"  ... and {len(available_endpoints) - 20} more")
+        logger.info("\nUse --endpoint <name> to process a specific endpoint")
+        return []
+    
+    return endpoints_to_process
+
+
+def filter_parameters(all_param_values, args):
+    """Filter parameter list based on command line arguments"""
+    if not all_param_values:
+        return all_param_values
+    
+    # Specific parameter list
+    if args.param_list:
+        # Convert to appropriate type based on first parameter
+        if all_param_values and isinstance(all_param_values[0], int):
+            try:
+                filtered_params = [int(p) for p in args.param_list]
+            except ValueError:
+                logger.warning("Could not convert param_list to integers, using as strings")
+                filtered_params = args.param_list
+        else:
+            filtered_params = args.param_list
+        
+        # Only include parameters that exist in the master list
+        return [p for p in filtered_params if p in all_param_values]
+    
+    # Range-based filtering
+    start_idx = args.param_start or 0
+    end_idx = args.param_end or len(all_param_values)
+    
+    # Apply limit if specified
+    if args.param_limit:
+        end_idx = min(start_idx + args.param_limit, len(all_param_values))
+    
+    filtered_params = all_param_values[start_idx:end_idx]
+    
+    logger.info(f"Filtered parameters: {len(all_param_values)} -> {len(filtered_params)} "
+                f"(range: {start_idx}-{end_idx})")
+    
+    return filtered_params
+
+
+def setup_database_connection(args):
+    """Setup database connection with optional config file"""
+    try:
+        # Import and initialize the enhanced RDS connection manager
+        from rds_connection_manager import RDSConnectionManager
+        
+        # Load database config from file if provided
+        if args.db_config:
+            db_config = load_config_from_file(args.db_config)
+            if db_config:
+                for key, value in db_config.items():
+                    os.environ[f'DB_{key.upper()}'] = str(value)
+        else:
+            # Use default/environment variables or hardcoded values
+            # NOTE: For production, these should come from environment variables or config files
+            os.environ.setdefault('DB_HOST', 'nba-rds-instance.c9wwc0ukkiu5.us-east-1.rds.amazonaws.com')
+            os.environ.setdefault('DB_NAME', 'thebigone')
+            os.environ.setdefault('DB_USER', 'ajwin')
+            os.environ.setdefault('DB_PASSWORD', 'CharlesBark!23')
+            os.environ.setdefault('DB_PORT', '5432')
+        
+        conn_manager = RDSConnectionManager(max_retries=3, retry_delay=5)
+        
+        # Test connection
+        if not conn_manager.ensure_connection():
+            logger.error("[FAILED] Could not establish database connection")
+            return None
+        
+        node_info = f" (Node: {args.node_id})" if args.node_id else ""
+        logger.info(f"[SUCCESS] Connected to RDS database{node_info}")
+        return conn_manager
+        
+    except Exception as e:
+        logger.error(f"Database connection failed: {str(e)}")
+        return None
+
+
 def main():
-    """Main execution function for COMPREHENSIVE NBA endpoint processing"""
+    """Main execution function with parameterized processing for distributed execution"""
+    # Parse command line arguments
+    args = parse_arguments()
+    
+    # Show configuration in dry-run mode
+    if args.dry_run:
+        logger.info("[DRY-RUN] Processing configuration:")
+        logger.info(f"  Endpoint: {args.endpoint}")
+        logger.info(f"  Endpoints: {args.endpoints}")
+        logger.info(f"  Category: {args.category}")
+        logger.info(f"  Priority: {args.priority}")
+        logger.info(f"  Parameter range: {args.param_start}-{args.param_end}")
+        logger.info(f"  Parameter limit: {args.param_limit}")
+        logger.info(f"  Rate limit: {args.rate_limit}")
+        logger.info(f"  Node ID: {args.node_id}")
+    
+    # Setup database connection
+    conn_manager = setup_database_connection(args)
+    if not conn_manager:
+        return
+    
+    # Create NBA processor with configurable rate limiting
+    processor = NBAEndpointProcessor(conn_manager, league='NBA', rate_limit=args.rate_limit)
+    
+    # Create failed calls tracking table
+    processor.create_failed_calls_table()
+    
+    # Determine which endpoints to process
+    endpoints_to_process = get_endpoints_to_process(args)
+    
+    if not endpoints_to_process:
+        logger.error("No endpoints to process. Use --endpoint <name> or see available endpoints above.")
+        conn_manager.close_connection()
+        return
+    
+    node_info = f" on node {args.node_id}" if args.node_id else ""
+    logger.info(f"[START] Processing {len(endpoints_to_process)} endpoint(s){node_info}")
+    
+    if args.dry_run:
+        logger.info("[DRY-RUN] Endpoints that would be processed:")
+        for endpoint_config in endpoints_to_process:
+            logger.info(f"  - {endpoint_config['endpoint']} ({endpoint_config.get('priority', 'unknown')} priority)")
+        conn_manager.close_connection()
+        return
+    
+    logger.info("[TARGET] Starting parameterized endpoint processing...")
+    logger.info("="*60)
+    
+    try:
+        all_results = {}
+        
+        # Process each endpoint individually (allows for better distribution)
+        for i, endpoint_config in enumerate(endpoints_to_process, 1):
+            endpoint_name = endpoint_config['endpoint']
+            logger.info(f"\n[ENDPOINT {i}/{len(endpoints_to_process)}] Processing: {endpoint_name}")
+            
+            # Get all parameter values for this endpoint
+            parameters = endpoint_config['parameters']
+            param_key = list(parameters.keys())[0]
+            param_source = parameters[param_key]
+            
+            # Get parameter values and apply filtering
+            all_param_values = processor.get_parameter_values(param_source)
+            filtered_param_values = filter_parameters(all_param_values, args)
+            
+            if not filtered_param_values:
+                logger.warning(f"No parameters to process for {endpoint_name}")
+                continue
+            
+            # Temporarily modify the processor's parameter source for this endpoint
+            original_get_parameter_values = processor.get_parameter_values
+            
+            def filtered_get_parameter_values(source):
+                if source == param_source:
+                    return filtered_param_values
+                return original_get_parameter_values(source)
+            
+            processor.get_parameter_values = filtered_get_parameter_values
+            
+            # Process the endpoint
+            start_time = time.time()
+            success = processor.process_endpoint(endpoint_config)
+            duration = time.time() - start_time
+            
+            # Restore original method
+            processor.get_parameter_values = original_get_parameter_values
+            
+            # Record result
+            all_results[endpoint_name] = {
+                'success': success,
+                'duration': duration,
+                'parameters_processed': len(filtered_param_values)
+            }
+            
+            status = "[SUCCESS]" if success else "[FAILED]"
+            logger.info(f"{status} {endpoint_name}: {duration:.1f}s, {len(filtered_param_values)} parameters")
+        
+    except KeyboardInterrupt:
+        logger.info(f"\n[PAUSE] PROCESSING INTERRUPTED BY USER{node_info}")
+        logger.info("[INFO] System can resume from where it left off")
+    except Exception as e:
+        logger.error(f"Unexpected error during processing: {str(e)}")
+    
+    # Final summary
+    logger.info("\n" + "="*60)
+    logger.info(f"[SUMMARY] PROCESSING SUMMARY{node_info}")
+    logger.info("="*60)
+    
+    if all_results:
+        successful_endpoints = sum(1 for r in all_results.values() if r['success'])
+        total_parameters = sum(r['parameters_processed'] for r in all_results.values())
+        total_time = sum(r['duration'] for r in all_results.values())
+        
+        logger.info(f"[SUCCESS] Processed endpoints: {successful_endpoints}/{len(all_results)}")
+        logger.info(f"[PARAMS] Total parameters processed: {total_parameters:,}")
+        logger.info(f"[TIME] Total processing time: {total_time/60:.1f} minutes")
+        
+        # Processing statistics
+        summary = processor.get_processing_summary()
+        logger.info(f"[CALLS] Total API calls made: {summary['total_processed']:,}")
+        logger.info(f"[ERRORS] Total errors encountered: {summary['total_errors']:,}")
+        logger.info(f"[RATE] Overall success rate: {summary['success_rate']:.1f}%")
+    
+    conn_manager.close_connection()
+    logger.info(f"[COMPLETE] Processing complete{node_info}")
+
+
+def main_legacy():
+    """Original main function for backward compatibility (comprehensive processing)"""
     # Connect to database with robust connection management
     try:
         import sys

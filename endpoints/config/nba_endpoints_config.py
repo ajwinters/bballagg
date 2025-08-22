@@ -354,3 +354,21 @@ def get_endpoints_by_frequency(frequency='weekly'):
 def get_endpoints_by_category(category):
     """Get all endpoints in a specific category"""
     return ALL_ENDPOINTS.get(category, [])
+
+
+def get_endpoint_by_name(endpoint_name):
+    """Get a specific endpoint configuration by name"""
+    for category, endpoints in ALL_ENDPOINTS.items():
+        for endpoint in endpoints:
+            if endpoint['endpoint'] == endpoint_name:
+                return endpoint
+    return None
+
+
+def list_all_endpoint_names():
+    """Get a list of all available endpoint names"""
+    endpoint_names = []
+    for category, endpoints in ALL_ENDPOINTS.items():
+        for endpoint in endpoints:
+            endpoint_names.append(endpoint['endpoint'])
+    return sorted(endpoint_names)
