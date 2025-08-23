@@ -380,19 +380,10 @@ class NBAEndpointProcessor:
                     # Create table if it doesn't exist
                     cleaned_df = allintwo.clean_column_names(df)
                     try:
-                        # Use connection manager for table creation
+                        # Create table using psycopg2 (consistent with rest of codebase)
                         with self.conn_manager.get_cursor() as cursor:
-                            # Create table using pandas to_sql method
-                            import pandas as pd
-                            from sqlalchemy import create_engine
-                            
-                            # Create SQLAlchemy engine from connection manager config
-                            db_config = self.conn_manager.db_config
-                            engine_url = f"postgresql://{db_config['user']}:{db_config['password']}@{db_config['host']}:{db_config['port']}/{db_config['database']}"
-                            engine = create_engine(engine_url)
-                            
-                            # Create table schema only (no data insertion yet)
-                            cleaned_df.head(0).to_sql(table_name, engine, if_exists='append', index=False)
+                            # Use allintwo's create_table function
+                            allintwo.create_table(cursor.connection, table_name, cleaned_df)
                             logger.info(f"Table {table_name} created/verified")
                     except Exception as e:
                         logger.error(f"Failed to create table {table_name}: {str(e)}")
@@ -452,17 +443,11 @@ class NBAEndpointProcessor:
                             if df_index < len(dataframes) and not dataframes[df_index].empty:
                                 df_to_insert = allintwo.clean_column_names(dataframes[df_index])
                                 
-                                # Insert data using connection manager
+                                # Insert data using psycopg2 (consistent with codebase)
                                 try:
-                                    from sqlalchemy import create_engine
-                                    
-                                    # Create SQLAlchemy engine
-                                    db_config = self.conn_manager.db_config
-                                    engine_url = f"postgresql://{db_config['user']}:{db_config['password']}@{db_config['host']}:{db_config['port']}/{db_config['database']}"
-                                    engine = create_engine(engine_url)
-                                    
-                                    # Insert the dataframe
-                                    df_to_insert.to_sql(table_name, engine, if_exists='append', index=False)
+                                    # Use allintwo's insert function with connection manager
+                                    with self.conn_manager.get_cursor() as cursor:
+                                        allintwo.insert_dataframe_to_rds(cursor.connection, df_to_insert, table_name)
                                     success_count += 1
                                     # Log successful insertion
                                     logger.info(f"[SUCCESS] Inserted {len(df_to_insert)} rows for game {param_value}")

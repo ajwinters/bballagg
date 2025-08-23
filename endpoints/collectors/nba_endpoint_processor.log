@@ -3228,3 +3228,253 @@ Use --endpoint <name> to process a specific endpoint
 2025-08-22 18:37:12,135 - INFO - [DRY-RUN] Endpoints that would be processed:
 2025-08-22 18:37:12,137 - INFO -   - BoxScoreAdvancedV3 (high priority)
 2025-08-22 18:37:12,137 - INFO - [CLOSED] Database connection closed
+2025-08-23 09:11:32,991 - INFO - [INIT] RDS Connection Manager initialized with ASCII logging
+2025-08-23 09:11:32,991 - WARNING - [RECONNECT] Connection lost - attempting to reconnect...
+2025-08-23 09:11:32,991 - INFO - [RECONNECT] Reconnection attempt 1/3
+2025-08-23 09:11:32,991 - INFO - [CONNECT] Creating new database connection...
+2025-08-23 09:11:33,350 - INFO - [SUCCESS] Database connection established
+2025-08-23 09:11:33,350 - INFO - [SUCCESS] Reconnection successful
+2025-08-23 09:11:33,350 - INFO - [SUCCESS] Connected to RDS database
+2025-08-23 09:11:33,472 - INFO - Failed calls tracking table created/verified
+2025-08-23 09:11:33,503 - INFO - No specific endpoint specified. Available endpoints (41):
+2025-08-23 09:11:33,503 - INFO -    1. BoxScoreAdvancedV2
+2025-08-23 09:11:33,504 - INFO -    2. BoxScoreAdvancedV3
+2025-08-23 09:11:33,504 - INFO -    3. BoxScoreDefensiveV2
+2025-08-23 09:11:33,504 - INFO -    4. BoxScoreFourFactorsV2
+2025-08-23 09:11:33,504 - INFO -    5. BoxScoreFourFactorsV3
+2025-08-23 09:11:33,506 - INFO -    6. BoxScoreHustleV2
+2025-08-23 09:11:33,506 - INFO -    7. BoxScoreMatchupsV3
+2025-08-23 09:11:33,506 - INFO -    8. BoxScoreMiscV2
+2025-08-23 09:11:33,506 - INFO -    9. BoxScoreMiscV3
+2025-08-23 09:11:33,506 - INFO -   10. BoxScorePlayerTrackV2
+2025-08-23 09:11:33,506 - INFO -   11. BoxScorePlayerTrackV3
+2025-08-23 09:11:33,506 - INFO -   12. BoxScoreScoringV2
+2025-08-23 09:11:33,506 - INFO -   13. BoxScoreScoringV3
+2025-08-23 09:11:33,506 - INFO -   14. BoxScoreSimilarityScore
+2025-08-23 09:11:33,506 - INFO -   15. BoxScoreSummaryV2
+2025-08-23 09:11:33,506 - INFO -   16. BoxScoreTraditionalV2
+2025-08-23 09:11:33,506 - INFO -   17. BoxScoreTraditionalV3
+2025-08-23 09:11:33,506 - INFO -   18. BoxScoreUsageV2
+2025-08-23 09:11:33,506 - INFO -   19. BoxScoreUsageV3
+2025-08-23 09:11:33,506 - INFO -   20. CommonPlayerInfo
+2025-08-23 09:11:33,506 - INFO -   ... and 21 more
+2025-08-23 09:11:33,506 - INFO - 
+Use --endpoint <name> to process a specific endpoint
+2025-08-23 09:11:33,506 - ERROR - No endpoints to process. Use --endpoint <name> or see available endpoints above.
+2025-08-23 09:11:33,506 - INFO - [CLOSED] Database connection closed
+2025-08-23 09:11:37,703 - INFO - [INIT] RDS Connection Manager initialized with ASCII logging
+2025-08-23 09:11:37,703 - WARNING - [RECONNECT] Connection lost - attempting to reconnect...
+2025-08-23 09:11:37,703 - INFO - [RECONNECT] Reconnection attempt 1/3
+2025-08-23 09:11:37,703 - INFO - [CONNECT] Creating new database connection...
+2025-08-23 09:11:37,978 - INFO - [SUCCESS] Database connection established
+2025-08-23 09:11:37,978 - INFO - [SUCCESS] Reconnection successful
+2025-08-23 09:11:37,978 - INFO - [SUCCESS] Connected to RDS database
+2025-08-23 09:11:38,069 - INFO - Failed calls tracking table created/verified
+2025-08-23 09:11:38,103 - INFO - No specific endpoint specified. Available endpoints (41):
+2025-08-23 09:11:38,103 - INFO -    1. BoxScoreAdvancedV2
+2025-08-23 09:11:38,103 - INFO -    2. BoxScoreAdvancedV3
+2025-08-23 09:11:38,103 - INFO -    3. BoxScoreDefensiveV2
+2025-08-23 09:11:38,103 - INFO -    4. BoxScoreFourFactorsV2
+2025-08-23 09:11:38,106 - INFO -    5. BoxScoreFourFactorsV3
+2025-08-23 09:11:38,106 - INFO -    6. BoxScoreHustleV2
+2025-08-23 09:11:38,106 - INFO -    7. BoxScoreMatchupsV3
+2025-08-23 09:11:38,106 - INFO -    8. BoxScoreMiscV2
+2025-08-23 09:11:38,107 - INFO -    9. BoxScoreMiscV3
+2025-08-23 09:11:38,107 - INFO -   10. BoxScorePlayerTrackV2
+2025-08-23 09:11:38,107 - INFO -   11. BoxScorePlayerTrackV3
+2025-08-23 09:11:38,108 - INFO -   12. BoxScoreScoringV2
+2025-08-23 09:11:38,108 - INFO -   13. BoxScoreScoringV3
+2025-08-23 09:11:38,108 - INFO -   14. BoxScoreSimilarityScore
+2025-08-23 09:11:38,108 - INFO -   15. BoxScoreSummaryV2
+2025-08-23 09:11:38,109 - INFO -   16. BoxScoreTraditionalV2
+2025-08-23 09:11:38,109 - INFO -   17. BoxScoreTraditionalV3
+2025-08-23 09:11:38,109 - INFO -   18. BoxScoreUsageV2
+2025-08-23 09:11:38,109 - INFO -   19. BoxScoreUsageV3
+2025-08-23 09:11:38,109 - INFO -   20. CommonPlayerInfo
+2025-08-23 09:11:38,109 - INFO -   ... and 21 more
+2025-08-23 09:11:38,109 - INFO - 
+Use --endpoint <name> to process a specific endpoint
+2025-08-23 09:11:38,110 - ERROR - No endpoints to process. Use --endpoint <name> or see available endpoints above.
+2025-08-23 09:11:38,110 - INFO - [CLOSED] Database connection closed
+2025-08-23 09:13:43,461 - INFO - [INIT] RDS Connection Manager initialized with ASCII logging
+2025-08-23 09:13:43,461 - WARNING - [RECONNECT] Connection lost - attempting to reconnect...
+2025-08-23 09:13:43,461 - INFO - [RECONNECT] Reconnection attempt 1/3
+2025-08-23 09:13:43,461 - INFO - [CONNECT] Creating new database connection...
+2025-08-23 09:13:44,003 - INFO - [SUCCESS] Database connection established
+2025-08-23 09:13:44,003 - INFO - [SUCCESS] Reconnection successful
+2025-08-23 09:13:44,005 - INFO - [SUCCESS] Connected to RDS database (Node: server1)
+2025-08-23 09:13:44,100 - INFO - Failed calls tracking table created/verified
+2025-08-23 09:13:44,133 - INFO - [START] Processing 1 endpoint(s) on node server1
+2025-08-23 09:13:44,135 - INFO - [TARGET] Starting parameterized endpoint processing...
+2025-08-23 09:13:44,135 - INFO - ============================================================
+2025-08-23 09:13:44,135 - INFO - 
+[ENDPOINT 1/1] Processing: BoxScoreAdvancedV3
+2025-08-23 09:13:44,899 - INFO - Fetched 52782 records from nba_games
+2025-08-23 09:13:44,959 - INFO - Found 52782 unique game IDs for NBA
+2025-08-23 09:13:44,970 - INFO - Filtered parameters: 52782 -> 52782 (range: 0-52782)
+2025-08-23 09:13:44,972 - INFO - Processing endpoint: BoxScoreAdvancedV3 for NBA
+2025-08-23 09:13:44,972 - INFO - Testing BoxScoreAdvancedV3 structure with first parameter...
+2025-08-23 09:13:50,961 - INFO - Endpoint BoxScoreAdvancedV3 returns 2 dataframes
+2025-08-23 09:13:50,961 - INFO - Processing dataframe 0: nba_boxscoreadvancedv3_playerstats
+2025-08-23 09:13:51,066 - ERROR - [ERROR] Database operation failed: No module named 'sqlalchemy'
+2025-08-23 09:13:51,066 - ERROR - Failed to create table nba_boxscoreadvancedv3_playerstats: No module named 'sqlalchemy'
+2025-08-23 09:13:51,066 - INFO - Processing dataframe 1: nba_boxscoreadvancedv3_teamstats
+2025-08-23 09:13:51,173 - ERROR - [ERROR] Database operation failed: No module named 'sqlalchemy'
+2025-08-23 09:13:51,173 - ERROR - Failed to create table nba_boxscoreadvancedv3_teamstats: No module named 'sqlalchemy'
+2025-08-23 09:13:51,173 - INFO - [SUCCESS] BoxScoreAdvancedV3: 6.2s, 52782 parameters
+2025-08-23 09:13:51,173 - INFO - 
+============================================================
+2025-08-23 09:13:51,173 - INFO - [SUMMARY] PROCESSING SUMMARY on node server1
+2025-08-23 09:13:51,173 - INFO - ============================================================
+2025-08-23 09:13:51,185 - INFO - [SUCCESS] Processed endpoints: 1/1
+2025-08-23 09:13:51,185 - INFO - [PARAMS] Total parameters processed: 52,782
+2025-08-23 09:13:51,185 - INFO - [TIME] Total processing time: 0.1 minutes
+2025-08-23 09:13:51,185 - INFO - [CALLS] Total API calls made: 0
+2025-08-23 09:13:51,185 - INFO - [ERRORS] Total errors encountered: 0
+2025-08-23 09:13:51,185 - INFO - [RATE] Overall success rate: 0.0%
+2025-08-23 09:13:51,187 - INFO - [CLOSED] Database connection closed
+2025-08-23 09:13:51,187 - INFO - [COMPLETE] Processing complete on node server1
+2025-08-23 09:15:34,316 - INFO - [INIT] RDS Connection Manager initialized with ASCII logging
+2025-08-23 09:15:34,316 - WARNING - [RECONNECT] Connection lost - attempting to reconnect...
+2025-08-23 09:15:34,316 - INFO - [RECONNECT] Reconnection attempt 1/3
+2025-08-23 09:15:34,316 - INFO - [CONNECT] Creating new database connection...
+2025-08-23 09:15:34,798 - INFO - [SUCCESS] Database connection established
+2025-08-23 09:15:34,798 - INFO - [SUCCESS] Reconnection successful
+2025-08-23 09:15:34,798 - INFO - [SUCCESS] Connected to RDS database (Node: server1)
+2025-08-23 09:15:34,882 - INFO - Failed calls tracking table created/verified
+2025-08-23 09:15:34,933 - INFO - [START] Processing 1 endpoint(s) on node server1
+2025-08-23 09:15:34,934 - INFO - [TARGET] Starting parameterized endpoint processing...
+2025-08-23 09:15:34,934 - INFO - ============================================================
+2025-08-23 09:15:34,934 - INFO - 
+[ENDPOINT 1/1] Processing: BoxScoreAdvancedV3
+2025-08-23 09:15:35,838 - INFO - Fetched 52782 records from nba_games
+2025-08-23 09:15:35,887 - INFO - Found 52782 unique game IDs for NBA
+2025-08-23 09:15:35,901 - INFO - Filtered parameters: 52782 -> 52782 (range: 0-52782)
+2025-08-23 09:15:35,903 - INFO - Processing endpoint: BoxScoreAdvancedV3 for NBA
+2025-08-23 09:15:35,903 - INFO - Testing BoxScoreAdvancedV3 structure with first parameter...
+2025-08-23 09:15:36,055 - INFO - Endpoint BoxScoreAdvancedV3 returns 2 dataframes
+2025-08-23 09:15:36,055 - INFO - Processing dataframe 0: nba_boxscoreadvancedv3_playerstats
+2025-08-23 09:15:36,169 - ERROR - [ERROR] Database operation failed: No module named 'sqlalchemy'
+2025-08-23 09:15:36,169 - ERROR - Failed to create table nba_boxscoreadvancedv3_playerstats: No module named 'sqlalchemy'
+2025-08-23 09:15:36,169 - INFO - Processing dataframe 1: nba_boxscoreadvancedv3_teamstats
+2025-08-23 09:15:36,270 - ERROR - [ERROR] Database operation failed: No module named 'sqlalchemy'
+2025-08-23 09:15:36,270 - ERROR - Failed to create table nba_boxscoreadvancedv3_teamstats: No module named 'sqlalchemy'
+2025-08-23 09:15:36,270 - INFO - [SUCCESS] BoxScoreAdvancedV3: 0.4s, 52782 parameters
+2025-08-23 09:15:36,270 - INFO - 
+============================================================
+2025-08-23 09:15:36,270 - INFO - [SUMMARY] PROCESSING SUMMARY on node server1
+2025-08-23 09:15:36,270 - INFO - ============================================================
+2025-08-23 09:15:36,270 - INFO - [SUCCESS] Processed endpoints: 1/1
+2025-08-23 09:15:36,270 - INFO - [PARAMS] Total parameters processed: 52,782
+2025-08-23 09:15:36,270 - INFO - [TIME] Total processing time: 0.0 minutes
+2025-08-23 09:15:36,270 - INFO - [CALLS] Total API calls made: 0
+2025-08-23 09:15:36,270 - INFO - [ERRORS] Total errors encountered: 0
+2025-08-23 09:15:36,270 - INFO - [RATE] Overall success rate: 0.0%
+2025-08-23 09:15:36,270 - INFO - [CLOSED] Database connection closed
+2025-08-23 09:15:36,270 - INFO - [COMPLETE] Processing complete on node server1
+2025-08-23 09:18:32,658 - INFO - [DRY-RUN] Processing configuration:
+2025-08-23 09:18:32,658 - INFO -   Endpoint: BoxScoreAdvancedV3
+2025-08-23 09:18:32,658 - INFO -   Endpoints: None
+2025-08-23 09:18:32,658 - INFO -   Category: None
+2025-08-23 09:18:32,658 - INFO -   Priority: None
+2025-08-23 09:18:32,658 - INFO -   Parameter range: None-None
+2025-08-23 09:18:32,658 - INFO -   Parameter limit: None
+2025-08-23 09:18:32,658 - INFO -   Rate limit: 0.3
+2025-08-23 09:18:32,658 - INFO -   Node ID: test_server
+2025-08-23 09:18:32,663 - INFO - [INIT] RDS Connection Manager initialized with ASCII logging
+2025-08-23 09:18:32,663 - WARNING - [RECONNECT] Connection lost - attempting to reconnect...
+2025-08-23 09:18:32,663 - INFO - [RECONNECT] Reconnection attempt 1/3
+2025-08-23 09:18:32,663 - INFO - [CONNECT] Creating new database connection...
+2025-08-23 09:18:33,026 - INFO - [SUCCESS] Database connection established
+2025-08-23 09:18:33,026 - INFO - [SUCCESS] Reconnection successful
+2025-08-23 09:18:33,026 - INFO - [SUCCESS] Connected to RDS database (Node: test_server)
+2025-08-23 09:18:33,131 - INFO - Failed calls tracking table created/verified
+2025-08-23 09:18:33,165 - INFO - [START] Processing 1 endpoint(s) on node test_server
+2025-08-23 09:18:33,165 - INFO - [DRY-RUN] Endpoints that would be processed:
+2025-08-23 09:18:33,166 - INFO -   - BoxScoreAdvancedV3 (high priority)
+2025-08-23 09:18:33,166 - INFO - [CLOSED] Database connection closed
+2025-08-23 09:18:42,215 - INFO - [INIT] RDS Connection Manager initialized with ASCII logging
+2025-08-23 09:18:42,215 - WARNING - [RECONNECT] Connection lost - attempting to reconnect...
+2025-08-23 09:18:42,215 - INFO - [RECONNECT] Reconnection attempt 1/3
+2025-08-23 09:18:42,215 - INFO - [CONNECT] Creating new database connection...
+2025-08-23 09:18:42,550 - INFO - [SUCCESS] Database connection established
+2025-08-23 09:18:42,550 - INFO - [SUCCESS] Reconnection successful
+2025-08-23 09:18:42,550 - INFO - [SUCCESS] Connected to RDS database (Node: test_server)
+2025-08-23 09:18:42,658 - INFO - Failed calls tracking table created/verified
+2025-08-23 09:18:42,702 - INFO - [START] Processing 1 endpoint(s) on node test_server
+2025-08-23 09:18:42,703 - INFO - [TARGET] Starting parameterized endpoint processing...
+2025-08-23 09:18:42,703 - INFO - ============================================================
+2025-08-23 09:18:42,704 - INFO - 
+[ENDPOINT 1/1] Processing: BoxScoreAdvancedV3
+2025-08-23 09:18:43,485 - INFO - Fetched 52782 records from nba_games
+2025-08-23 09:18:43,533 - INFO - Found 52782 unique game IDs for NBA
+2025-08-23 09:18:43,544 - INFO - Filtered parameters: 52782 -> 2 (range: 0-2)
+2025-08-23 09:18:43,544 - INFO - Processing endpoint: BoxScoreAdvancedV3 for NBA
+2025-08-23 09:18:43,544 - INFO - Testing BoxScoreAdvancedV3 structure with first parameter...
+2025-08-23 09:18:43,705 - INFO - Endpoint BoxScoreAdvancedV3 returns 2 dataframes
+2025-08-23 09:18:43,707 - INFO - Processing dataframe 0: nba_boxscoreadvancedv3_playerstats
+2025-08-23 09:18:43,839 - INFO - Table nba_boxscoreadvancedv3_playerstats created/verified
+2025-08-23 09:18:43,976 - INFO - Table nba_boxscoreadvancedv3_playerstats: 0 missing parameters out of 2 total
+2025-08-23 09:18:44,014 - INFO - Table nba_boxscoreadvancedv3_playerstats is up to date, skipping
+2025-08-23 09:18:44,014 - INFO - Processing dataframe 1: nba_boxscoreadvancedv3_teamstats
+2025-08-23 09:18:44,129 - INFO - Table nba_boxscoreadvancedv3_teamstats created/verified
+2025-08-23 09:18:44,232 - INFO - Table nba_boxscoreadvancedv3_teamstats: 0 missing parameters out of 2 total
+2025-08-23 09:18:44,265 - INFO - Table nba_boxscoreadvancedv3_teamstats is up to date, skipping
+2025-08-23 09:18:44,265 - INFO - [SUCCESS] BoxScoreAdvancedV3: 0.7s, 2 parameters
+2025-08-23 09:18:44,265 - INFO - 
+============================================================
+2025-08-23 09:18:44,265 - INFO - [SUMMARY] PROCESSING SUMMARY on node test_server
+2025-08-23 09:18:44,265 - INFO - ============================================================
+2025-08-23 09:18:44,265 - INFO - [SUCCESS] Processed endpoints: 1/1
+2025-08-23 09:18:44,265 - INFO - [PARAMS] Total parameters processed: 2
+2025-08-23 09:18:44,265 - INFO - [TIME] Total processing time: 0.0 minutes
+2025-08-23 09:18:44,265 - INFO - [CALLS] Total API calls made: 0
+2025-08-23 09:18:44,265 - INFO - [ERRORS] Total errors encountered: 0
+2025-08-23 09:18:44,271 - INFO - [RATE] Overall success rate: 0.0%
+2025-08-23 09:18:44,271 - INFO - [CLOSED] Database connection closed
+2025-08-23 09:18:44,271 - INFO - [COMPLETE] Processing complete on node test_server
+2025-08-23 09:19:18,165 - INFO - [INIT] RDS Connection Manager initialized with ASCII logging
+2025-08-23 09:19:18,167 - WARNING - [RECONNECT] Connection lost - attempting to reconnect...
+2025-08-23 09:19:18,167 - INFO - [RECONNECT] Reconnection attempt 1/3
+2025-08-23 09:19:18,167 - INFO - [CONNECT] Creating new database connection...
+2025-08-23 09:19:18,492 - INFO - [SUCCESS] Database connection established
+2025-08-23 09:19:18,492 - INFO - [SUCCESS] Reconnection successful
+2025-08-23 09:19:18,492 - INFO - [SUCCESS] Connected to RDS database (Node: test_server)
+2025-08-23 09:19:18,607 - INFO - Failed calls tracking table created/verified
+2025-08-23 09:19:18,652 - INFO - [START] Processing 1 endpoint(s) on node test_server
+2025-08-23 09:19:18,654 - INFO - [TARGET] Starting parameterized endpoint processing...
+2025-08-23 09:19:18,654 - INFO - ============================================================
+2025-08-23 09:19:18,654 - INFO - 
+[ENDPOINT 1/1] Processing: BoxScoreAdvancedV3
+2025-08-23 09:19:19,468 - INFO - Fetched 52782 records from nba_games
+2025-08-23 09:19:19,540 - INFO - Found 52782 unique game IDs for NBA
+2025-08-23 09:19:19,559 - INFO - Filtered parameters: 52782 -> 2 (range: 50000-50002)
+2025-08-23 09:19:19,560 - INFO - Processing endpoint: BoxScoreAdvancedV3 for NBA
+2025-08-23 09:19:19,562 - INFO - Testing BoxScoreAdvancedV3 structure with first parameter...
+2025-08-23 09:19:23,721 - INFO - Endpoint BoxScoreAdvancedV3 returns 2 dataframes
+2025-08-23 09:19:23,721 - INFO - Processing dataframe 0: nba_boxscoreadvancedv3_playerstats
+2025-08-23 09:19:23,864 - INFO - Table nba_boxscoreadvancedv3_playerstats created/verified
+2025-08-23 09:19:24,053 - INFO - Table nba_boxscoreadvancedv3_playerstats: 1 missing parameters out of 2 total
+2025-08-23 09:19:24,097 - INFO - Processing 1 missing parameters for nba_boxscoreadvancedv3_playerstats
+2025-08-23 09:19:24,428 - INFO - [SUCCESS] Inserted 40 rows for game 0012000006
+2025-08-23 09:19:24,735 - INFO - Completed nba_boxscoreadvancedv3_playerstats: 1 success, 0 errors
+2025-08-23 09:19:24,735 - INFO - Processing dataframe 1: nba_boxscoreadvancedv3_teamstats
+2025-08-23 09:19:24,876 - INFO - Table nba_boxscoreadvancedv3_teamstats created/verified
+2025-08-23 09:19:24,963 - INFO - Table nba_boxscoreadvancedv3_teamstats: 2 missing parameters out of 2 total
+2025-08-23 09:19:25,008 - INFO - Processing 2 missing parameters for nba_boxscoreadvancedv3_teamstats
+2025-08-23 09:19:27,756 - INFO - [SUCCESS] Inserted 2 rows for game 0012000009
+2025-08-23 09:19:28,330 - INFO - [SUCCESS] Inserted 2 rows for game 0012000006
+2025-08-23 09:19:28,632 - INFO - Completed nba_boxscoreadvancedv3_teamstats: 2 success, 0 errors
+2025-08-23 09:19:28,632 - INFO - [SUCCESS] BoxScoreAdvancedV3: 9.1s, 2 parameters
+2025-08-23 09:19:28,632 - INFO - 
+============================================================
+2025-08-23 09:19:28,632 - INFO - [SUMMARY] PROCESSING SUMMARY on node test_server
+2025-08-23 09:19:28,632 - INFO - ============================================================
+2025-08-23 09:19:28,632 - INFO - [SUCCESS] Processed endpoints: 1/1
+2025-08-23 09:19:28,632 - INFO - [PARAMS] Total parameters processed: 2
+2025-08-23 09:19:28,632 - INFO - [TIME] Total processing time: 0.2 minutes
+2025-08-23 09:19:28,632 - INFO - [CALLS] Total API calls made: 3
+2025-08-23 09:19:28,632 - INFO - [ERRORS] Total errors encountered: 0
+2025-08-23 09:19:28,632 - INFO - [RATE] Overall success rate: 100.0%
+2025-08-23 09:19:28,632 - INFO - [CLOSED] Database connection closed
+2025-08-23 09:19:28,632 - INFO - [COMPLETE] Processing complete on node test_server
