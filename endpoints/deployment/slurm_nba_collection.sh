@@ -6,8 +6,8 @@
 #SBATCH --job-name=nba_collection
 #SBATCH --output=logs/nba_%x_%A_%a.out
 #SBATCH --error=logs/nba_%x_%A_%a.err
-#SBATCH --mail-type=FAIL
-#SBATCH --mail-user=your_email@psu.edu
+##SBATCH --mail-type=FAIL
+##SBATCH --mail-user=ajw5296@psu.edu
 
 # Check if profile argument provided
 if [ -z "$1" ]; then
