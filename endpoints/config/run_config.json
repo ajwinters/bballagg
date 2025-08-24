@@ -1,0 +1,35 @@
+{
+  "collection_profiles": {
+    "test": {
+      "description": "Quick test run with 3 endpoints",
+      "endpoints": [
+        "CommonAllPlayersV3",
+        "LeagueStandingsV2", 
+        "CommonTeamInfoV3"
+      ],
+      "slurm_config": {
+        "time": "02:00:00",
+        "mem_per_cpu": "2GB",
+        "rate_limit": 0.5
+      }
+    },
+    "high_priority": {
+      "description": "High priority endpoints only",
+      "filter": "priority:high",
+      "slurm_config": {
+        "time": "12:00:00",
+        "mem_per_cpu": "4GB",
+        "rate_limit": 0.3
+      }
+    },
+    "full": {
+      "description": "All available endpoints",
+      "filter": "all",
+      "slurm_config": {
+        "time": "24:00:00", 
+        "mem_per_cpu": "8GB",
+        "rate_limit": 1.0
+      }
+    }
+  }
+}
