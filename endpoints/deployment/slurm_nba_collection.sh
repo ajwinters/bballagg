@@ -82,13 +82,26 @@ echo "Processing endpoint: $ENDPOINT"
 
 # Load modules and environment (CUSTOMIZE FOR YOUR CLUSTER)
 module load python/3.11.0
-source .venv/bin/activate
+
+# Activate virtual environment
+if [ -f ".venv/bin/activate" ]; then
+    source .venv/bin/activate
+    echo "Virtual environment activated"
+else
+    echo "Warning: Virtual environment not found at .venv/bin/activate"
+fi
+
+# Verify Python environment
+python --version
+pip list | grep -E "(psycopg2|pandas|requests|nbaapi)"
 
 # Create unique node ID
 NODE_ID="${PROFILE}_${SLURM_JOB_ID}_${SLURM_ARRAY_TASK_ID}"
+echo "Node ID: $NODE_ID"
 
-# Run the endpoint processor
-python collectors/endpoint_processor.py \
+# Run the single endpoint processor
+echo "Starting single endpoint processor..."
+python collectors/single_endpoint_processor.py \
     --endpoint "$ENDPOINT" \
     --node-id "$NODE_ID" \
     --rate-limit "$RATE_LIMIT" \

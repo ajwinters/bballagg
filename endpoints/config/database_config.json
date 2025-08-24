@@ -3,5 +3,6 @@
   "name": "thebigone",
   "user": "ajwin",
   "password": "CharlesBark!23",
-  "port": "5432"
+  "port": "5432",
+  "ssl_mode": "require"
 }

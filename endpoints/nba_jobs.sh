@@ -7,10 +7,12 @@ show_usage() {
     echo ""
     echo "Commands:"
     echo "  submit <profile>  - Submit job with profile (test|high_priority|full)"
-    echo "  status           - Show job status"  
+    echo "  status           - Show job status and quick stats"
+    echo "  monitor          - Run detailed monitoring script"
     echo "  cancel <job_id>  - Cancel specific job"
     echo "  logs <job_id>    - Show logs for job"
     echo "  profiles         - List available profiles"
+    echo "  cleanup          - Clean old log files"
     echo ""
 }
 
@@ -41,7 +43,13 @@ case "$1" in
         
     "status")
         echo "NBA Collection Jobs Status:"
+        echo "=========================="
         squeue -u $(whoami) --format="%.10i %.15j %.8T %.10M %.5D %.12L" --name=nba_*
+        echo ""
+        echo "Quick Stats:"
+        echo "  Total NBA jobs: $(squeue -u $(whoami) --name=nba_* | wc -l)"
+        echo "  Running: $(squeue -u $(whoami) --name=nba_* -t RUNNING | wc -l)"
+        echo "  Pending: $(squeue -u $(whoami) --name=nba_* -t PENDING | wc -l)"
         ;;
         
     "cancel")
@@ -71,6 +79,19 @@ case "$1" in
         
     "profiles")
         show_profiles
+        ;;
+        
+    "monitor")
+        echo "Running detailed monitoring..."
+        python scripts/monitor.py
+        ;;
+        
+    "cleanup")
+        echo "Cleaning old log files (>7 days)..."
+        find logs -name "*.log" -mtime +7 -delete 2>/dev/null || echo "No old logs to clean"
+        find logs -name "*.out" -mtime +7 -delete 2>/dev/null || echo "No old output files to clean" 
+        find logs -name "*.err" -mtime +7 -delete 2>/dev/null || echo "No old error files to clean"
+        echo "Cleanup complete."
         ;;
         
     *)
