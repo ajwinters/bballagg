@@ -3,9 +3,9 @@
     "test": {
       "description": "Quick test run with 3 endpoints",
       "endpoints": [
-        "CommonAllPlayersV3",
-        "LeagueStandingsV2", 
-        "CommonTeamInfoV3"
+        "BoxScoreAdvancedV3",
+        "BoxScoreTraditionalV2", 
+        "PlayerGameLogs"
       ],
       "slurm_config": {
         "time": "02:00:00",
