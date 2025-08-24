@@ -44,12 +44,35 @@ case "$1" in
     "status")
         echo "NBA Collection Jobs Status:"
         echo "=========================="
-        squeue -u $(whoami) --format="%.10i %.15j %.8T %.10M %.5D %.12L" --name=nba_*
-        echo ""
-        echo "Quick Stats:"
-        echo "  Total NBA jobs: $(squeue -u $(whoami) --name=nba_* | wc -l)"
-        echo "  Running: $(squeue -u $(whoami) --name=nba_* -t RUNNING | wc -l)"
-        echo "  Pending: $(squeue -u $(whoami) --name=nba_* -t PENDING | wc -l)"
+        
+        # First try with NBA filter (handles both nba_* and nba_collection patterns)
+        NBA_JOBS=$(squeue -u $(whoami) --name=nba* --noheader 2>/dev/null | wc -l)
+        
+        if [ "$NBA_JOBS" -gt 0 ]; then
+            echo "Found $NBA_JOBS NBA jobs:"
+            squeue -u $(whoami) --format="%.10i %.15j %.8T %.10M %.5D %.12L" --name=nba*
+            echo ""
+            echo "Quick Stats:"
+            echo "  Total NBA jobs: $NBA_JOBS"
+            echo "  Running: $(squeue -u $(whoami) --name=nba* -t RUNNING --noheader 2>/dev/null | wc -l)"
+            echo "  Pending: $(squeue -u $(whoami) --name=nba* -t PENDING --noheader 2>/dev/null | wc -l)"
+            echo "  Completed: $(squeue -u $(whoami) --name=nba* -t COMPLETED --noheader 2>/dev/null | wc -l)"
+        else
+            echo "No NBA-named jobs found. Showing all your jobs:"
+            ALL_JOBS=$(squeue -u $(whoami) --noheader 2>/dev/null | wc -l)
+            if [ "$ALL_JOBS" -gt 0 ]; then
+                echo "Found $ALL_JOBS total jobs:"
+                squeue -u $(whoami) --format="%.10i %.15j %.8T %.10M %.5D %.12L"
+                echo ""
+                echo "Job names:"
+                squeue -u $(whoami) --format="%.15j" --noheader | sort | uniq -c
+            else
+                echo "No jobs found for user $(whoami)"
+                echo ""
+                echo "Checking recent job history:"
+                sacct -u $(whoami) --format=JobID,JobName,State,Submit,Start,End -S today --noheader | head -10
+            fi
+        fi
         ;;
         
     "cancel")
