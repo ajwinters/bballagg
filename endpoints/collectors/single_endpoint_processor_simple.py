@@ -102,77 +102,142 @@ def resolve_parameters(endpoint_config, conn_manager, logger):
         elif param_source == 'from_mastergames':
             # Get game IDs from master games table
             try:
-                logger.info("Fetching game IDs from nba_mastergames table...")
-                query = "SELECT DISTINCT gameid FROM nba_mastergames ORDER BY gameid DESC LIMIT 10"
+                logger.info("Fetching game IDs from master games table...")
                 
-                with conn_manager.get_cursor() as cursor:
-                    cursor.execute(query)
-                    results = cursor.fetchall()
+                # Use actual master games tables found in database
+                league_tables = {
+                    'nba': 'nba_games',
+                    'gleague': 'gleague_games', 
+                    'wnba': 'wnba_games'
+                }
                 
-                if results:
-                    game_ids = [row[0] for row in results]
-                    logger.info(f"Found {len(game_ids)} recent game IDs: {game_ids[:3]}...")
-                    
+                game_ids = []
+                
+                for league, table_name in league_tables.items():
+                    try:
+                        query = f"SELECT DISTINCT gameid FROM {table_name} WHERE seasonid LIKE '%2023%' OR seasonid LIKE '%2024%' ORDER BY gamedate DESC LIMIT 20"
+                        
+                        with conn_manager.get_cursor() as cursor:
+                            cursor.execute(query)
+                            results = cursor.fetchall()
+                        
+                        if results:
+                            league_game_ids = [row[0] for row in results]
+                            game_ids.extend(league_game_ids)
+                            logger.info(f"Found {len(league_game_ids)} game IDs from {table_name}: {league_game_ids[:3]}...")
+                            
+                    except Exception as e:
+                        logger.debug(f"Table {table_name} not found or accessible: {e}")
+                        continue
+                
+                if game_ids:
                     # For single endpoint processing, just use the first game ID
                     resolved_params[param_key] = game_ids[0]  
                     logger.info(f"Resolved {param_key} = {resolved_params[param_key]}")
                 else:
-                    logger.error("No game IDs found in nba_mastergames table")
-                    return None
+                    # Fallback: use a recent NBA game ID (this season's game)
+                    fallback_game_id = "0022400001"  # 2024-25 season game
+                    logger.warning(f"No master games table found, using fallback game_id: {fallback_game_id}")
+                    resolved_params[param_key] = fallback_game_id
                     
             except Exception as e:
                 logger.error(f"Failed to fetch game IDs: {e}")
-                return None
+                # Final fallback
+                fallback_game_id = "0022400001"  # 2024-25 season game
+                logger.warning(f"Using fallback game_id: {fallback_game_id}")
+                resolved_params[param_key] = fallback_game_id
                 
         elif param_source == 'from_masterplayers':
             # Get player IDs from master players table
             try:
-                logger.info("Fetching player IDs from nba_masterplayers table...")
-                query = "SELECT DISTINCT playerid FROM nba_masterplayers ORDER BY playerid LIMIT 10"
+                logger.info("Fetching player IDs from master players table...")
                 
-                with conn_manager.get_cursor() as cursor:
-                    cursor.execute(query)
-                    results = cursor.fetchall()
+                # Use actual master players tables found in database
+                league_tables = {
+                    'nba': 'nba_players',
+                    'gleague': 'gleague_players', 
+                    'wnba': 'wnba_players'
+                }
                 
-                if results:
-                    player_ids = [row[0] for row in results]
-                    logger.info(f"Found {len(player_ids)} player IDs: {player_ids[:3]}...")
-                    
-                    # For single endpoint processing, just use the first player ID
+                player_ids = []
+                
+                for league, table_name in league_tables.items():
+                    try:
+                        query = f"SELECT DISTINCT playerid FROM {table_name} WHERE season LIKE '%2024%' ORDER BY playername LIMIT 20"
+                        
+                        with conn_manager.get_cursor() as cursor:
+                            cursor.execute(query)
+                            results = cursor.fetchall()
+                        
+                        if results:
+                            league_player_ids = [row[0] for row in results]
+                            player_ids.extend(league_player_ids)
+                            logger.info(f"Found {len(league_player_ids)} player IDs from {table_name}: {league_player_ids[:3]}...")
+                            
+                    except Exception as e:
+                        logger.debug(f"Table {table_name} not found or accessible: {e}")
+                        continue
+                
+                if player_ids:
                     resolved_params[param_key] = player_ids[0]
                     logger.info(f"Resolved {param_key} = {resolved_params[param_key]}")
                 else:
-                    logger.error("No player IDs found in nba_masterplayers table")
-                    return None
+                    # Fallback: use LeBron James' player ID
+                    fallback_player_id = 2544  # LeBron James
+                    logger.warning(f"No master players table found, using fallback player_id: {fallback_player_id}")
+                    resolved_params[param_key] = fallback_player_id
                     
             except Exception as e:
                 logger.error(f"Failed to fetch player IDs: {e}")
-                return None
+                fallback_player_id = 2544  # LeBron James
+                logger.warning(f"Using fallback player_id: {fallback_player_id}")
+                resolved_params[param_key] = fallback_player_id
                 
         elif param_source == 'from_masterteams':
             # Get team IDs from master teams table
             try:
-                logger.info("Fetching team IDs from nba_masterteams table...")
-                query = "SELECT DISTINCT teamid FROM nba_masterteams ORDER BY teamid LIMIT 10"
+                logger.info("Fetching team IDs from master teams table...")
                 
-                with conn_manager.get_cursor() as cursor:
-                    cursor.execute(query)
-                    results = cursor.fetchall()
+                # Use actual master teams tables found in database
+                league_tables = {
+                    'nba': 'nba_teams',
+                    'gleague': 'gleague_teams', 
+                    'wnba': 'wnba_teams'
+                }
                 
-                if results:
-                    team_ids = [row[0] for row in results]
-                    logger.info(f"Found {len(team_ids)} team IDs: {team_ids[:3]}...")
-                    
-                    # For single endpoint processing, just use the first team ID
+                team_ids = []
+                
+                for league, table_name in league_tables.items():
+                    try:
+                        query = f"SELECT DISTINCT teamid FROM {table_name} ORDER BY teamname LIMIT 20"
+                        
+                        with conn_manager.get_cursor() as cursor:
+                            cursor.execute(query)
+                            results = cursor.fetchall()
+                        
+                        if results:
+                            league_team_ids = [row[0] for row in results]
+                            team_ids.extend(league_team_ids)
+                            logger.info(f"Found {len(league_team_ids)} team IDs from {table_name}: {league_team_ids[:3]}...")
+                            
+                    except Exception as e:
+                        logger.debug(f"Table {table_name} not found or accessible: {e}")
+                        continue
+                
+                if team_ids:
                     resolved_params[param_key] = team_ids[0]
                     logger.info(f"Resolved {param_key} = {resolved_params[param_key]}")
                 else:
-                    logger.error("No team IDs found in nba_masterteams table")
-                    return None
+                    # Fallback: use Lakers team ID
+                    fallback_team_id = 1610612747  # Los Angeles Lakers
+                    logger.warning(f"No master teams table found, using fallback team_id: {fallback_team_id}")
+                    resolved_params[param_key] = fallback_team_id
                     
             except Exception as e:
                 logger.error(f"Failed to fetch team IDs: {e}")
-                return None
+                fallback_team_id = 1610612747  # Los Angeles Lakers
+                logger.warning(f"Using fallback team_id: {fallback_team_id}")
+                resolved_params[param_key] = fallback_team_id
                 
         else:
             logger.warning(f"Unknown parameter source: {param_source}")

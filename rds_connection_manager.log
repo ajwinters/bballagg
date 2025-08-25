@@ -1,0 +1,18 @@
+2025-08-25 14:40:57,590 - INFO - [INIT] RDS Connection Manager initialized with ASCII logging
+2025-08-25 14:40:57,591 - ERROR - Error during database inspection: 'RDSConnectionManager' object has no attribute 'get_connection'
+2025-08-25 14:41:26,044 - INFO - [INIT] RDS Connection Manager initialized with ASCII logging
+2025-08-25 14:41:26,044 - INFO - [CONNECT] Creating new database connection...
+2025-08-25 14:41:30,112 - ERROR - [ERROR] Connection failed (attempt 1): connection to server at "localhost" (::1), port 5432 failed: Connection refused (0x0000274D/10061)
+	Is the server running on that host and accepting TCP/IP connections?
+connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection refused (0x0000274D/10061)
+	Is the server running on that host and accepting TCP/IP connections?
+
+2025-08-25 14:41:30,112 - ERROR - Failed to establish database connection
+2025-08-25 14:42:23,933 - INFO - [INIT] RDS Connection Manager initialized with ASCII logging
+2025-08-25 14:42:23,933 - INFO - [CONNECT] Creating new database connection...
+2025-08-25 14:42:24,802 - INFO - [SUCCESS] Database connection established
+2025-08-25 14:42:31,352 - INFO - [CLOSED] Database connection closed
+2025-08-25 14:48:41,432 - INFO - [INIT] RDS Connection Manager initialized with ASCII logging
+2025-08-25 14:48:41,432 - INFO - [CONNECT] Creating new database connection...
+2025-08-25 14:48:41,929 - INFO - [SUCCESS] Database connection established
+2025-08-25 14:48:44,705 - INFO - [CLOSED] Database connection closed
