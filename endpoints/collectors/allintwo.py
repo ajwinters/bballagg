@@ -21,8 +21,29 @@ def connect_to_rds(db_name, username, password, host, port=5432):
         return None
 
 def clean_column_names(df):
+    # PostgreSQL reserved keywords that need special handling
+    reserved_keywords = {
+        'to': 'turnovers',
+        'from': 'from_field', 
+        'order': 'order_field',
+        'group': 'group_field',
+        'select': 'select_field',
+        'where': 'where_field',
+        'having': 'having_field',
+        'union': 'union_field',
+        'user': 'user_field'
+    }
+    
     # Function to remove special characters and spaces, and convert to lowercase
-    df.columns = [re.sub(r'[^a-zA-Z0-9]', '', col).lower() for col in df.columns]
+    cleaned_columns = []
+    for col in df.columns:
+        cleaned = re.sub(r'[^a-zA-Z0-9]', '', col).lower()
+        # Handle reserved keywords
+        if cleaned in reserved_keywords:
+            cleaned = reserved_keywords[cleaned]
+        cleaned_columns.append(cleaned)
+    
+    df.columns = cleaned_columns
     return df
 
 #pandas to sql type conversion

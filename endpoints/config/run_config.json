@@ -5,12 +5,23 @@
       "endpoints": [
         "BoxScoreAdvancedV3",
         "BoxScoreTraditionalV2", 
-        "PlayerGameLogs"
+        "LeagueDashPlayerBioStats"
       ],
       "slurm_config": {
         "time": "02:00:00",
         "mem_per_cpu": "2GB",
         "rate_limit": 0.5
+      }
+    },
+    "test_player_logs": {
+      "description": "Test PlayerGameLogs endpoint specifically",
+      "endpoints": [
+        "PlayerGameLogs"
+      ],
+      "slurm_config": {
+        "time": "01:00:00",
+        "mem_per_cpu": "4GB",
+        "rate_limit": 1.0
       }
     },
     "high_priority": {

@@ -150,6 +150,19 @@ class NBAEndpointProcessor:
                 return [f"{current_year}-{str(current_year + 1)[-2:]}"]
             else:
                 return [f"{current_year - 1}-{str(current_year)[-2:]}"]
+                
+        elif parameter_source == 'dynamic_date_range':
+            # For PlayerGameLogs and similar endpoints that need date ranges
+            # Use last 30 days as default range
+            end_date = datetime.now()
+            start_date = end_date - timedelta(days=30)
+            
+            # Format dates as YYYY-MM-DD for NBA API
+            date_from = start_date.strftime('%Y-%m-%d')
+            date_to = end_date.strftime('%Y-%m-%d')
+            
+            logger.info(f"Generated dynamic date range: {date_from} to {date_to}")
+            return [(date_from, date_to)]  # Return as tuple for date range
             
         return []
     
@@ -263,6 +276,67 @@ class NBAEndpointProcessor:
                     return None, error_msg
         
         return None, "Unknown error in NBA API call"
+    
+    def make_nba_api_call_with_retry_multi_param(self, endpoint_class, param_dict, max_retries=3):
+        """
+        Make NBA API call with multiple parameters (like PlayerGameLogs)
+        """
+        retry_delay = 1
+        
+        for retry_attempt in range(max_retries):
+            try:
+                # Check for sleep/wake cycles and ensure database connection is healthy
+                self.conn.ensure_connection()
+                
+                # Create endpoint instance with all parameters
+                endpoint_instance = endpoint_class(**param_dict)
+                
+                # Get data with timeout handling
+                dataframes = endpoint_instance.get_data_frames()
+                
+                return dataframes, None  # Success: return data and no error
+                
+            except Exception as e:
+                error_str = str(e)
+                
+                # Handle timeout/network errors with retry
+                if any(keyword in error_str.lower() for keyword in ['timeout', 'connection', 'network', 'timed out']):
+                    if retry_attempt < max_retries - 1:
+                        logger.warning(f"[NETWORK] Network/timeout error for multi-param call (attempt {retry_attempt + 1}/{max_retries})")
+                        logger.warning(f"   [INFO] Retrying in {retry_delay}s...")
+                        time.sleep(retry_delay)
+                        retry_delay = min(retry_delay * 1.5, 8)
+                        
+                        # Force connection refresh on network errors
+                        try:
+                            self.conn.ensure_connection()
+                            logger.warning(f"   [SUCCESS] Connection refresh completed")
+                        except Exception as conn_error:
+                            logger.warning(f"   [WARNING] Connection refresh failed: {conn_error}")
+                        
+                        continue
+                    else:
+                        error_msg = f"Network/timeout error after {max_retries} attempts: {error_str}"
+                        return None, error_msg
+                        
+                # Check for rate limiting
+                elif "429" in error_str or "rate limit" in error_str.lower():
+                    if retry_attempt < max_retries - 1:
+                        wait_time = retry_delay * 2
+                        logger.warning(f"[RATE_LIMIT] NBA API rate limited for multi-param call - waiting {wait_time}s...")
+                        time.sleep(wait_time)
+                        retry_delay = min(retry_delay * 1.5, 8)
+                        continue
+                    else:
+                        error_msg = f"NBA API rate limited after {max_retries} attempts: {error_str}"
+                        return None, error_msg
+                        
+                else:
+                    # Non-timeout error, don't retry
+                    error_msg = f"NBA API error: {error_str}"
+                    return None, error_msg
+        
+        return None, "Unknown error in NBA multi-param API call"
 
     def track_failed_call(self, table_name, parameter_name, parameter_value, error):
         """Track failed API calls to avoid immediate retries"""
@@ -329,29 +403,196 @@ class NBAEndpointProcessor:
             # Get the endpoint class
             endpoint_class = getattr(nbaapi, endpoint_name)
             
-            # Determine parameter source and values
+            # Handle multiple parameters
             parameters = endpoint_config['parameters']
-            param_key = list(parameters.keys())[0]  # Get first parameter
-            param_source = parameters[param_key]
             
-            # Get all parameter values from master tables
-            all_param_values = self.get_parameter_values(param_source)
+            # Build parameter dict with resolved values
+            param_dict = {}
+            for param_key, param_source in parameters.items():
+                if param_source == 'dynamic_date_range':
+                    # For date range endpoints, we need both dates from the same range
+                    if 'date_range' not in locals():
+                        date_range = self.get_parameter_values(param_source)[0]  # Get the tuple
+                    
+                    if 'from' in param_key.lower():
+                        param_dict[param_key] = date_range[0]  # Start date
+                    elif 'to' in param_key.lower():
+                        param_dict[param_key] = date_range[1]  # End date
+                        
+                elif param_source == 'current_season':
+                    season = self.get_parameter_values(param_source)[0]
+                    param_dict[param_key] = season
+                    
+                else:
+                    # For single-parameter endpoints (game_id, player_id, etc.)
+                    all_param_values = self.get_parameter_values(param_source)
+                    if not all_param_values:
+                        logger.warning(f"No parameter values found for {param_source} in {self.league}")
+                        return False
+                    
+                    # Store for later iteration (single parameter endpoints)
+                    if len(parameters) == 1:  # Single parameter endpoint
+                        single_param_key = param_key
+                        single_param_values = all_param_values
             
-            if not all_param_values:
-                logger.warning(f"No parameter values found for {param_source} in {self.league}")
+            # Handle single vs multi-parameter endpoints differently
+            if len(parameters) == 1 and any(source in ['from_mastergames', 'from_masterplayers', 'from_masterteams'] 
+                                          for source in parameters.values()):
+                # Single parameter endpoint - iterate through values
+                all_param_values = single_param_values
+                param_key = single_param_key
+                
+                if limit:
+                    all_param_values = all_param_values[:limit]
+                    logger.info(f"Limited to {limit} parameters for testing")
+                
+                # Test with first parameter to get dataframe structure
+                logger.info(f"Testing {endpoint_name} structure with first parameter...")
+                test_param = all_param_values[0]
+                
+                try:
+                    test_endpoint = endpoint_class(**{param_key: test_param})
+                    test_dataframes = test_endpoint.get_data_frames()
+                    
+                    if not test_dataframes:
+                        logger.warning(f"Endpoint {endpoint_name} returned no dataframes")
+                        return False
+                        
+                except Exception as e:
+                    logger.error(f"Failed to test {endpoint_name} structure: {str(e)}")
+                    return False
+                    
+                # Process each parameter value
+                success_count = 0
+                error_count = 0
+                
+                for i, param_value in enumerate(all_param_values):
+                    logger.info(f"Processing {param_key}={param_value} ({i+1}/{len(all_param_values)})")
+                    
+                    # Make API call with retry logic
+                    dataframes, error_message = self.make_nba_api_call_with_retry(endpoint_class, param_key, param_value)
+                    
+                    if dataframes is None:
+                        error_count += 1
+                        self.save_failed_call(endpoint_name, "unknown", param_key, param_value, error_message)
+                        logger.warning(f"Failed to get data for {param_key}={param_value}: {error_message}")
+                        continue
+                    
+                    # Process each dataframe
+                    for j, (df_name, df) in enumerate(dataframes):
+                        if df is None or df.empty:
+                            logger.warning(f"Empty dataframe {df_name} for {param_key}={param_value}")
+                            continue
+                        
+                        # Generate table name
+                        table_name = self.generate_table_name(endpoint_name, df_name)
+                        logger.info(f"Processing dataframe {j+1}: {table_name}")
+                        
+                        try:
+                            # Clean dataframe
+                            cleaned_df = self.clean_dataframe(df)
+                            
+                            # Create table if it doesn't exist
+                            if not self.table_exists(table_name):
+                                with self.conn_manager.get_cursor() as cursor:
+                                    # Create table using psycopg2 (consistent with rest of codebase)
+                                    try:
+                                        # Use allintwo's create_table function
+                                        allintwo.create_table(cursor.connection, table_name, cleaned_df)
+                                        logger.info(f"Created table {table_name}")
+                                    except Exception as e:
+                                        logger.error(f"Failed to create table {table_name}: {str(e)}")
+                                        continue
+                            
+                            # Insert data using allintwo function (consistent with rest of codebase)
+                            allintwo.insert_dataframe_to_rds(self.conn_manager.connection, cleaned_df, table_name)
+                            logger.info(f"Inserted {len(cleaned_df)} rows into {table_name}")
+                            success_count += 1
+                            
+                        except Exception as e:
+                            error_count += 1
+                            self.save_failed_call(endpoint_name, table_name, param_key, param_value, str(e))
+                            logger.error(f"Failed to process {table_name}: {str(e)}")
+                    
+                    # Apply rate limiting
+                    if self.rate_limit > 0:
+                        time.sleep(self.rate_limit)
+                
+            else:
+                # Multi-parameter endpoint (like PlayerGameLogs) - single call
+                logger.info(f"Processing multi-parameter endpoint {endpoint_name} with params: {param_dict}")
+                
+                try:
+                    # Test endpoint first
+                    test_endpoint = endpoint_class(**param_dict)
+                    test_dataframes = test_endpoint.get_data_frames()
+                    
+                    if not test_dataframes:
+                        logger.warning(f"Endpoint {endpoint_name} returned no dataframes")
+                        return False
+                        
+                except Exception as e:
+                    logger.error(f"Failed to test {endpoint_name} structure: {str(e)}")
+                    return False
+                
+                # Make single API call
+                dataframes, error_message = self.make_nba_api_call_with_retry_multi_param(endpoint_class, param_dict)
+                
+                if dataframes is None:
+                    self.save_failed_call(endpoint_name, "unknown", str(param_dict), "", error_message)
+                    logger.error(f"Failed to get data for {endpoint_name}: {error_message}")
+                    return False
+                
+                success_count = 0
+                error_count = 0
+                
+                # Process each dataframe
+                for j, (df_name, df) in enumerate(dataframes):
+                    if df is None or df.empty:
+                        logger.warning(f"Empty dataframe {df_name}")
+                        continue
+                    
+                    # Generate table name
+                    table_name = self.generate_table_name(endpoint_name, df_name)
+                    logger.info(f"Processing dataframe {j+1}: {table_name}")
+                    
+                    try:
+                        # Clean dataframe
+                        cleaned_df = self.clean_dataframe(df)
+                        
+                        # Create table if it doesn't exist
+                        if not self.table_exists(table_name):
+                            with self.conn_manager.get_cursor() as cursor:
+                                try:
+                                    # Use allintwo's create_table function
+                                    allintwo.create_table(cursor.connection, table_name, cleaned_df)
+                                    logger.info(f"Created table {table_name}")
+                                except Exception as e:
+                                    logger.error(f"Failed to create table {table_name}: {str(e)}")
+                                    continue
+                        
+                        # Insert data using allintwo function
+                        allintwo.insert_dataframe_to_rds(self.conn_manager.connection, cleaned_df, table_name)
+                        logger.info(f"Inserted {len(cleaned_df)} rows into {table_name}")
+                        success_count += 1
+                        
+                    except Exception as e:
+                        error_count += 1
+                        self.save_failed_call(endpoint_name, table_name, str(param_dict), "", str(e))
+                        logger.error(f"Failed to process {table_name}: {str(e)}")
+            
+            total_operations = success_count + error_count
+            if total_operations > 0:
+                success_rate = (success_count / total_operations) * 100
+                logger.info(f"Completed processing {endpoint_name}: {success_count} successful, {error_count} failed ({success_rate:.1f}% success rate)")
+                return success_count > 0
+            else:
+                logger.warning(f"No operations completed for {endpoint_name}")
                 return False
                 
-            if limit:
-                all_param_values = all_param_values[:limit]
-                logger.info(f"Limited to {limit} parameters for testing")
-            
-            # Test with first parameter to get dataframe structure
-            logger.info(f"Testing {endpoint_name} structure with first parameter...")
-            test_param = all_param_values[0]
-            
-            try:
-                test_endpoint = endpoint_class(**{param_key: test_param})
-                test_dataframes = test_endpoint.get_data_frames()
+        except Exception as e:
+            logger.error(f"Fatal error processing endpoint {endpoint_name}: {str(e)}")
+            return False
                 
                 if not test_dataframes:
                     logger.warning(f"Endpoint {endpoint_name} returned no dataframes")
