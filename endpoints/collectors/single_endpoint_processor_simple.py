@@ -88,19 +88,17 @@ def find_missing_ids(conn_manager, master_table, endpoint_table_prefix, id_colum
     """
     try:
         with conn_manager.get_cursor() as cursor:
-            # Get all IDs from master table (recent seasons only)
+            # Get all IDs from master table (ALL HISTORICAL DATA)
             if 'game' in master_table:
                 cursor.execute(f"""
                     SELECT DISTINCT {id_column} 
                     FROM {master_table} 
-                    WHERE seasonid LIKE '%2023%' OR seasonid LIKE '%2024%' 
                     ORDER BY {id_column}
                 """)
             elif 'player' in master_table:
                 cursor.execute(f"""
                     SELECT DISTINCT {id_column} 
                     FROM {master_table} 
-                    WHERE season LIKE '%2024%' 
                     ORDER BY {id_column}
                 """)
             else:  # teams
@@ -626,7 +624,7 @@ def find_all_missing_ids(endpoint_config, conn_manager, logger):
                                              'gameid', failed_ids_table, logger)
                 all_missing.extend(missing_ids)
             
-            missing_ids_by_param[param_key] = all_missing[:10]  # Limit to first 10 for testing
+            missing_ids_by_param[param_key] = all_missing  # Process ALL missing IDs
             
         elif source_value == 'from_masterplayers':
             # Find missing player IDs across all leagues
@@ -644,7 +642,7 @@ def find_all_missing_ids(endpoint_config, conn_manager, logger):
                                              'playerid', failed_ids_table, logger)
                 all_missing.extend(missing_ids)
                 
-            missing_ids_by_param[param_key] = all_missing[:5]  # Limit to first 5 for testing
+            missing_ids_by_param[param_key] = all_missing  # Process ALL missing IDs
             
         elif source_value == 'from_masterteams':
             # Find missing team IDs across all leagues
@@ -662,7 +660,7 @@ def find_all_missing_ids(endpoint_config, conn_manager, logger):
                                              'teamid', failed_ids_table, logger)
                 all_missing.extend(missing_ids)
                 
-            missing_ids_by_param[param_key] = all_missing[:3]  # Limit to first 3 for testing
+            missing_ids_by_param[param_key] = all_missing  # Process ALL missing IDs
     
     return missing_ids_by_param
 
