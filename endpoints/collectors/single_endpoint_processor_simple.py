@@ -115,7 +115,8 @@ def resolve_parameters(endpoint_config, conn_manager, logger):
                 
                 for league, table_name in league_tables.items():
                     try:
-                        query = f"SELECT DISTINCT gameid FROM {table_name} WHERE seasonid LIKE '%2023%' OR seasonid LIKE '%2024%' ORDER BY gamedate DESC LIMIT 20"
+                        # Simplified query - just get recent game IDs without ordering by gamedate
+                        query = f"SELECT DISTINCT gameid FROM {table_name} WHERE seasonid LIKE '%2023%' OR seasonid LIKE '%2024%' LIMIT 20"
                         
                         with conn_manager.get_cursor() as cursor:
                             cursor.execute(query)
@@ -163,7 +164,8 @@ def resolve_parameters(endpoint_config, conn_manager, logger):
                 
                 for league, table_name in league_tables.items():
                     try:
-                        query = f"SELECT DISTINCT playerid FROM {table_name} WHERE season LIKE '%2024%' ORDER BY playername LIMIT 20"
+                        # Simplified query - just get player IDs without complex ordering
+                        query = f"SELECT DISTINCT playerid FROM {table_name} WHERE season LIKE '%2024%' LIMIT 20"
                         
                         with conn_manager.get_cursor() as cursor:
                             cursor.execute(query)
@@ -209,7 +211,8 @@ def resolve_parameters(endpoint_config, conn_manager, logger):
                 
                 for league, table_name in league_tables.items():
                     try:
-                        query = f"SELECT DISTINCT teamid FROM {table_name} ORDER BY teamname LIMIT 20"
+                        # Simplified query - just get team IDs without ordering
+                        query = f"SELECT DISTINCT teamid FROM {table_name} LIMIT 20"
                         
                         with conn_manager.get_cursor() as cursor:
                             cursor.execute(query)
