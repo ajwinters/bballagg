@@ -105,7 +105,7 @@ echo "Node ID: $NODE_ID"
 
 # Run the single endpoint processor
 echo "Starting single endpoint processor..."
-python collectors/single_endpoint_processor.py \
+python collectors/single_endpoint_processor_simple.py \
     --endpoint "$ENDPOINT" \
     --node-id "$NODE_ID" \
     --rate-limit "$RATE_LIMIT" \
