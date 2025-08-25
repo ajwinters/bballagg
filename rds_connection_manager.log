@@ -32,3 +32,203 @@ connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection re
 2025-08-25 15:04:57,425 - INFO - Found 20 team IDs from gleague_teams: ['1612709933', '1612709922', '1612709926']...
 2025-08-25 15:04:57,613 - INFO - Found 13 team IDs from wnba_teams: ['1611661324', '1611661325', '1611661330']...
 2025-08-25 15:04:57,613 - INFO - [CLOSED] Database connection closed
+2025-08-25 16:08:59,342 - INFO - === NBA Data Processor Started ===
+2025-08-25 16:08:59,347 - INFO - Node ID: test_node
+2025-08-25 16:08:59,347 - INFO - Log file: C:\Users\ajwin\Projects\Personal\thebigone\endpoints\logs\nba_processor_test_node_20250825_160859.log
+2025-08-25 16:08:59,347 - INFO - [INIT] RDS Connection Manager initialized with ASCII logging
+2025-08-25 16:08:59,347 - INFO - [CONNECT] Creating new database connection...
+2025-08-25 16:08:59,870 - INFO - [SUCCESS] Database connection established
+2025-08-25 16:09:01,172 - INFO - ID Analysis for nba_games:
+2025-08-25 16:09:01,172 - INFO -   Total IDs: 2771
+2025-08-25 16:09:01,172 - INFO -   Existing: 5421
+2025-08-25 16:09:01,172 - INFO -   Failed: 0
+2025-08-25 16:09:01,172 - INFO -   Missing: 2396
+2025-08-25 16:09:01,247 - INFO - [CLOSED] Database connection closed
+2025-08-25 16:09:01,290 - INFO - Found endpoint config: {'endpoint': 'BoxScoreAdvancedV3', 'description': 'Advanced box score stats V3 (PREFERRED)', 'parameters': {'game_id': 'from_mastergames'}, 'frequency': 'after_game_completion', 'priority': 'high'}
+2025-08-25 16:09:01,290 - INFO - Initializing database connection...
+2025-08-25 16:09:01,290 - INFO - [INIT] RDS Connection Manager initialized with ASCII logging
+2025-08-25 16:09:01,290 - WARNING - [RECONNECT] Connection lost - attempting to reconnect...
+2025-08-25 16:09:01,290 - INFO - [RECONNECT] Reconnection attempt 1/3
+2025-08-25 16:09:01,290 - INFO - [CONNECT] Creating new database connection...
+2025-08-25 16:09:01,850 - INFO - [SUCCESS] Database connection established
+2025-08-25 16:09:01,850 - INFO - [SUCCESS] Reconnection successful
+2025-08-25 16:09:01,850 - INFO - Database connection established successfully
+2025-08-25 16:09:01,850 - INFO - Got endpoint class: <class 'nba_api.stats.endpoints.boxscoreadvancedv3.BoxScoreAdvancedV3'>
+2025-08-25 16:09:01,860 - ERROR - Full error traceback:
+Traceback (most recent call last):
+  File "C:\Users\ajwin\Projects\Personal\thebigone\endpoints\collectors\single_endpoint_processor_simple.py", line 445, in process_single_endpoint_comprehensive
+    missing_ids_by_param = find_all_missing_ids(endpoint_config, conn_manager, logger)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ajwin\Projects\Personal\thebigone\endpoints\collectors\single_endpoint_processor_simple.py", line 599, in find_all_missing_ids
+    param_source = param_config.get('source', 'static')
+                   ^^^^^^^^^^^^^^^^
+AttributeError: 'str' object has no attribute 'get'
+2025-08-25 16:12:34,829 - INFO - === NBA Data Processor Started ===
+2025-08-25 16:12:34,829 - INFO - Node ID: test_node
+2025-08-25 16:12:34,829 - INFO - Log file: C:\Users\ajwin\Projects\Personal\thebigone\endpoints\logs\nba_processor_test_node_20250825_161234.log
+2025-08-25 16:12:34,829 - INFO - [INIT] RDS Connection Manager initialized with ASCII logging
+2025-08-25 16:12:34,829 - INFO - [CONNECT] Creating new database connection...
+2025-08-25 16:12:35,431 - INFO - [SUCCESS] Database connection established
+2025-08-25 16:12:36,241 - INFO - ID Analysis for nba_games:
+2025-08-25 16:12:36,241 - INFO -   Total IDs: 2771
+2025-08-25 16:12:36,241 - INFO -   Existing: 5421
+2025-08-25 16:12:36,245 - INFO -   Failed: 0
+2025-08-25 16:12:36,245 - INFO -   Missing: 2396
+2025-08-25 16:12:36,289 - INFO - [CLOSED] Database connection closed
+2025-08-25 16:12:36,289 - INFO - Starting COMPREHENSIVE processing of endpoint: BoxScoreAdvancedV3
+2025-08-25 16:12:36,291 - INFO - Found endpoint config: {'endpoint': 'BoxScoreAdvancedV3', 'description': 'Advanced box score stats V3 (PREFERRED)', 'parameters': {'game_id': 'from_mastergames'}, 'frequency': 'after_game_completion', 'priority': 'high'}
+2025-08-25 16:12:36,291 - INFO - Initializing database connection...
+2025-08-25 16:12:36,291 - INFO - [INIT] RDS Connection Manager initialized with ASCII logging
+2025-08-25 16:12:36,291 - WARNING - [RECONNECT] Connection lost - attempting to reconnect...
+2025-08-25 16:12:36,291 - INFO - [RECONNECT] Reconnection attempt 1/3
+2025-08-25 16:12:36,291 - INFO - [CONNECT] Creating new database connection...
+2025-08-25 16:12:36,662 - INFO - [SUCCESS] Database connection established
+2025-08-25 16:12:36,662 - INFO - [SUCCESS] Reconnection successful
+2025-08-25 16:12:36,664 - INFO - Database connection established successfully
+2025-08-25 16:12:36,664 - INFO - Got endpoint class: <class 'nba_api.stats.endpoints.boxscoreadvancedv3.BoxScoreAdvancedV3'>
+2025-08-25 16:12:37,589 - INFO - ID Analysis for nba_games:
+2025-08-25 16:12:37,589 - INFO -   Total IDs: 2771
+2025-08-25 16:12:37,591 - INFO -   Existing: 5421
+2025-08-25 16:12:37,591 - INFO -   Failed: 0
+2025-08-25 16:12:37,591 - INFO -   Missing: 2396
+2025-08-25 16:12:38,409 - INFO - ID Analysis for gleague_games:
+2025-08-25 16:12:38,409 - INFO -   Total IDs: 1084
+2025-08-25 16:12:38,409 - INFO -   Existing: 5421
+2025-08-25 16:12:38,409 - INFO -   Failed: 0
+2025-08-25 16:12:38,410 - INFO -   Missing: 1084
+2025-08-25 16:12:39,161 - INFO - ID Analysis for wnba_games:
+2025-08-25 16:12:39,169 - INFO -   Total IDs: 544
+2025-08-25 16:12:39,169 - INFO -   Existing: 5421
+2025-08-25 16:12:39,169 - INFO -   Failed: 0
+2025-08-25 16:12:39,169 - INFO -   Missing: 544
+2025-08-25 16:12:39,203 - INFO - Parameter game_id: 10 missing IDs to process
+2025-08-25 16:12:39,203 - INFO - Processing 10 missing IDs for parameter: game_id
+2025-08-25 16:12:39,209 - INFO - \n--- Processing ID 1/10: 0012300001 ---
+2025-08-25 16:12:39,209 - INFO - Parameters for this call: {'game_id': '0012300001'}
+2025-08-25 16:12:39,209 - INFO - Making API call (attempt 1/3)
+2025-08-25 16:12:44,879 - INFO - API call successful - got 2 dataframes
+2025-08-25 16:12:44,881 - INFO -   Processing dataframe 0 -> nba_boxscoreadvancedv3_0
+2025-08-25 16:12:44,989 - INFO - Creating table: nba_boxscoreadvancedv3_0
+2025-08-25 16:12:45,109 - INFO - Inserting 42 rows into nba_boxscoreadvancedv3_0
+2025-08-25 16:12:45,333 - INFO - Successfully inserted data into nba_boxscoreadvancedv3_0
+2025-08-25 16:12:45,333 - INFO -   Processing dataframe 1 -> nba_boxscoreadvancedv3_1
+2025-08-25 16:12:45,439 - INFO - Creating table: nba_boxscoreadvancedv3_1
+2025-08-25 16:12:45,541 - INFO - Inserting 2 rows into nba_boxscoreadvancedv3_1
+2025-08-25 16:12:45,695 - INFO - Successfully inserted data into nba_boxscoreadvancedv3_1
+2025-08-25 16:12:45,697 - INFO - Successfully processed game_id=0012300001 (2 dataframes)
+2025-08-25 16:12:46,697 - INFO - \n--- Processing ID 2/10: 0012300002 ---
+2025-08-25 16:12:46,697 - INFO - Parameters for this call: {'game_id': '0012300002'}
+2025-08-25 16:12:46,699 - INFO - Making API call (attempt 1/3)
+2025-08-25 16:12:49,219 - INFO - API call successful - got 2 dataframes
+2025-08-25 16:12:49,223 - INFO -   Processing dataframe 0 -> nba_boxscoreadvancedv3_0
+2025-08-25 16:12:49,370 - INFO - Inserting 37 rows into nba_boxscoreadvancedv3_0
+2025-08-25 16:12:49,480 - INFO - Successfully inserted data into nba_boxscoreadvancedv3_0
+2025-08-25 16:12:49,487 - INFO -   Processing dataframe 1 -> nba_boxscoreadvancedv3_1
+2025-08-25 16:12:49,591 - INFO - Inserting 2 rows into nba_boxscoreadvancedv3_1
+2025-08-25 16:12:49,689 - INFO - Successfully inserted data into nba_boxscoreadvancedv3_1
+2025-08-25 16:12:49,689 - INFO - Successfully processed game_id=0012300002 (2 dataframes)
+2025-08-25 16:12:50,692 - INFO - \n--- Processing ID 3/10: 0012300003 ---
+2025-08-25 16:12:50,692 - INFO - Parameters for this call: {'game_id': '0012300003'}
+2025-08-25 16:12:50,694 - INFO - Making API call (attempt 1/3)
+2025-08-25 16:12:52,981 - INFO - API call successful - got 2 dataframes
+2025-08-25 16:12:52,981 - INFO -   Processing dataframe 0 -> nba_boxscoreadvancedv3_0
+2025-08-25 16:12:53,342 - INFO - Inserting 39 rows into nba_boxscoreadvancedv3_0
+2025-08-25 16:12:53,480 - INFO - Successfully inserted data into nba_boxscoreadvancedv3_0
+2025-08-25 16:12:53,489 - INFO -   Processing dataframe 1 -> nba_boxscoreadvancedv3_1
+2025-08-25 16:12:53,582 - INFO - Inserting 2 rows into nba_boxscoreadvancedv3_1
+2025-08-25 16:12:53,679 - INFO - Successfully inserted data into nba_boxscoreadvancedv3_1
+2025-08-25 16:12:53,679 - INFO - Successfully processed game_id=0012300003 (2 dataframes)
+2025-08-25 16:12:54,685 - INFO - \n--- Processing ID 4/10: 0012300005 ---
+2025-08-25 16:12:54,685 - INFO - Parameters for this call: {'game_id': '0012300005'}
+2025-08-25 16:12:54,685 - INFO - Making API call (attempt 1/3)
+2025-08-25 16:12:56,810 - INFO - API call successful - got 2 dataframes
+2025-08-25 16:12:56,812 - INFO -   Processing dataframe 0 -> nba_boxscoreadvancedv3_0
+2025-08-25 16:12:56,899 - INFO - Inserting 40 rows into nba_boxscoreadvancedv3_0
+2025-08-25 16:12:57,027 - INFO - Successfully inserted data into nba_boxscoreadvancedv3_0
+2025-08-25 16:12:57,029 - INFO -   Processing dataframe 1 -> nba_boxscoreadvancedv3_1
+2025-08-25 16:12:57,114 - INFO - Inserting 2 rows into nba_boxscoreadvancedv3_1
+2025-08-25 16:12:57,239 - INFO - Successfully inserted data into nba_boxscoreadvancedv3_1
+2025-08-25 16:12:57,239 - INFO - Successfully processed game_id=0012300005 (2 dataframes)
+2025-08-25 16:12:58,242 - INFO - \n--- Processing ID 5/10: 0012300007 ---
+2025-08-25 16:12:58,243 - INFO - Parameters for this call: {'game_id': '0012300007'}
+2025-08-25 16:12:58,244 - INFO - Making API call (attempt 1/3)
+2025-08-25 16:13:00,587 - INFO - API call successful - got 2 dataframes
+2025-08-25 16:13:00,587 - INFO -   Processing dataframe 0 -> nba_boxscoreadvancedv3_0
+2025-08-25 16:13:00,749 - INFO - Inserting 39 rows into nba_boxscoreadvancedv3_0
+2025-08-25 16:13:00,894 - INFO - Successfully inserted data into nba_boxscoreadvancedv3_0
+2025-08-25 16:13:00,894 - INFO -   Processing dataframe 1 -> nba_boxscoreadvancedv3_1
+2025-08-25 16:13:00,991 - INFO - Inserting 2 rows into nba_boxscoreadvancedv3_1
+2025-08-25 16:13:01,079 - INFO - Successfully inserted data into nba_boxscoreadvancedv3_1
+2025-08-25 16:13:01,079 - INFO - Successfully processed game_id=0012300007 (2 dataframes)
+2025-08-25 16:13:02,081 - INFO - \n--- Processing ID 6/10: 0012300008 ---
+2025-08-25 16:13:02,081 - INFO - Parameters for this call: {'game_id': '0012300008'}
+2025-08-25 16:13:02,081 - INFO - Making API call (attempt 1/3)
+2025-08-25 16:13:06,794 - INFO - API call successful - got 2 dataframes
+2025-08-25 16:13:06,796 - INFO -   Processing dataframe 0 -> nba_boxscoreadvancedv3_0
+2025-08-25 16:13:06,921 - INFO - Inserting 38 rows into nba_boxscoreadvancedv3_0
+2025-08-25 16:13:07,045 - INFO - Successfully inserted data into nba_boxscoreadvancedv3_0
+2025-08-25 16:13:07,045 - INFO -   Processing dataframe 1 -> nba_boxscoreadvancedv3_1
+2025-08-25 16:13:07,139 - INFO - Inserting 2 rows into nba_boxscoreadvancedv3_1
+2025-08-25 16:13:07,229 - INFO - Successfully inserted data into nba_boxscoreadvancedv3_1
+2025-08-25 16:13:07,229 - INFO - Successfully processed game_id=0012300008 (2 dataframes)
+2025-08-25 16:13:08,239 - INFO - \n--- Processing ID 7/10: 0012300009 ---
+2025-08-25 16:13:08,239 - INFO - Parameters for this call: {'game_id': '0012300009'}
+2025-08-25 16:13:08,240 - INFO - Making API call (attempt 1/3)
+2025-08-25 16:13:11,144 - INFO - API call successful - got 2 dataframes
+2025-08-25 16:13:11,144 - INFO -   Processing dataframe 0 -> nba_boxscoreadvancedv3_0
+2025-08-25 16:13:11,245 - INFO - Inserting 42 rows into nba_boxscoreadvancedv3_0
+2025-08-25 16:13:11,359 - INFO - Successfully inserted data into nba_boxscoreadvancedv3_0
+2025-08-25 16:13:11,359 - INFO -   Processing dataframe 1 -> nba_boxscoreadvancedv3_1
+2025-08-25 16:13:11,462 - INFO - Inserting 2 rows into nba_boxscoreadvancedv3_1
+2025-08-25 16:13:11,579 - INFO - Successfully inserted data into nba_boxscoreadvancedv3_1
+2025-08-25 16:13:11,579 - INFO - Successfully processed game_id=0012300009 (2 dataframes)
+2025-08-25 16:13:12,583 - INFO - \n--- Processing ID 8/10: 0012300011 ---
+2025-08-25 16:13:12,583 - INFO - Parameters for this call: {'game_id': '0012300011'}
+2025-08-25 16:13:12,583 - INFO - Making API call (attempt 1/3)
+2025-08-25 16:13:16,465 - INFO - API call successful - got 2 dataframes
+2025-08-25 16:13:16,465 - INFO -   Processing dataframe 0 -> nba_boxscoreadvancedv3_0
+2025-08-25 16:13:16,570 - INFO - Inserting 40 rows into nba_boxscoreadvancedv3_0
+2025-08-25 16:13:16,689 - INFO - Successfully inserted data into nba_boxscoreadvancedv3_0
+2025-08-25 16:13:16,689 - INFO -   Processing dataframe 1 -> nba_boxscoreadvancedv3_1
+2025-08-25 16:13:16,795 - INFO - Inserting 2 rows into nba_boxscoreadvancedv3_1
+2025-08-25 16:13:16,893 - INFO - Successfully inserted data into nba_boxscoreadvancedv3_1
+2025-08-25 16:13:16,893 - INFO - Successfully processed game_id=0012300011 (2 dataframes)
+2025-08-25 16:13:17,898 - INFO - \n--- Processing ID 9/10: 0012300012 ---
+2025-08-25 16:13:17,899 - INFO - Parameters for this call: {'game_id': '0012300012'}
+2025-08-25 16:13:17,899 - INFO - Making API call (attempt 1/3)
+2025-08-25 16:13:19,881 - INFO - API call successful - got 2 dataframes
+2025-08-25 16:13:19,881 - INFO -   Processing dataframe 0 -> nba_boxscoreadvancedv3_0
+2025-08-25 16:13:19,981 - INFO - Inserting 38 rows into nba_boxscoreadvancedv3_0
+2025-08-25 16:13:20,109 - INFO - Successfully inserted data into nba_boxscoreadvancedv3_0
+2025-08-25 16:13:20,109 - INFO -   Processing dataframe 1 -> nba_boxscoreadvancedv3_1
+2025-08-25 16:13:20,212 - INFO - Inserting 2 rows into nba_boxscoreadvancedv3_1
+2025-08-25 16:13:20,312 - INFO - Successfully inserted data into nba_boxscoreadvancedv3_1
+2025-08-25 16:13:20,314 - INFO - Successfully processed game_id=0012300012 (2 dataframes)
+2025-08-25 16:13:21,315 - INFO - \n--- Processing ID 10/10: 0012300013 ---
+2025-08-25 16:13:21,315 - INFO - Parameters for this call: {'game_id': '0012300013'}
+2025-08-25 16:13:21,315 - INFO - Making API call (attempt 1/3)
+2025-08-25 16:13:23,324 - INFO - API call successful - got 2 dataframes
+2025-08-25 16:13:23,324 - INFO -   Processing dataframe 0 -> nba_boxscoreadvancedv3_0
+2025-08-25 16:13:23,428 - INFO - Inserting 37 rows into nba_boxscoreadvancedv3_0
+2025-08-25 16:13:23,561 - INFO - Successfully inserted data into nba_boxscoreadvancedv3_0
+2025-08-25 16:13:23,561 - INFO -   Processing dataframe 1 -> nba_boxscoreadvancedv3_1
+2025-08-25 16:13:23,659 - INFO - Inserting 2 rows into nba_boxscoreadvancedv3_1
+2025-08-25 16:13:23,759 - INFO - Successfully inserted data into nba_boxscoreadvancedv3_1
+2025-08-25 16:13:23,759 - INFO - Successfully processed game_id=0012300013 (2 dataframes)
+2025-08-25 16:13:24,762 - INFO - [CLOSED] Database connection closed
+2025-08-25 16:13:24,762 - INFO - COMPREHENSIVE PROCESSING COMPLETE
+2025-08-25 16:13:24,762 - INFO - Endpoint: BoxScoreAdvancedV3
+2025-08-25 16:13:24,762 - INFO - Duration: 48.47 seconds
+2025-08-25 16:13:24,762 - INFO - IDs processed successfully: 10
+2025-08-25 16:13:24,762 - INFO - IDs failed: 0
+2025-08-25 16:13:24,762 - INFO - Total IDs attempted: 10
+2025-08-25 16:13:24,762 - INFO - Success rate: 100.0%
+2025-08-25 16:15:45,528 - INFO - [INIT] RDS Connection Manager initialized with ASCII logging
+2025-08-25 16:16:18,978 - INFO - [INIT] RDS Connection Manager initialized with ASCII logging
+2025-08-25 16:16:18,978 - INFO - [CONNECT] Creating new database connection...
+2025-08-25 16:16:23,044 - ERROR - [ERROR] Connection failed (attempt 1): connection to server at "localhost" (::1), port 5432 failed: Connection refused (0x0000274D/10061)
+	Is the server running on that host and accepting TCP/IP connections?
+connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection refused (0x0000274D/10061)
+	Is the server running on that host and accepting TCP/IP connections?
+
+2025-08-25 16:16:23,046 - INFO - [CLOSED] Database connection closed

@@ -71,7 +71,137 @@ def load_database_config(config_path):
     except Exception as e:
         raise Exception(f"Failed to load database config from {config_path}: {e}")
 
-def resolve_parameters(endpoint_config, conn_manager, logger):
+def find_missing_ids(conn_manager, master_table, endpoint_table_prefix, id_column, failed_ids_table, logger):
+    """
+    Find IDs from master table that aren't in endpoint tables and haven't failed before
+    
+    Args:
+        conn_manager: Database connection manager
+        master_table: Source table with all possible IDs
+        endpoint_table_prefix: Prefix of endpoint tables to check against
+        id_column: Column name for the ID (e.g., 'gameid', 'playerid')
+        failed_ids_table: Table tracking failed API calls
+        logger: Logger instance
+    
+    Returns:
+        List of missing IDs that should be processed
+    """
+    try:
+        with conn_manager.get_cursor() as cursor:
+            # Get all IDs from master table (recent seasons only)
+            if 'game' in master_table:
+                cursor.execute(f"""
+                    SELECT DISTINCT {id_column} 
+                    FROM {master_table} 
+                    WHERE seasonid LIKE '%2023%' OR seasonid LIKE '%2024%' 
+                    ORDER BY {id_column}
+                """)
+            elif 'player' in master_table:
+                cursor.execute(f"""
+                    SELECT DISTINCT {id_column} 
+                    FROM {master_table} 
+                    WHERE season LIKE '%2024%' 
+                    ORDER BY {id_column}
+                """)
+            else:  # teams
+                cursor.execute(f"""
+                    SELECT DISTINCT {id_column} 
+                    FROM {master_table} 
+                    ORDER BY {id_column}
+                """)
+            
+            all_ids = set(row[0] for row in cursor.fetchall())
+            
+            # Get existing IDs from endpoint tables
+            existing_ids = set()
+            
+            # Find endpoint tables with this prefix
+            cursor.execute("""
+                SELECT table_name 
+                FROM information_schema.tables 
+                WHERE table_schema = 'public' 
+                AND table_name LIKE %s
+            """, (f"{endpoint_table_prefix}%",))
+            
+            endpoint_tables = [row[0] for row in cursor.fetchall()]
+            
+            for table in endpoint_tables:
+                try:
+                    cursor.execute(f"SELECT DISTINCT {id_column} FROM {table}")
+                    table_ids = set(row[0] for row in cursor.fetchall())
+                    existing_ids.update(table_ids)
+                except Exception as e:
+                    logger.debug(f"Could not check {table}: {e}")
+                    continue
+            
+            # Get failed IDs to exclude
+            failed_ids = set()
+            try:
+                cursor.execute(f"""
+                    SELECT {id_column} 
+                    FROM {failed_ids_table} 
+                    WHERE endpoint_prefix = %s
+                """, (endpoint_table_prefix,))
+                failed_ids = set(row[0] for row in cursor.fetchall())
+            except Exception as e:
+                logger.debug(f"Failed IDs table not accessible: {e}")
+            
+            # Calculate missing IDs
+            missing_ids = all_ids - existing_ids - failed_ids
+            
+            logger.info(f"ID Analysis for {master_table}:")
+            logger.info(f"  Total IDs: {len(all_ids)}")
+            logger.info(f"  Existing: {len(existing_ids)}")
+            logger.info(f"  Failed: {len(failed_ids)}")
+            logger.info(f"  Missing: {len(missing_ids)}")
+            
+            return sorted(list(missing_ids))
+            
+    except Exception as e:
+        logger.error(f"Error finding missing IDs: {e}")
+        return []
+
+def record_failed_id(conn_manager, failed_ids_table, endpoint_prefix, id_column, id_value, error_message, logger):
+    """Record an ID that failed to process to prevent future attempts"""
+    try:
+        # Create failed IDs table if it doesn't exist
+        with conn_manager.get_cursor() as cursor:
+            cursor.execute(f"""
+                CREATE TABLE IF NOT EXISTS {failed_ids_table} (
+                    id SERIAL PRIMARY KEY,
+                    endpoint_prefix VARCHAR(255) NOT NULL,
+                    id_column VARCHAR(50) NOT NULL,
+                    id_value VARCHAR(255) NOT NULL,
+                    error_message TEXT,
+                    failed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    UNIQUE(endpoint_prefix, id_column, id_value)
+                )
+            """)
+            
+            # Insert failed ID
+            cursor.execute(f"""
+                INSERT INTO {failed_ids_table} 
+                (endpoint_prefix, id_column, id_value, error_message)
+                VALUES (%s, %s, %s, %s)
+                ON CONFLICT (endpoint_prefix, id_column, id_value) 
+                DO UPDATE SET 
+                    error_message = EXCLUDED.error_message,
+                    failed_at = CURRENT_TIMESTAMP
+            """, (endpoint_prefix, id_column, id_value, str(error_message)[:500]))
+            
+        conn_manager.connection.commit()
+        logger.warning(f"Recorded failed ID: {id_value} for {endpoint_prefix}")
+        
+    except Exception as e:
+        logger.error(f"Could not record failed ID: {e}")
+
+def resolve_parameters_comprehensive(endpoint_name, endpoint_config, conn_manager, logger):
+    """
+    Resolve parameters by finding ALL missing IDs from master tables
+    
+    Returns:
+        dict: Parameter configuration with lists of missing IDs to process
+    """
     """Resolve endpoint parameters"""
     parameters = endpoint_config['parameters']
     resolved_params = {}
@@ -279,11 +409,16 @@ def make_api_call(endpoint_class, params, rate_limit, logger):
     
     return None
 
-def process_single_endpoint(endpoint_name, node_id, rate_limit, logger):
-    """Process a single NBA endpoint"""
+def process_single_endpoint_comprehensive(endpoint_name, node_id, rate_limit, logger):
+    """Process a single NBA endpoint comprehensively - collect all missing data"""
     
-    logger.info(f"Starting processing of endpoint: {endpoint_name}")
+    logger.info(f"Starting COMPREHENSIVE processing of endpoint: {endpoint_name}")
     start_time = time.time()
+    
+    # Tracking variables
+    total_processed = 0
+    total_failed = 0
+    total_skipped = 0
     
     try:
         # Get endpoint configuration
@@ -297,7 +432,6 @@ def process_single_endpoint(endpoint_name, node_id, rate_limit, logger):
         logger.info("Initializing database connection...")
         conn_manager = RDSConnectionManager()
         
-        # Test connection
         if not conn_manager.ensure_connection():
             raise Exception("Failed to establish database connection")
         
@@ -307,17 +441,238 @@ def process_single_endpoint(endpoint_name, node_id, rate_limit, logger):
         endpoint_class = getattr(nbaapi, endpoint_name)
         logger.info(f"Got endpoint class: {endpoint_class}")
         
-        # Resolve parameters
-        resolved_params = resolve_parameters(endpoint_config, conn_manager, logger)
-        if resolved_params is None:
-            raise Exception("Failed to resolve endpoint parameters")
+        # Find all missing IDs that need to be processed
+        missing_ids_by_param = find_all_missing_ids(endpoint_config, conn_manager, logger)
         
-        logger.info(f"Resolved parameters: {resolved_params}")
+        if not missing_ids_by_param:
+            logger.info("No missing data found - all data is up to date!")
+            return {"status": "complete", "processed": 0, "failed": 0, "skipped": 0}
         
-        # Make API call
-        dataframes = make_api_call(endpoint_class, resolved_params, rate_limit, logger)
-        if dataframes is None:
-            raise Exception("Failed to get data from NBA API")
+        # Log what we found
+        for param_key, missing_ids in missing_ids_by_param.items():
+            logger.info(f"Parameter {param_key}: {len(missing_ids)} missing IDs to process")        # Process each missing ID
+        failed_ids_table = f"failed_api_calls"
+        
+        # Determine which parameter has IDs to iterate through
+        main_param_key = None
+        main_ids = []
+        
+        for param_key, ids in missing_ids_by_param.items():
+            if ids:  # Find the first parameter with actual IDs
+                main_param_key = param_key
+                main_ids = ids
+                break
+        
+        if not main_param_key:
+            logger.warning("No missing IDs found to process")
+            return {"status": "complete", "processed": 0, "failed": 0, "skipped": 0}
+        
+        logger.info(f"Processing {len(main_ids)} missing IDs for parameter: {main_param_key}")
+        
+        # Process each missing ID
+        for i, missing_id in enumerate(main_ids):
+            logger.info(f"\\n--- Processing ID {i+1}/{len(main_ids)}: {missing_id} ---")
+            
+            # Build parameters for this specific ID
+            current_params = {}
+            
+            # Add the main ID we're iterating through
+            current_params[main_param_key] = missing_id
+            
+            # Add any static parameters from config
+            for param_key_static, param_source_static in endpoint_config.get('parameters', {}).items():
+                if param_key_static != main_param_key:  # Don't override our main parameter
+                    # Handle direct string values
+                    if isinstance(param_source_static, str):
+                        if param_source_static in ['from_current_season', 'from_recent_season']:
+                            current_params[param_key_static] = get_current_season()
+                        elif param_source_static not in ['from_mastergames', 'from_masterplayers', 'from_masterteams']:
+                            # It's a static value
+                            current_params[param_key_static] = param_source_static
+                    else:
+                        # Handle object format
+                        source_type = param_source_static.get('source', 'static')
+                        if source_type == 'static':
+                            current_params[param_key_static] = param_source_static.get('value')
+                        elif source_type in ['from_current_season', 'from_recent_season']:
+                            current_params[param_key_static] = get_current_season()
+            
+            logger.info(f"Parameters for this call: {current_params}")
+            
+            # Make API call for this specific ID
+            try:
+                dataframes = make_api_call(endpoint_class, current_params, rate_limit, logger)
+                
+                if dataframes is None:
+                    logger.warning(f"No data returned for {main_param_key}={missing_id}")
+                    record_failed_id(conn_manager, failed_ids_table, f"nba_{endpoint_name.lower()}", 
+                                    main_param_key, missing_id, "No data returned", logger)
+                    total_failed += 1
+                    continue
+                
+                # Process and store the dataframes
+                success_count = 0
+                error_count = 0
+                
+                for df_index, df in enumerate(dataframes):
+                    try:
+                        # Updated table naming convention - remove "dataframe_"
+                        table_name = f"nba_{endpoint_name.lower()}_{df_index}"
+                        logger.info(f"  Processing dataframe {df_index} -> {table_name}")
+                        
+                        # Clean dataframe (handles reserved keywords)
+                        cleaned_df = allintwo.clean_column_names(df.copy())
+                        
+                        # Check if table exists, create if not
+                        table_exists = allintwo.check_table_exists(conn_manager.connection, table_name)
+                        if not table_exists:
+                            logger.info(f"Creating table: {table_name}")
+                            allintwo.create_table(conn_manager.connection, table_name, cleaned_df)
+                        
+                        # Insert data
+                        logger.info(f"Inserting {len(cleaned_df)} rows into {table_name}")
+                        allintwo.insert_dataframe_to_rds(conn_manager.connection, cleaned_df, table_name)
+                        logger.info(f"Successfully inserted data into {table_name}")
+                        success_count += 1
+                        
+                    except Exception as e:
+                        error_count += 1
+                        logger.error(f"Failed to process dataframe {df_index}: {str(e)}")
+                        continue
+                
+                if success_count > 0:
+                    total_processed += 1
+                    logger.info(f"Successfully processed {main_param_key}={missing_id} ({success_count} dataframes)")
+                else:
+                    total_failed += 1
+                    record_failed_id(conn_manager, failed_ids_table, f"nba_{endpoint_name.lower()}", 
+                                    main_param_key, missing_id, "All dataframes failed to process", logger)
+                    logger.error(f"All dataframes failed for {main_param_key}={missing_id}")
+                
+            except Exception as e:
+                total_failed += 1
+                error_msg = str(e)
+                logger.error(f"API call failed for {main_param_key}={missing_id}: {error_msg}")
+                record_failed_id(conn_manager, failed_ids_table, f"nba_{endpoint_name.lower()}", 
+                                main_param_key, missing_id, error_msg, logger)
+                continue
+            
+            # Rate limiting between API calls
+            if rate_limit > 0:
+                logger.debug(f"Rate limiting: waiting {rate_limit} seconds...")
+                time.sleep(rate_limit)
+        
+        # Close connection
+        conn_manager.close_connection()
+        
+        end_time = time.time()
+        duration = end_time - start_time
+        
+        # Final summary
+        logger.info(f"COMPREHENSIVE PROCESSING COMPLETE")
+        logger.info(f"Endpoint: {endpoint_name}")
+        logger.info(f"Duration: {duration:.2f} seconds")
+        logger.info(f"IDs processed successfully: {total_processed}")
+        logger.info(f"IDs failed: {total_failed}")
+        logger.info(f"Total IDs attempted: {len(main_ids)}")
+        
+        success_rate = (total_processed / len(main_ids) * 100) if main_ids else 0
+        logger.info(f"Success rate: {success_rate:.1f}%")
+        
+        return {
+            "status": "complete",
+            "processed": total_processed,
+            "failed": total_failed,
+            "total_attempted": len(main_ids),
+            "success_rate": success_rate
+        }
+        
+    except Exception as e:
+        logger.error(f"Critical error in comprehensive processing: {str(e)}")
+        logger.exception("Full error traceback:")
+        return {"status": "error", "error": str(e)}
+
+def find_all_missing_ids(endpoint_config, conn_manager, logger):
+    """
+    Find all missing IDs for all parameters that need to be resolved from master tables
+    
+    Returns:
+        dict: {parameter_name: [list_of_missing_ids]}
+    """
+    missing_ids_by_param = {}
+    failed_ids_table = "failed_api_calls"
+    
+    for param_key, param_source in endpoint_config.get('parameters', {}).items():
+        # Handle direct string values (e.g., 'game_id': 'from_mastergames')
+        if isinstance(param_source, str):
+            source_value = param_source
+        else:
+            # Handle object format (e.g., 'game_id': {'source': 'from_mastergames'})
+            source_value = param_source.get('source', 'static')
+        
+        if source_value == 'from_mastergames':
+            # Find missing game IDs across all leagues
+            all_missing = []
+            
+            league_tables = {
+                'nba': 'nba_games',
+                'gleague': 'gleague_games', 
+                'wnba': 'wnba_games'
+            }
+            
+            for league, table_name in league_tables.items():
+                endpoint_prefix = f"nba_{endpoint_config['endpoint'].lower()}"
+                missing_ids = find_missing_ids(conn_manager, table_name, endpoint_prefix, 
+                                             'gameid', failed_ids_table, logger)
+                all_missing.extend(missing_ids)
+            
+            missing_ids_by_param[param_key] = all_missing[:10]  # Limit to first 10 for testing
+            
+        elif source_value == 'from_masterplayers':
+            # Find missing player IDs across all leagues
+            all_missing = []
+            
+            league_tables = {
+                'nba': 'nba_players',
+                'gleague': 'gleague_players', 
+                'wnba': 'wnba_players'
+            }
+            
+            for league, table_name in league_tables.items():
+                endpoint_prefix = f"nba_{endpoint_config['endpoint'].lower()}"
+                missing_ids = find_missing_ids(conn_manager, table_name, endpoint_prefix, 
+                                             'playerid', failed_ids_table, logger)
+                all_missing.extend(missing_ids)
+                
+            missing_ids_by_param[param_key] = all_missing[:5]  # Limit to first 5 for testing
+            
+        elif source_value == 'from_masterteams':
+            # Find missing team IDs across all leagues
+            all_missing = []
+            
+            league_tables = {
+                'nba': 'nba_teams',
+                'gleague': 'gleague_teams', 
+                'wnba': 'wnba_teams'
+            }
+            
+            for league, table_name in league_tables.items():
+                endpoint_prefix = f"nba_{endpoint_config['endpoint'].lower()}"
+                missing_ids = find_missing_ids(conn_manager, table_name, endpoint_prefix, 
+                                             'teamid', failed_ids_table, logger)
+                all_missing.extend(missing_ids)
+                
+            missing_ids_by_param[param_key] = all_missing[:3]  # Limit to first 3 for testing
+    
+    return missing_ids_by_param
+
+def get_current_season():
+    """Get current NBA season string"""
+    now = datetime.now()
+    if now.month >= 10:  # Season starts in October
+        return f"{now.year}-{str(now.year + 1)[2:]}"
+    else:
+        return f"{now.year - 1}-{str(now.year)[2:]}"
         
         # Process dataframes
         success_count = 0
@@ -375,42 +730,8 @@ def process_single_endpoint(endpoint_name, node_id, rate_limit, logger):
                 
             except Exception as e:
                 error_count += 1
-                logger.error(f"❌ Failed to process dataframe {i}: {str(e)}")
-                logger.exception("Full error traceback:")
+                logger.error(f"❌ Failed to process dataframe {df_index}: {str(e)}")
                 continue
-        
-        # Apply rate limiting
-        if rate_limit > 0:
-            time.sleep(rate_limit)
-        
-        # Close connection
-        conn_manager.close_connection()
-        
-        end_time = time.time()
-        duration = end_time - start_time
-        
-        # Log results
-        total_operations = success_count + error_count
-        success_rate = (success_count / total_operations * 100) if total_operations > 0 else 0
-        
-        logger.info(f"=== PROCESSING COMPLETE ===")
-        logger.info(f"Endpoint: {endpoint_name}")
-        logger.info(f"Duration: {duration:.2f} seconds")
-        logger.info(f"Dataframes processed: {success_count}")
-        logger.info(f"Errors: {error_count}")
-        logger.info(f"Success rate: {success_rate:.1f}%")
-        
-        return success_count > 0, {
-            'total_processed': success_count,
-            'total_errors': error_count,
-            'success_rate': success_rate,
-            'duration': duration
-        }
-        
-    except Exception as e:
-        logger.error(f"Failed to process endpoint {endpoint_name}: {e}")
-        logger.exception("Full traceback:")
-        return False, {'error': str(e)}
 
 def main():
     """Main entry point"""
@@ -433,19 +754,23 @@ def main():
         db_config = load_database_config(args.db_config)
         logger.info("Database configuration loaded successfully")
         
-        # Process the endpoint
-        success, summary = process_single_endpoint(
+        # Process the endpoint comprehensively
+        result = process_single_endpoint_comprehensive(
             endpoint_name=args.endpoint,
             node_id=args.node_id,
             rate_limit=args.rate_limit,
             logger=logger
         )
         
-        if success:
-            logger.info("🎉 Endpoint processing completed successfully!")
+        if result["status"] == "complete":
+            if result["processed"] > 0:
+                logger.info("🎉 Comprehensive endpoint processing completed successfully!")
+                logger.info(f"Final stats: {result['processed']} processed, {result['failed']} failed")
+            else:
+                logger.info("✅ No new data to process - everything is up to date!")
             sys.exit(0)
         else:
-            logger.error("❌ Endpoint processing failed")
+            logger.error("❌ Comprehensive endpoint processing failed")
             sys.exit(1)
             
     except Exception as e:
