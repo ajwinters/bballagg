@@ -71,7 +71,7 @@ def load_database_config(config_path):
     except Exception as e:
         raise Exception(f"Failed to load database config from {config_path}: {e}")
 
-def resolve_parameters(endpoint_config, logger):
+def resolve_parameters(endpoint_config, conn_manager, logger):
     """Resolve endpoint parameters"""
     parameters = endpoint_config['parameters']
     resolved_params = {}
@@ -98,6 +98,81 @@ def resolve_parameters(endpoint_config, logger):
             elif 'to' in param_key.lower():
                 resolved_params[param_key] = end_date.strftime('%Y-%m-%d')
                 logger.info(f"Resolved {param_key} = {resolved_params[param_key]}")
+                
+        elif param_source == 'from_mastergames':
+            # Get game IDs from master games table
+            try:
+                logger.info("Fetching game IDs from nba_mastergames table...")
+                query = "SELECT DISTINCT gameid FROM nba_mastergames ORDER BY gameid DESC LIMIT 10"
+                
+                with conn_manager.get_cursor() as cursor:
+                    cursor.execute(query)
+                    results = cursor.fetchall()
+                
+                if results:
+                    game_ids = [row[0] for row in results]
+                    logger.info(f"Found {len(game_ids)} recent game IDs: {game_ids[:3]}...")
+                    
+                    # For single endpoint processing, just use the first game ID
+                    resolved_params[param_key] = game_ids[0]  
+                    logger.info(f"Resolved {param_key} = {resolved_params[param_key]}")
+                else:
+                    logger.error("No game IDs found in nba_mastergames table")
+                    return None
+                    
+            except Exception as e:
+                logger.error(f"Failed to fetch game IDs: {e}")
+                return None
+                
+        elif param_source == 'from_masterplayers':
+            # Get player IDs from master players table
+            try:
+                logger.info("Fetching player IDs from nba_masterplayers table...")
+                query = "SELECT DISTINCT playerid FROM nba_masterplayers ORDER BY playerid LIMIT 10"
+                
+                with conn_manager.get_cursor() as cursor:
+                    cursor.execute(query)
+                    results = cursor.fetchall()
+                
+                if results:
+                    player_ids = [row[0] for row in results]
+                    logger.info(f"Found {len(player_ids)} player IDs: {player_ids[:3]}...")
+                    
+                    # For single endpoint processing, just use the first player ID
+                    resolved_params[param_key] = player_ids[0]
+                    logger.info(f"Resolved {param_key} = {resolved_params[param_key]}")
+                else:
+                    logger.error("No player IDs found in nba_masterplayers table")
+                    return None
+                    
+            except Exception as e:
+                logger.error(f"Failed to fetch player IDs: {e}")
+                return None
+                
+        elif param_source == 'from_masterteams':
+            # Get team IDs from master teams table
+            try:
+                logger.info("Fetching team IDs from nba_masterteams table...")
+                query = "SELECT DISTINCT teamid FROM nba_masterteams ORDER BY teamid LIMIT 10"
+                
+                with conn_manager.get_cursor() as cursor:
+                    cursor.execute(query)
+                    results = cursor.fetchall()
+                
+                if results:
+                    team_ids = [row[0] for row in results]
+                    logger.info(f"Found {len(team_ids)} team IDs: {team_ids[:3]}...")
+                    
+                    # For single endpoint processing, just use the first team ID
+                    resolved_params[param_key] = team_ids[0]
+                    logger.info(f"Resolved {param_key} = {resolved_params[param_key]}")
+                else:
+                    logger.error("No team IDs found in nba_masterteams table")
+                    return None
+                    
+            except Exception as e:
+                logger.error(f"Failed to fetch team IDs: {e}")
+                return None
                 
         else:
             logger.warning(f"Unknown parameter source: {param_source}")
@@ -165,7 +240,7 @@ def process_single_endpoint(endpoint_name, node_id, rate_limit, logger):
         logger.info(f"Got endpoint class: {endpoint_class}")
         
         # Resolve parameters
-        resolved_params = resolve_parameters(endpoint_config, logger)
+        resolved_params = resolve_parameters(endpoint_config, conn_manager, logger)
         if resolved_params is None:
             raise Exception("Failed to resolve endpoint parameters")
         
@@ -180,18 +255,37 @@ def process_single_endpoint(endpoint_name, node_id, rate_limit, logger):
         success_count = 0
         error_count = 0
         
-        for i, (df_name, df) in enumerate(dataframes):
+        logger.info(f"Processing {len(dataframes)} dataframes from {endpoint_name}")
+        
+        # Try to get dataframe names from the endpoint if available
+        try:
+            endpoint_instance = endpoint_class(**resolved_params)
+            if hasattr(endpoint_instance, 'data_sets'):
+                df_names = [ds.lower() for ds in endpoint_instance.data_sets]
+                logger.info(f"Found dataframe names: {df_names}")
+            else:
+                df_names = None
+        except:
+            df_names = None
+        
+        for i, df in enumerate(dataframes):
             if df is None or df.empty:
-                logger.warning(f"Dataframe {i} ({df_name}) is empty, skipping")
+                logger.warning(f"Dataframe {i} is empty, skipping")
                 continue
             
-            logger.info(f"Processing dataframe {i+1}/{len(dataframes)}: {df_name}")
+            logger.info(f"Processing dataframe {i+1}/{len(dataframes)}")
             logger.info(f"  Shape: {df.shape}")
             logger.info(f"  Columns: {list(df.columns)[:5]}...")  # Show first 5 columns
             
             try:
-                # Generate table name
-                table_name = f"nba_{endpoint_name.lower()}_{df_name.lower()}"
+                # Generate table name - use actual name if available, otherwise use index
+                if df_names and i < len(df_names):
+                    df_name = df_names[i]
+                else:
+                    df_name = f"dataframe_{i}"
+                
+                table_name = f"nba_{endpoint_name.lower()}_{df_name}"
+                logger.info(f"  Table name: {table_name}")
                 
                 # Clean dataframe (handles reserved keywords like 'to' -> 'turnovers')
                 cleaned_df = allintwo.clean_column_names(df.copy())
@@ -213,7 +307,8 @@ def process_single_endpoint(endpoint_name, node_id, rate_limit, logger):
                 
             except Exception as e:
                 error_count += 1
-                logger.error(f"❌ Failed to process dataframe {df_name}: {str(e)}")
+                logger.error(f"❌ Failed to process dataframe {i}: {str(e)}")
+                logger.exception("Full error traceback:")
                 continue
         
         # Apply rate limiting
