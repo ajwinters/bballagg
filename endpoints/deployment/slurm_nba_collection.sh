@@ -80,20 +80,24 @@ fi
 
 echo "Processing endpoint: $ENDPOINT"
 
-# Load modules and environment (CUSTOMIZE FOR YOUR CLUSTER)
-module load python/3.11.2
+# Navigate to project root and activate virtual environment
+PROJECT_ROOT="$(cd .. && pwd)"
+echo "Project root: $PROJECT_ROOT"
 
-# Activate virtual environment
-if [ -f ".venv/bin/activate" ]; then
-    source .venv/bin/activate
-    echo "Virtual environment activated"
+# Activate virtual environment from project root
+if [ -f "$PROJECT_ROOT/.venv/bin/activate" ]; then
+    source "$PROJECT_ROOT/.venv/bin/activate"
+    echo "✅ Virtual environment activated from $PROJECT_ROOT/.venv"
 else
-    echo "Warning: Virtual environment not found at .venv/bin/activate"
+    echo "❌ Warning: Virtual environment not found at $PROJECT_ROOT/.venv/bin/activate"
+    exit 1
 fi
 
 # Verify Python environment
+echo "Python environment verification:"
 python --version
-pip list | grep -E "(psycopg2|pandas|requests|nbaapi)"
+echo "Key packages:"
+pip list | grep -E "(psycopg2|pandas|requests|nba)" || echo "Package check failed, but continuing..."
 
 # Create unique node ID
 NODE_ID="${PROFILE}_${SLURM_JOB_ID}_${SLURM_ARRAY_TASK_ID}"
