@@ -23,154 +23,154 @@ GAME_ENDPOINTS = [
     {
         'endpoint': 'BoxScoreAdvancedV3', 
         'description': 'Advanced box score stats V3 (PREFERRED)',
-        'parameters': {'gameid': 'from_mastergames'},
+        'parameters': {'game_id': 'from_mastergames'},
         'frequency': 'after_game_completion',
         'priority': 'high'
     },
     {
         'endpoint': 'BoxScoreAdvancedV2',
         'description': 'Advanced box score stats for a game (backup)',
-        'parameters': {'gameid': 'from_mastergames'},
+        'parameters': {'game_id': 'from_mastergames'},
         'frequency': 'after_game_completion',
         'priority': 'medium'
     },
     {
         'endpoint': 'BoxScoreDefensiveV2',
         'description': 'Defensive stats for a game',
-        'parameters': {'gameid': 'from_mastergames'},
+        'parameters': {'game_id': 'from_mastergames'},
         'frequency': 'after_game_completion', 
         'priority': 'medium'
     },
     {
         'endpoint': 'BoxScoreFourFactorsV3',
         'description': 'Four factors stats V3 (PREFERRED)',
-        'parameters': {'gameid': 'from_mastergames'}, 
+        'parameters': {'game_id': 'from_mastergames'}, 
         'frequency': 'after_game_completion',
         'priority': 'high'
     },
     {
         'endpoint': 'BoxScoreFourFactorsV2',
         'description': 'Four factors stats for a game (backup)',
-        'parameters': {'gameid': 'from_mastergames'},
+        'parameters': {'game_id': 'from_mastergames'},
         'frequency': 'after_game_completion',
         'priority': 'medium'
     },
     {
         'endpoint': 'BoxScoreHustleV2',
         'description': 'Hustle stats for a game',
-        'parameters': {'gameid': 'from_mastergames'},
+        'parameters': {'game_id': 'from_mastergames'},
         'frequency': 'after_game_completion',
         'priority': 'low'
     },
     {
         'endpoint': 'BoxScoreMatchupsV3',
         'description': 'Matchup data for a game (PREFERRED)',
-        'parameters': {'gameid': 'from_mastergames'},
+        'parameters': {'game_id': 'from_mastergames'},
         'frequency': 'after_game_completion',
         'priority': 'medium'
     },
     {
         'endpoint': 'BoxScoreMiscV3',
         'description': 'Miscellaneous stats V3 (PREFERRED)',
-        'parameters': {'gameid': 'from_mastergames'},
+        'parameters': {'game_id': 'from_mastergames'},
         'frequency': 'after_game_completion',
         'priority': 'high'
     },
     {
         'endpoint': 'BoxScoreMiscV2',
         'description': 'Miscellaneous stats for a game (backup)',
-        'parameters': {'gameid': 'from_mastergames'},
+        'parameters': {'game_id': 'from_mastergames'},
         'frequency': 'after_game_completion',
         'priority': 'medium'
     },
     {
         'endpoint': 'BoxScorePlayerTrackV3',
         'description': 'Player tracking stats V3 (PREFERRED)', 
-        'parameters': {'gameid': 'from_mastergames'},
+        'parameters': {'game_id': 'from_mastergames'},
         'frequency': 'after_game_completion',
         'priority': 'high'
     },
     {
         'endpoint': 'BoxScorePlayerTrackV2',
         'description': 'Player tracking stats for a game (backup)',
-        'parameters': {'gameid': 'from_mastergames'},
+        'parameters': {'game_id': 'from_mastergames'},
         'frequency': 'after_game_completion',
         'priority': 'medium'
     },
     {
         'endpoint': 'BoxScoreScoringV3',
         'description': 'Scoring stats V3 (PREFERRED)',
-        'parameters': {'gameid': 'from_mastergames'},
+        'parameters': {'game_id': 'from_mastergames'},
         'frequency': 'after_game_completion', 
         'priority': 'high'
     },
     {
         'endpoint': 'BoxScoreScoringV2',
         'description': 'Scoring stats for a game (backup)',
-        'parameters': {'gameid': 'from_mastergames'},
+        'parameters': {'game_id': 'from_mastergames'},
         'frequency': 'after_game_completion',
         'priority': 'medium'
     },
     {
         'endpoint': 'BoxScoreSimilarityScore',
         'description': 'Similarity score for a game',
-        'parameters': {'gameid': 'from_mastergames'},
+        'parameters': {'game_id': 'from_mastergames'},
         'frequency': 'after_game_completion',
         'priority': 'low'
     },
     {
         'endpoint': 'BoxScoreSummaryV2',
         'description': 'Game summary and basic info',
-        'parameters': {'gameid': 'from_mastergames'},
+        'parameters': {'game_id': 'from_mastergames'},
         'frequency': 'after_game_completion',
         'priority': 'high'
     },
     {
         'endpoint': 'BoxScoreTraditionalV3',
         'description': 'Traditional box score stats V3 (PREFERRED)',
-        'parameters': {'gameid': 'from_mastergames'},
+        'parameters': {'game_id': 'from_mastergames'},
         'frequency': 'after_game_completion',
         'priority': 'high'
     },
     {
         'endpoint': 'BoxScoreTraditionalV2',
         'description': 'Traditional box score stats (backup)',
-        'parameters': {'gameid': 'from_mastergames'},
+        'parameters': {'game_id': 'from_mastergames'},
         'frequency': 'after_game_completion',
         'priority': 'medium'
     },
     {
         'endpoint': 'BoxScoreUsageV3',
         'description': 'Usage stats V3 (PREFERRED)',
-        'parameters': {'gameid': 'from_mastergames'},
+        'parameters': {'game_id': 'from_mastergames'},
         'frequency': 'after_game_completion',
         'priority': 'high'
     },
     {
         'endpoint': 'BoxScoreUsageV2',
         'description': 'Usage stats for a game (backup)',
-        'parameters': {'gameid': 'from_mastergames'},
+        'parameters': {'game_id': 'from_mastergames'},
         'frequency': 'after_game_completion',
         'priority': 'medium'
     },
     {
         'endpoint': 'GameRotation',
         'description': 'Player rotation data for a game',
-        'parameters': {'gameid': 'from_mastergames'},
+        'parameters': {'game_id': 'from_mastergames'},
         'frequency': 'after_game_completion',
         'priority': 'medium'
     },
     {
         'endpoint': 'HustleStatsBoxScore',
         'description': 'Hustle stats box score',
-        'parameters': {'gameid': 'from_mastergames'},
+        'parameters': {'game_id': 'from_mastergames'},
         'frequency': 'after_game_completion',
         'priority': 'low'
     },
     {
         'endpoint': 'PlayByPlayV3',
         'description': 'Play-by-play data for a game',
-        'parameters': {'gameid': 'from_mastergames'},
+        'parameters': {'game_id': 'from_mastergames'},
         'frequency': 'after_game_completion',
         'priority': 'high'
     }
@@ -181,105 +181,105 @@ PLAYER_ENDPOINTS = [
     {
         'endpoint': 'CommonPlayerInfo',
         'description': 'Basic player information',
-        'parameters': {'playerid': 'from_masterplayers'},
+        'parameters': {'player_id': 'from_masterplayers'},
         'frequency': 'weekly',
         'priority': 'high'
     },
     {
         'endpoint': 'PlayerGameLog', 
         'description': 'Player game log for current season',
-        'parameters': {'playerid': 'from_masterplayers'},
+        'parameters': {'player_id': 'from_masterplayers'},
         'frequency': 'weekly',
         'priority': 'high'
     },
     {
         'endpoint': 'PlayerDashboardByGameSplits',
         'description': 'Player dashboard by game splits',
-        'parameters': {'playerid': 'from_masterplayers'},
+        'parameters': {'player_id': 'from_masterplayers'},
         'frequency': 'weekly',
         'priority': 'medium'
     },
     {
         'endpoint': 'PlayerDashboardByGeneralSplits',
         'description': 'Player dashboard by general splits',
-        'parameters': {'playerid': 'from_masterplayers'},
+        'parameters': {'player_id': 'from_masterplayers'},
         'frequency': 'weekly',
         'priority': 'medium'
     },
     {
         'endpoint': 'PlayerDashboardByShootingSplits',
         'description': 'Player dashboard by shooting splits',
-        'parameters': {'playerid': 'from_masterplayers'},
+        'parameters': {'player_id': 'from_masterplayers'},
         'frequency': 'weekly', 
         'priority': 'high'
     },
     {
         'endpoint': 'PlayerDashboardByTeamPerformance',
         'description': 'Player dashboard by team performance',
-        'parameters': {'playerid': 'from_masterplayers'},
+        'parameters': {'player_id': 'from_masterplayers'},
         'frequency': 'weekly',
         'priority': 'medium'
     },
     {
         'endpoint': 'PlayerDashboardByYearOverYear',
         'description': 'Player dashboard year over year',
-        'parameters': {'playerid': 'from_masterplayers'},
+        'parameters': {'player_id': 'from_masterplayers'},
         'frequency': 'weekly',
         'priority': 'medium'
     },
     {
         'endpoint': 'PlayerDashboardByClutch',
         'description': 'Player dashboard by clutch situations',
-        'parameters': {'playerid': 'from_masterplayers', 'last_n_games': 30},
+        'parameters': {'player_id': 'from_masterplayers', 'last_n_games': 30},
         'frequency': 'weekly',
         'priority': 'high'
     },
     {
         'endpoint': 'PlayerDashboardByLastNGames',
         'description': 'Player dashboard by last N games',
-        'parameters': {'playerid': 'from_masterplayers'},
+        'parameters': {'player_id': 'from_masterplayers'},
         'frequency': 'weekly',
         'priority': 'medium'
     },
     {
         'endpoint': 'PlayerNextNGames',
         'description': 'Player next N games',
-        'parameters': {'playerid': 'from_masterplayers'},
+        'parameters': {'player_id': 'from_masterplayers'},
         'frequency': 'weekly',
         'priority': 'low'
     },
     {
         'endpoint': 'PlayerVsPlayer',
         'description': 'Player vs Player comparison (requires second player)',
-        'parameters': {'playerid': 'from_masterplayers', 'vs_playerid': 'dynamic'},
+        'parameters': {'player_id': 'from_masterplayers', 'vs_player_id': 'dynamic'},
         'frequency': 'on_demand',
         'priority': 'low'
     },
     {
         'endpoint': 'PlayerDashPtPass',
         'description': 'Player dash passing stats',
-        'parameters': {'playerid': 'from_masterplayers', 'teamid': 'dynamic'},
+        'parameters': {'player_id': 'from_masterplayers', 'team_id': 'dynamic'},
         'frequency': 'weekly',
         'priority': 'medium'
     },
     {
         'endpoint': 'PlayerDashPtReb', 
         'description': 'Player dash rebounding stats',
-        'parameters': {'playerid': 'from_masterplayers', 'teamid': 'dynamic'},
+        'parameters': {'player_id': 'from_masterplayers', 'team_id': 'dynamic'},
         'frequency': 'weekly',
         'priority': 'medium'
     },
     {
         'endpoint': 'PlayerDashPtShotDefend',
         'description': 'Player dash shot defend stats',
-        'parameters': {'playerid': 'from_masterplayers', 'teamid': 'dynamic'},
+        'parameters': {'player_id': 'from_masterplayers', 'team_id': 'dynamic'},
         'frequency': 'weekly',
         'priority': 'low'
     },
     {
         'endpoint': 'PlayerDashPtShots',
         'description': 'Player dash shot stats',
-        'parameters': {'playerid': 'from_masterplayers', 'teamid': 'dynamic'},
+        'parameters': {'player_id': 'from_masterplayers', 'team_id': 'dynamic'},
         'frequency': 'weekly',
         'priority': 'medium'
     }
@@ -290,7 +290,7 @@ TEAM_ENDPOINTS = [
     {
         'endpoint': 'CommonTeamRoster',
         'description': 'Team roster information',
-        'parameters': {'teamid': 'from_masterteams'},
+        'parameters': {'team_id': 'from_masterteams'},
         'frequency': 'weekly',
         'priority': 'high'
     }
