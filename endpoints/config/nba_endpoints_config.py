@@ -112,13 +112,6 @@ GAME_ENDPOINTS = [
         'priority': 'medium'
     },
     {
-        'endpoint': 'BoxScoreSimilarityScore',
-        'description': 'Similarity score for a game',
-        'parameters': {'game_id': 'from_mastergames'},
-        'frequency': 'after_game_completion',
-        'priority': 'low'
-    },
-    {
         'endpoint': 'BoxScoreSummaryV2',
         'description': 'Game summary and basic info',
         'parameters': {'game_id': 'from_mastergames'},

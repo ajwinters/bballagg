@@ -88,27 +88,35 @@ def find_missing_ids(conn_manager, master_table, endpoint_table_prefix, id_colum
     """
     try:
         with conn_manager.get_cursor() as cursor:
-            # Get all IDs from master table (ALL HISTORICAL DATA)
+            # Get all IDs from master table - ORDER BY DATE DESC (latest games first)
             if 'game' in master_table:
                 cursor.execute(f"""
-                    SELECT DISTINCT {id_column} 
+                    SELECT DISTINCT {id_column}, gamedate
                     FROM {master_table} 
-                    ORDER BY {id_column}
+                    ORDER BY gamedate DESC, {id_column} DESC
                 """)
+                # Extract just the IDs but maintain the latest-first order
+                all_ids_ordered = [row[0] for row in cursor.fetchall()]
+                all_ids = set(all_ids_ordered)
+                logger.info(f"Found {len(all_ids)} games in {master_table}, ordered latest first")
+                
             elif 'player' in master_table:
                 cursor.execute(f"""
                     SELECT DISTINCT {id_column} 
                     FROM {master_table} 
-                    ORDER BY {id_column}
+                    ORDER BY {id_column} DESC
                 """)
+                all_ids_ordered = [row[0] for row in cursor.fetchall()]
+                all_ids = set(all_ids_ordered)
+                
             else:  # teams
                 cursor.execute(f"""
                     SELECT DISTINCT {id_column} 
                     FROM {master_table} 
-                    ORDER BY {id_column}
+                    ORDER BY {id_column} DESC
                 """)
-            
-            all_ids = set(row[0] for row in cursor.fetchall())
+                all_ids_ordered = [row[0] for row in cursor.fetchall()]
+                all_ids = set(all_ids_ordered)
             
             # Get existing IDs from endpoint tables
             existing_ids = set()
@@ -144,8 +152,16 @@ def find_missing_ids(conn_manager, master_table, endpoint_table_prefix, id_colum
             except Exception as e:
                 logger.debug(f"Failed IDs table not accessible: {e}")
             
-            # Calculate missing IDs
-            missing_ids = all_ids - existing_ids - failed_ids
+            # Calculate missing IDs and preserve latest-first order
+            if 'game' in master_table:
+                # For games, maintain chronological order (latest first)
+                missing_ids = [game_id for game_id in all_ids_ordered 
+                              if game_id not in existing_ids and game_id not in failed_ids]
+                logger.info(f"Missing IDs will be processed in latest-first order")
+            else:
+                # For players/teams, use set operations then sort
+                missing_ids_set = all_ids - existing_ids - failed_ids
+                missing_ids = sorted(list(missing_ids_set), reverse=True)  # Descending order
             
             logger.info(f"ID Analysis for {master_table}:")
             logger.info(f"  Total IDs: {len(all_ids)}")
@@ -153,7 +169,12 @@ def find_missing_ids(conn_manager, master_table, endpoint_table_prefix, id_colum
             logger.info(f"  Failed: {len(failed_ids)}")
             logger.info(f"  Missing: {len(missing_ids)}")
             
-            return sorted(list(missing_ids))
+            if missing_ids and 'game' in master_table:
+                logger.info(f"  Processing order: Latest games first")
+                logger.info(f"  First 5 games to process: {missing_ids[:5]}")
+                logger.info(f"  Last 5 games to process: {missing_ids[-5:]}")
+            
+            return missing_ids
             
     except Exception as e:
         logger.error(f"Error finding missing IDs: {e}")
@@ -492,6 +513,11 @@ def process_single_endpoint_comprehensive(endpoint_name, node_id, rate_limit, lo
         
         logger.info(f"Processing {len(main_ids)} missing IDs for parameter: {main_param_key}")
         
+        # Log processing strategy
+        if 'game' in main_param_key:
+            logger.info(f"🕒 PROCESSING STRATEGY: Latest games first, working backwards through time")
+            logger.info(f"📅 This prioritizes recent games for faster data availability")
+        
         # Process each missing ID
         for i, missing_id in enumerate(main_ids):
             logger.info(f"\\n--- Processing ID {i+1}/{len(main_ids)}: {missing_id} ---")
@@ -567,6 +593,20 @@ def process_single_endpoint_comprehensive(endpoint_name, node_id, rate_limit, lo
                 success_count = 0
                 error_count = 0
                 
+                # Try to get proper dataframe names from the endpoint
+                dataframe_names = []
+                try:
+                    # Create endpoint instance to get dataframe metadata
+                    temp_endpoint_instance = endpoint_class(**current_params)
+                    if hasattr(temp_endpoint_instance, 'expected_data') and temp_endpoint_instance.expected_data:
+                        # Get dataframe names from expected_data attribute (the correct way!)
+                        dataframe_names = [name.lower() for name in temp_endpoint_instance.expected_data.keys()]
+                        logger.info(f"Found dataframe names from expected_data: {dataframe_names}")
+                    else:
+                        logger.info(f"No expected_data metadata found, using index-based naming")
+                except Exception as e:
+                    logger.warning(f"Could not get dataframe names: {e}")
+                
                 for df_index, df in enumerate(dataframes):
                     try:
                         # Check if dataframe is valid
@@ -574,9 +614,18 @@ def process_single_endpoint_comprehensive(endpoint_name, node_id, rate_limit, lo
                             logger.warning(f"  Dataframe {df_index} is None or empty, skipping")
                             continue
                         
-                        # Updated table naming convention - remove "dataframe_"
-                        table_name = f"nba_{endpoint_name.lower()}_{df_index}"
-                        logger.info(f"  Processing dataframe {df_index} -> {table_name} (shape: {getattr(df, 'shape', 'unknown')})")
+                        # Use proper dataframe naming convention
+                        if df_index < len(dataframe_names):
+                            # Use the actual dataframe name from NBA API metadata
+                            df_name = dataframe_names[df_index]
+                            table_name = f"nba_{endpoint_name.lower()}_{df_name}"
+                            logger.info(f"  Processing dataframe {df_index} ({df_name}) -> {table_name}")
+                        else:
+                            # Fallback to index-based naming
+                            table_name = f"nba_{endpoint_name.lower()}_{df_index}"
+                            logger.info(f"  Processing dataframe {df_index} (unnamed) -> {table_name}")
+                        
+                        logger.info(f"    Shape: {getattr(df, 'shape', 'unknown')}")
                         
                         # Clean dataframe (handles reserved keywords)
                         cleaned_df = allintwo.clean_column_names(df.copy())
