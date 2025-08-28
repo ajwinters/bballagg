@@ -377,32 +377,57 @@ def resolve_parameters_comprehensive(endpoint_name, endpoint_config, conn_manage
     return resolved_params
 
 def make_api_call(endpoint_class, params, rate_limit, logger):
-    """Make NBA API call with retry logic"""
+    """Make NBA API call with intelligent retry logic"""
     max_retries = 3
     
     for attempt in range(max_retries):
         try:
-            logger.info(f"Making API call (attempt {attempt + 1}/{max_retries})")
+            logger.info(f"Making API call (attempt {attempt + 1}/{max_retries}) with params: {params}")
             endpoint_instance = endpoint_class(**params)
             dataframes = endpoint_instance.get_data_frames()
             
             if dataframes is None:
-                logger.warning("API returned None")
+                logger.warning("API returned None - no data available for these parameters")
                 return None
                 
             logger.info(f"API call successful - got {len(dataframes)} dataframes")
             return dataframes
             
         except Exception as e:
-            error_str = str(e)
-            logger.warning(f"API call failed (attempt {attempt + 1}): {error_str}")
+            error_str = str(e).lower()
+            logger.warning(f"API call failed (attempt {attempt + 1}): {str(e)}")
             
+            # Don't retry for parameter errors, authentication issues, or permanent failures
+            permanent_error_indicators = [
+                'invalid game id',
+                'invalid player id', 
+                'invalid team id',
+                'bad request',
+                '400',
+                '401', 
+                '403',
+                'unauthorized',
+                'forbidden',
+                'parameter',
+                'invalid parameter',
+                'missing required',
+                'missing 1 required positional argument',
+                'nonetype',  # API returning None due to bad parameters
+                'keys',      # 'NoneType' object has no attribute 'keys'
+                'list index out of range'  # Empty response causing list access errors
+            ]
+            
+            if any(indicator in error_str for indicator in permanent_error_indicators):
+                logger.error(f"Permanent error detected, not retrying: {str(e)}")
+                return "PERMANENT_ERROR"
+            
+            # Retry for temporary errors (network, rate limiting, server issues)
             if attempt < max_retries - 1:
                 wait_time = (attempt + 1) * 2
-                logger.info(f"Retrying in {wait_time} seconds...")
+                logger.info(f"Temporary error, retrying in {wait_time} seconds...")
                 time.sleep(wait_time)
             else:
-                logger.error(f"All API call attempts failed: {error_str}")
+                logger.error(f"All API call attempts failed: {str(e)}")
                 return None
     
     return None
@@ -487,24 +512,54 @@ def process_single_endpoint_comprehensive(endpoint_name, node_id, rate_limit, lo
                         elif param_source_static not in ['from_mastergames', 'from_masterplayers', 'from_masterteams']:
                             # It's a static value
                             current_params[param_key_static] = param_source_static
+                    elif isinstance(param_source_static, (int, float, bool)):
+                        # Handle numeric and boolean static values (like last_n_games: 30)
+                        current_params[param_key_static] = param_source_static
                     else:
                         # Handle object format
-                        source_type = param_source_static.get('source', 'static')
-                        if source_type == 'static':
-                            current_params[param_key_static] = param_source_static.get('value')
-                        elif source_type in ['from_current_season', 'from_recent_season']:
-                            current_params[param_key_static] = get_current_season()
+                        try:
+                            source_type = param_source_static.get('source', 'static')
+                            if source_type == 'static':
+                                current_params[param_key_static] = param_source_static.get('value')
+                            elif source_type in ['from_current_season', 'from_recent_season']:
+                                current_params[param_key_static] = get_current_season()
+                        except AttributeError:
+                            # If it's not a dict-like object, treat as static value
+                            current_params[param_key_static] = param_source_static
             
             logger.info(f"Parameters for this call: {current_params}")
+            
+            # Validate parameters before making API call
+            is_valid, validation_error = validate_api_parameters(endpoint_name, current_params, logger)
+            if not is_valid:
+                logger.error(f"Parameter validation failed for {main_param_key}={missing_id}: {validation_error}")
+                record_failed_id(conn_manager, failed_ids_table, f"nba_{endpoint_name.lower()}", 
+                                main_param_key, missing_id, f"Parameter validation failed: {validation_error}", logger)
+                total_failed += 1
+                continue
             
             # Make API call for this specific ID
             try:
                 dataframes = make_api_call(endpoint_class, current_params, rate_limit, logger)
                 
+                if dataframes == "PERMANENT_ERROR":
+                    logger.error(f"Permanent API error for {main_param_key}={missing_id} - recording as failed")
+                    record_failed_id(conn_manager, failed_ids_table, f"nba_{endpoint_name.lower()}", 
+                                    main_param_key, missing_id, "Permanent API parameter error", logger)
+                    total_failed += 1
+                    continue
+                
                 if dataframes is None:
                     logger.warning(f"No data returned for {main_param_key}={missing_id}")
                     record_failed_id(conn_manager, failed_ids_table, f"nba_{endpoint_name.lower()}", 
                                     main_param_key, missing_id, "No data returned", logger)
+                    total_failed += 1
+                    continue
+                
+                if not isinstance(dataframes, list) or len(dataframes) == 0:
+                    logger.warning(f"Empty or invalid dataframes for {main_param_key}={missing_id}")
+                    record_failed_id(conn_manager, failed_ids_table, f"nba_{endpoint_name.lower()}", 
+                                    main_param_key, missing_id, "Empty dataframes returned", logger)
                     total_failed += 1
                     continue
                 
@@ -514,9 +569,14 @@ def process_single_endpoint_comprehensive(endpoint_name, node_id, rate_limit, lo
                 
                 for df_index, df in enumerate(dataframes):
                     try:
+                        # Check if dataframe is valid
+                        if df is None or (hasattr(df, 'empty') and df.empty):
+                            logger.warning(f"  Dataframe {df_index} is None or empty, skipping")
+                            continue
+                        
                         # Updated table naming convention - remove "dataframe_"
                         table_name = f"nba_{endpoint_name.lower()}_{df_index}"
-                        logger.info(f"  Processing dataframe {df_index} -> {table_name}")
+                        logger.info(f"  Processing dataframe {df_index} -> {table_name} (shape: {getattr(df, 'shape', 'unknown')})")
                         
                         # Clean dataframe (handles reserved keywords)
                         cleaned_df = allintwo.clean_column_names(df.copy())
@@ -604,9 +664,22 @@ def find_all_missing_ids(endpoint_config, conn_manager, logger):
         # Handle direct string values (e.g., 'game_id': 'from_mastergames')
         if isinstance(param_source, str):
             source_value = param_source
+        elif isinstance(param_source, (int, float, bool)):
+            # Skip numeric/boolean static parameters - they don't need missing ID resolution
+            logger.debug(f"Skipping static parameter {param_key}={param_source}")
+            continue
         else:
             # Handle object format (e.g., 'game_id': {'source': 'from_mastergames'})
-            source_value = param_source.get('source', 'static')
+            try:
+                source_value = param_source.get('source', 'static')
+                if source_value == 'static':
+                    # Skip static parameters
+                    logger.debug(f"Skipping static parameter {param_key}")
+                    continue
+            except AttributeError:
+                # If it's not a dict-like object, skip it
+                logger.debug(f"Skipping non-dict parameter {param_key}={param_source}")
+                continue
         
         if source_value == 'from_mastergames':
             # Find missing game IDs across all leagues
@@ -671,6 +744,53 @@ def get_current_season():
         return f"{now.year}-{str(now.year + 1)[2:]}"
     else:
         return f"{now.year - 1}-{str(now.year)[2:]}"
+
+def validate_api_parameters(endpoint_name, params, logger):
+    """
+    Validate API parameters before making calls to avoid permanent failures
+    
+    Returns:
+        tuple: (is_valid: bool, error_message: str)
+    """
+    try:
+        # Basic validation - check for required parameters
+        if not params:
+            return False, "No parameters provided"
+        
+        # Check for common parameter issues
+        for key, value in params.items():
+            if value is None:
+                return False, f"Parameter {key} is None"
+            
+            # Validate game IDs (should be strings of digits)
+            if 'game_id' in key and isinstance(value, str):
+                if not value.isdigit() or len(value) < 8:
+                    return False, f"Invalid game_id format: {value}"
+            
+            # Validate player IDs (should be integers or digit strings)
+            if 'player_id' in key:
+                try:
+                    player_id = int(value)
+                    if player_id <= 0:
+                        return False, f"Invalid player_id: {value}"
+                except (ValueError, TypeError):
+                    return False, f"player_id must be numeric: {value}"
+            
+            # Validate team IDs (should be integers)
+            if 'team_id' in key:
+                try:
+                    team_id = int(value)
+                    if team_id <= 0:
+                        return False, f"Invalid team_id: {value}"
+                except (ValueError, TypeError):
+                    return False, f"team_id must be numeric: {value}"
+        
+        logger.debug(f"Parameters validated successfully for {endpoint_name}")
+        return True, ""
+        
+    except Exception as e:
+        logger.warning(f"Parameter validation error: {e}")
+        return False, f"Validation error: {str(e)}"
         
         # Process dataframes
         success_count = 0
