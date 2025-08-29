@@ -28,9 +28,9 @@
       "description": "High priority endpoints only",
       "filter": "priority:high",
       "slurm_config": {
-        "time": "12:00:00",
+        "time": "24:00:00",
         "mem_per_cpu": "4GB",
-        "rate_limit": 0.3
+        "rate_limit": 0.6
       }
     },
     "full": {
