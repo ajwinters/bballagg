@@ -1,0 +1,815 @@
+2025-09-01 12:32:58,740 - INFO - === NBA Data Processor Started ===
+2025-09-01 12:32:58,740 - INFO - Node ID: test_comprehensive
+2025-09-01 12:32:58,740 - INFO - Log file: C:\Users\ajwin\Projects\Personal\NBA\thebigone\endpoints\logs\nba_processor_test_comprehensive_20250901_123258.log
+2025-09-01 12:32:58,740 - INFO - Loading database config from: ../config/database_config.json
+2025-09-01 12:32:58,740 - INFO - Database configuration loaded successfully
+2025-09-01 12:32:58,740 - INFO - Starting COMPREHENSIVE processing of endpoint: PlayerDashboardByShootingSplits
+2025-09-01 12:32:58,740 - INFO - Found endpoint config: {'endpoint': 'PlayerDashboardByShootingSplits', 'description': 'Player dashboard by shooting splits (all seasons, all players)', 'parameters': {'player_id': 'from_masterplayers_all_seasons', 'season': 'from_masterplayers_all_seasons'}, 'frequency': 'weekly', 'priority': 'high', 'data_type': 'player_season_cumulative'}
+2025-09-01 12:32:58,740 - INFO - Initializing database connection...
+2025-09-01 12:32:58,740 - INFO - [INIT] RDS Connection Manager initialized with ASCII logging
+2025-09-01 12:32:58,740 - WARNING - [RECONNECT] Connection lost - attempting to reconnect...
+2025-09-01 12:32:58,740 - INFO - [RECONNECT] Reconnection attempt 1/3
+2025-09-01 12:32:58,744 - INFO - [CONNECT] Creating new database connection...
+2025-09-01 12:32:59,038 - INFO - [SUCCESS] Database connection established
+2025-09-01 12:32:59,038 - INFO - [SUCCESS] Reconnection successful
+2025-09-01 12:32:59,038 - INFO - Database connection established successfully
+2025-09-01 12:32:59,038 - INFO - Got endpoint class: <class 'nba_api.stats.endpoints.playerdashboardbyshootingsplits.PlayerDashboardByShootingSplits'>
+2025-09-01 12:32:59,038 - INFO - Finding missing player-season combinations for comprehensive collection...
+2025-09-01 12:32:59,038 - INFO - Processing nba_players for all player-season combinations...
+2025-09-01 12:32:59,165 - INFO - Found 571 player-season combinations in nba_players
+2025-09-01 12:32:59,430 - INFO - Available: 571, Existing: 0, Missing: 571
+2025-09-01 12:32:59,456 - INFO - Processing gleague_players for all player-season combinations...
+2025-09-01 12:32:59,548 - INFO - Found 538 player-season combinations in gleague_players
+2025-09-01 12:32:59,795 - INFO - Available: 538, Existing: 0, Missing: 538
+2025-09-01 12:32:59,825 - INFO - Processing wnba_players for all player-season combinations...
+2025-09-01 12:32:59,915 - INFO - Found 178 player-season combinations in wnba_players
+2025-09-01 12:33:00,166 - INFO - Available: 178, Existing: 0, Missing: 178
+2025-09-01 12:33:00,193 - INFO - Total missing player-season combinations to process: 1287
+2025-09-01 12:33:00,194 - INFO - Sample combinations: [('1631247', '2024-25'), ('1641796', '2024-25'), ('1629021', '2024-25'), ('1641711', '2024-25'), ('1642273', '2024-25')]...
+2025-09-01 12:33:00,194 - INFO - Finding missing player-season combinations for comprehensive collection...
+2025-09-01 12:33:00,194 - INFO - Processing nba_players for all player-season combinations...
+2025-09-01 12:33:00,276 - INFO - Found 571 player-season combinations in nba_players
+2025-09-01 12:33:00,538 - INFO - Available: 571, Existing: 0, Missing: 571
+2025-09-01 12:33:00,566 - INFO - Processing gleague_players for all player-season combinations...
+2025-09-01 12:33:00,649 - INFO - Found 538 player-season combinations in gleague_players
+2025-09-01 12:33:01,014 - INFO - Available: 538, Existing: 0, Missing: 538
+2025-09-01 12:33:01,041 - INFO - Processing wnba_players for all player-season combinations...
+2025-09-01 12:33:01,127 - INFO - Found 178 player-season combinations in wnba_players
+2025-09-01 12:33:01,375 - INFO - Available: 178, Existing: 0, Missing: 178
+2025-09-01 12:33:01,406 - INFO - Total missing player-season combinations to process: 1287
+2025-09-01 12:33:01,406 - INFO - Sample combinations: [('1631247', '2024-25'), ('1641796', '2024-25'), ('1629021', '2024-25'), ('1641711', '2024-25'), ('1642273', '2024-25')]...
+2025-09-01 12:33:01,406 - INFO - Parameter player_season_combinations: 1287 missing IDs to process
+2025-09-01 12:33:01,436 - INFO - Processing 1287 player-season combinations
+2025-09-01 12:33:01,436 - INFO - This will collect historical data for all players across all seasons
+2025-09-01 12:33:01,436 - INFO - Processing 1287 missing IDs for parameter: player_season_combinations
+2025-09-01 12:33:01,438 - INFO - \n--- Processing Player-Season 1/1287: Player 1631247, Season 2024-25 ---
+2025-09-01 12:33:01,438 - INFO - Parameters for this call: {'player_id': '1631247', 'season': '2024-25'}
+2025-09-01 12:33:01,438 - INFO - Making API call (attempt 1/3) with params: {'player_id': '1631247', 'season': '2024-25'}
+2025-09-01 12:33:07,531 - INFO - API call successful - got 8 dataframes
+2025-09-01 12:33:07,566 - INFO - Starting advanced DataFrame matching...
+2025-09-01 12:33:07,566 - INFO - Strategy 1: Column count matching
+2025-09-01 12:33:07,566 - INFO - Strategy 2: Content-based matching
+2025-09-01 12:33:07,566 - INFO - Strategy 3: Row count heuristics
+2025-09-01 12:33:07,566 - INFO - Strategy 4: Remaining name assignment
+2025-09-01 12:33:07,575 - INFO - Final matching complete: ['byhalfplayerdashboard', 'assistedby', 'byperiodplayerdashboard', 'dayplayerdashboard', 'assitedshotplayerdashboard', 'overallplayerdashboard', 'shot5ftplayerdashboard', 'shot8ftplayerdashboard']
+2025-09-01 12:33:07,575 - INFO - Matched dataframe names: ['byhalfplayerdashboard', 'assistedby', 'byperiodplayerdashboard', 'dayplayerdashboard', 'assitedshotplayerdashboard', 'overallplayerdashboard', 'shot5ftplayerdashboard', 'shot8ftplayerdashboard']
+2025-09-01 12:33:07,577 - INFO - Enhanced DataFrame 0 for player 1631247, season 2024-25
+2025-09-01 12:33:07,577 - INFO -   Original shape: (2, 30)
+2025-09-01 12:33:07,577 - INFO -   Enhanced shape: (2, 34)
+2025-09-01 12:33:07,577 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:33:07,577 - INFO - Enhanced DataFrame 1 for player 1631247, season 2024-25
+2025-09-01 12:33:07,577 - INFO -   Original shape: (9, 30)
+2025-09-01 12:33:07,577 - INFO -   Enhanced shape: (9, 34)
+2025-09-01 12:33:07,579 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:33:07,579 - INFO - Enhanced DataFrame 2 for player 1631247, season 2024-25
+2025-09-01 12:33:07,579 - INFO -   Original shape: (5, 30)
+2025-09-01 12:33:07,579 - INFO -   Enhanced shape: (5, 34)
+2025-09-01 12:33:07,580 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:33:07,580 - INFO - Enhanced DataFrame 3 for player 1631247, season 2024-25
+2025-09-01 12:33:07,580 - INFO -   Original shape: (7, 30)
+2025-09-01 12:33:07,580 - INFO -   Enhanced shape: (7, 34)
+2025-09-01 12:33:07,580 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:33:07,581 - INFO - Enhanced DataFrame 4 for player 1631247, season 2024-25
+2025-09-01 12:33:07,581 - INFO -   Original shape: (2, 30)
+2025-09-01 12:33:07,581 - INFO -   Enhanced shape: (2, 34)
+2025-09-01 12:33:07,581 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:33:07,582 - INFO - Enhanced DataFrame 5 for player 1631247, season 2024-25
+2025-09-01 12:33:07,582 - INFO -   Original shape: (26, 16)
+2025-09-01 12:33:07,582 - INFO -   Enhanced shape: (26, 20)
+2025-09-01 12:33:07,582 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:33:07,583 - INFO - Enhanced DataFrame 6 for player 1631247, season 2024-25
+2025-09-01 12:33:07,583 - INFO -   Original shape: (45, 30)
+2025-09-01 12:33:07,583 - INFO -   Enhanced shape: (45, 34)
+2025-09-01 12:33:07,583 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:33:07,584 - INFO - Enhanced DataFrame 7 for player 1631247, season 2024-25
+2025-09-01 12:33:07,584 - INFO -   Original shape: (17, 31)
+2025-09-01 12:33:07,584 - INFO -   Enhanced shape: (17, 35)
+2025-09-01 12:33:07,584 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:33:07,584 - INFO - Successfully enhanced 8 DataFrames
+2025-09-01 12:33:07,585 - INFO -   Processing dataframe 0 (byhalfplayerdashboard) -> nba_playerdashboardbyshootingsplits_byhalfplayerdashboard
+2025-09-01 12:33:07,585 - INFO -     Shape: (2, 34)
+2025-09-01 12:33:07,586 - INFO - Validation passed: 2 rows for player 1631247, season 2024-25
+2025-09-01 12:33:07,644 - INFO - Creating table: nba_playerdashboardbyshootingsplits_byhalfplayerdashboard
+2025-09-01 12:33:07,725 - INFO - Inserting 2 rows into nba_playerdashboardbyshootingsplits_byhalfplayerdashboard
+2025-09-01 12:33:07,815 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_byhalfplayerdashboard
+2025-09-01 12:33:07,815 - INFO -   Processing dataframe 1 (assistedby) -> nba_playerdashboardbyshootingsplits_assistedby
+2025-09-01 12:33:07,815 - INFO -     Shape: (9, 34)
+2025-09-01 12:33:07,815 - INFO - Validation passed: 9 rows for player 1631247, season 2024-25
+2025-09-01 12:33:07,866 - INFO - Inserting 9 rows into nba_playerdashboardbyshootingsplits_assistedby
+2025-09-01 12:33:07,925 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_assistedby
+2025-09-01 12:33:07,925 - INFO -   Processing dataframe 2 (byperiodplayerdashboard) -> nba_playerdashboardbyshootingsplits_byperiodplayerdashboard
+2025-09-01 12:33:07,925 - INFO -     Shape: (5, 34)
+2025-09-01 12:33:07,925 - INFO - Validation passed: 5 rows for player 1631247, season 2024-25
+2025-09-01 12:33:07,982 - INFO - Creating table: nba_playerdashboardbyshootingsplits_byperiodplayerdashboard
+2025-09-01 12:33:08,036 - INFO - Inserting 5 rows into nba_playerdashboardbyshootingsplits_byperiodplayerdashboard
+2025-09-01 12:33:08,125 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_byperiodplayerdashboard
+2025-09-01 12:33:08,125 - INFO -   Processing dataframe 3 (dayplayerdashboard) -> nba_playerdashboardbyshootingsplits_dayplayerdashboard
+2025-09-01 12:33:08,125 - INFO -     Shape: (7, 34)
+2025-09-01 12:33:08,125 - INFO - Validation passed: 7 rows for player 1631247, season 2024-25
+2025-09-01 12:33:08,181 - INFO - Creating table: nba_playerdashboardbyshootingsplits_dayplayerdashboard
+2025-09-01 12:33:08,243 - INFO - Inserting 7 rows into nba_playerdashboardbyshootingsplits_dayplayerdashboard
+2025-09-01 12:33:08,335 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_dayplayerdashboard
+2025-09-01 12:33:08,335 - INFO -   Processing dataframe 4 (assitedshotplayerdashboard) -> nba_playerdashboardbyshootingsplits_assitedshotplayerdashboard
+2025-09-01 12:33:08,335 - INFO -     Shape: (2, 34)
+2025-09-01 12:33:08,336 - INFO - Validation passed: 2 rows for player 1631247, season 2024-25
+2025-09-01 12:33:08,385 - INFO - Inserting 2 rows into nba_playerdashboardbyshootingsplits_assitedshotplayerdashboard
+2025-09-01 12:33:08,446 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_assitedshotplayerdashboard
+2025-09-01 12:33:08,446 - INFO -   Processing dataframe 5 (overallplayerdashboard) -> nba_playerdashboardbyshootingsplits_overallplayerdashboard
+2025-09-01 12:33:08,446 - INFO -     Shape: (26, 20)
+2025-09-01 12:33:08,447 - INFO - Validation passed: 26 rows for player 1631247, season 2024-25
+2025-09-01 12:33:08,498 - INFO - Inserting 26 rows into nba_playerdashboardbyshootingsplits_overallplayerdashboard
+2025-09-01 12:33:08,565 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_overallplayerdashboard
+2025-09-01 12:33:08,565 - INFO -   Processing dataframe 6 (shot5ftplayerdashboard) -> nba_playerdashboardbyshootingsplits_shot5ftplayerdashboard
+2025-09-01 12:33:08,565 - INFO -     Shape: (45, 34)
+2025-09-01 12:33:08,565 - INFO - Validation passed: 45 rows for player 1631247, season 2024-25
+2025-09-01 12:33:08,622 - INFO - Inserting 45 rows into nba_playerdashboardbyshootingsplits_shot5ftplayerdashboard
+2025-09-01 12:33:08,686 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_shot5ftplayerdashboard
+2025-09-01 12:33:08,686 - INFO -   Processing dataframe 7 (shot8ftplayerdashboard) -> nba_playerdashboardbyshootingsplits_shot8ftplayerdashboard
+2025-09-01 12:33:08,686 - INFO -     Shape: (17, 35)
+2025-09-01 12:33:08,686 - INFO - Validation passed: 17 rows for player 1631247, season 2024-25
+2025-09-01 12:33:08,735 - INFO - Inserting 17 rows into nba_playerdashboardbyshootingsplits_shot8ftplayerdashboard
+2025-09-01 12:33:08,806 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_shot8ftplayerdashboard
+2025-09-01 12:33:08,806 - INFO - Successfully processed Player 1631247, Season 2024-25 (8 dataframes)
+2025-09-01 12:33:09,807 - INFO - \n--- Processing Player-Season 2/1287: Player 1641796, Season 2024-25 ---
+2025-09-01 12:33:09,807 - INFO - Parameters for this call: {'player_id': '1641796', 'season': '2024-25'}
+2025-09-01 12:33:09,807 - INFO - Making API call (attempt 1/3) with params: {'player_id': '1641796', 'season': '2024-25'}
+2025-09-01 12:33:16,596 - INFO - API call successful - got 8 dataframes
+2025-09-01 12:33:16,635 - INFO - Starting advanced DataFrame matching...
+2025-09-01 12:33:16,635 - INFO - Strategy 1: Column count matching
+2025-09-01 12:33:16,635 - INFO - Strategy 2: Content-based matching
+2025-09-01 12:33:16,635 - INFO - Strategy 3: Row count heuristics
+2025-09-01 12:33:16,635 - INFO - Strategy 4: Remaining name assignment
+2025-09-01 12:33:16,643 - INFO - Final matching complete: ['byhalfplayerdashboard', 'assistedby', 'byperiodplayerdashboard', 'dayplayerdashboard', 'assitedshotplayerdashboard', 'overallplayerdashboard', 'shot5ftplayerdashboard', 'shot8ftplayerdashboard']
+2025-09-01 12:33:16,643 - INFO - Matched dataframe names: ['byhalfplayerdashboard', 'assistedby', 'byperiodplayerdashboard', 'dayplayerdashboard', 'assitedshotplayerdashboard', 'overallplayerdashboard', 'shot5ftplayerdashboard', 'shot8ftplayerdashboard']
+2025-09-01 12:33:16,644 - INFO - Enhanced DataFrame 0 for player 1641796, season 2024-25
+2025-09-01 12:33:16,644 - INFO -   Original shape: (2, 30)
+2025-09-01 12:33:16,644 - INFO -   Enhanced shape: (2, 34)
+2025-09-01 12:33:16,645 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:33:16,646 - INFO - Enhanced DataFrame 1 for player 1641796, season 2024-25
+2025-09-01 12:33:16,646 - INFO -   Original shape: (9, 30)
+2025-09-01 12:33:16,646 - INFO -   Enhanced shape: (9, 34)
+2025-09-01 12:33:16,646 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:33:16,646 - INFO - Enhanced DataFrame 2 for player 1641796, season 2024-25
+2025-09-01 12:33:16,647 - INFO -   Original shape: (5, 30)
+2025-09-01 12:33:16,647 - INFO -   Enhanced shape: (5, 34)
+2025-09-01 12:33:16,647 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:33:16,647 - INFO - Enhanced DataFrame 3 for player 1641796, season 2024-25
+2025-09-01 12:33:16,647 - INFO -   Original shape: (7, 30)
+2025-09-01 12:33:16,647 - INFO -   Enhanced shape: (7, 34)
+2025-09-01 12:33:16,648 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:33:16,648 - INFO - Enhanced DataFrame 4 for player 1641796, season 2024-25
+2025-09-01 12:33:16,648 - INFO -   Original shape: (2, 30)
+2025-09-01 12:33:16,648 - INFO -   Enhanced shape: (2, 34)
+2025-09-01 12:33:16,648 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:33:16,649 - INFO - Enhanced DataFrame 5 for player 1641796, season 2024-25
+2025-09-01 12:33:16,649 - INFO -   Original shape: (35, 16)
+2025-09-01 12:33:16,649 - INFO -   Enhanced shape: (35, 20)
+2025-09-01 12:33:16,649 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:33:16,650 - INFO - Enhanced DataFrame 6 for player 1641796, season 2024-25
+2025-09-01 12:33:16,650 - INFO -   Original shape: (44, 30)
+2025-09-01 12:33:16,650 - INFO -   Enhanced shape: (44, 34)
+2025-09-01 12:33:16,650 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:33:16,650 - INFO - Enhanced DataFrame 7 for player 1641796, season 2024-25
+2025-09-01 12:33:16,650 - INFO -   Original shape: (19, 31)
+2025-09-01 12:33:16,650 - INFO -   Enhanced shape: (19, 35)
+2025-09-01 12:33:16,650 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:33:16,650 - INFO - Successfully enhanced 8 DataFrames
+2025-09-01 12:33:16,652 - INFO -   Processing dataframe 0 (byhalfplayerdashboard) -> nba_playerdashboardbyshootingsplits_byhalfplayerdashboard
+2025-09-01 12:33:16,652 - INFO -     Shape: (2, 34)
+2025-09-01 12:33:16,653 - INFO - Validation passed: 2 rows for player 1641796, season 2024-25
+2025-09-01 12:33:16,717 - INFO - Inserting 2 rows into nba_playerdashboardbyshootingsplits_byhalfplayerdashboard
+2025-09-01 12:33:16,771 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_byhalfplayerdashboard
+2025-09-01 12:33:16,771 - INFO -   Processing dataframe 1 (assistedby) -> nba_playerdashboardbyshootingsplits_assistedby
+2025-09-01 12:33:16,771 - INFO -     Shape: (9, 34)
+2025-09-01 12:33:16,771 - INFO - Validation passed: 9 rows for player 1641796, season 2024-25
+2025-09-01 12:33:16,826 - INFO - Inserting 9 rows into nba_playerdashboardbyshootingsplits_assistedby
+2025-09-01 12:33:16,889 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_assistedby
+2025-09-01 12:33:16,889 - INFO -   Processing dataframe 2 (byperiodplayerdashboard) -> nba_playerdashboardbyshootingsplits_byperiodplayerdashboard
+2025-09-01 12:33:16,889 - INFO -     Shape: (5, 34)
+2025-09-01 12:33:16,889 - INFO - Validation passed: 5 rows for player 1641796, season 2024-25
+2025-09-01 12:33:16,947 - INFO - Inserting 5 rows into nba_playerdashboardbyshootingsplits_byperiodplayerdashboard
+2025-09-01 12:33:17,003 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_byperiodplayerdashboard
+2025-09-01 12:33:17,003 - INFO -   Processing dataframe 3 (dayplayerdashboard) -> nba_playerdashboardbyshootingsplits_dayplayerdashboard
+2025-09-01 12:33:17,003 - INFO -     Shape: (7, 34)
+2025-09-01 12:33:17,003 - INFO - Validation passed: 7 rows for player 1641796, season 2024-25
+2025-09-01 12:33:17,059 - INFO - Inserting 7 rows into nba_playerdashboardbyshootingsplits_dayplayerdashboard
+2025-09-01 12:33:17,115 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_dayplayerdashboard
+2025-09-01 12:33:17,115 - INFO -   Processing dataframe 4 (assitedshotplayerdashboard) -> nba_playerdashboardbyshootingsplits_assitedshotplayerdashboard
+2025-09-01 12:33:17,115 - INFO -     Shape: (2, 34)
+2025-09-01 12:33:17,115 - INFO - Validation passed: 2 rows for player 1641796, season 2024-25
+2025-09-01 12:33:17,169 - INFO - Inserting 2 rows into nba_playerdashboardbyshootingsplits_assitedshotplayerdashboard
+2025-09-01 12:33:17,228 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_assitedshotplayerdashboard
+2025-09-01 12:33:17,228 - INFO -   Processing dataframe 5 (overallplayerdashboard) -> nba_playerdashboardbyshootingsplits_overallplayerdashboard
+2025-09-01 12:33:17,228 - INFO -     Shape: (35, 20)
+2025-09-01 12:33:17,228 - INFO - Validation passed: 35 rows for player 1641796, season 2024-25
+2025-09-01 12:33:17,285 - INFO - Inserting 35 rows into nba_playerdashboardbyshootingsplits_overallplayerdashboard
+2025-09-01 12:33:17,355 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_overallplayerdashboard
+2025-09-01 12:33:17,355 - INFO -   Processing dataframe 6 (shot5ftplayerdashboard) -> nba_playerdashboardbyshootingsplits_shot5ftplayerdashboard
+2025-09-01 12:33:17,355 - INFO -     Shape: (44, 34)
+2025-09-01 12:33:17,355 - INFO - Validation passed: 44 rows for player 1641796, season 2024-25
+2025-09-01 12:33:17,415 - INFO - Inserting 44 rows into nba_playerdashboardbyshootingsplits_shot5ftplayerdashboard
+2025-09-01 12:33:17,485 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_shot5ftplayerdashboard
+2025-09-01 12:33:17,485 - INFO -   Processing dataframe 7 (shot8ftplayerdashboard) -> nba_playerdashboardbyshootingsplits_shot8ftplayerdashboard
+2025-09-01 12:33:17,485 - INFO -     Shape: (19, 35)
+2025-09-01 12:33:17,485 - INFO - Validation passed: 19 rows for player 1641796, season 2024-25
+2025-09-01 12:33:17,543 - INFO - Inserting 19 rows into nba_playerdashboardbyshootingsplits_shot8ftplayerdashboard
+2025-09-01 12:33:17,605 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_shot8ftplayerdashboard
+2025-09-01 12:33:17,605 - INFO - Successfully processed Player 1641796, Season 2024-25 (8 dataframes)
+2025-09-01 12:33:18,608 - INFO - \n--- Processing Player-Season 3/1287: Player 1629021, Season 2024-25 ---
+2025-09-01 12:33:18,608 - INFO - Parameters for this call: {'player_id': '1629021', 'season': '2024-25'}
+2025-09-01 12:33:18,608 - INFO - Making API call (attempt 1/3) with params: {'player_id': '1629021', 'season': '2024-25'}
+2025-09-01 12:33:23,865 - INFO - API call successful - got 8 dataframes
+2025-09-01 12:33:23,915 - INFO - Starting advanced DataFrame matching...
+2025-09-01 12:33:23,915 - INFO - Strategy 1: Column count matching
+2025-09-01 12:33:23,915 - INFO - Strategy 2: Content-based matching
+2025-09-01 12:33:23,915 - INFO - Strategy 3: Row count heuristics
+2025-09-01 12:33:23,921 - INFO - Strategy 4: Remaining name assignment
+2025-09-01 12:33:23,924 - INFO - Final matching complete: ['overallplayerdashboard', 'assistedby', 'byperiodplayerdashboard', 'dayplayerdashboard', 'byhalfplayerdashboard', 'assitedshotplayerdashboard', 'shot5ftplayerdashboard', 'shot8ftplayerdashboard']
+2025-09-01 12:33:23,924 - INFO - Matched dataframe names: ['overallplayerdashboard', 'assistedby', 'byperiodplayerdashboard', 'dayplayerdashboard', 'byhalfplayerdashboard', 'assitedshotplayerdashboard', 'shot5ftplayerdashboard', 'shot8ftplayerdashboard']
+2025-09-01 12:33:23,926 - INFO - Enhanced DataFrame 0 for player 1629021, season 2024-25
+2025-09-01 12:33:23,926 - INFO -   Original shape: (1, 30)
+2025-09-01 12:33:23,926 - INFO -   Enhanced shape: (1, 34)
+2025-09-01 12:33:23,926 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:33:23,927 - INFO - Enhanced DataFrame 1 for player 1629021, season 2024-25
+2025-09-01 12:33:23,927 - INFO -   Original shape: (9, 30)
+2025-09-01 12:33:23,927 - INFO -   Enhanced shape: (9, 34)
+2025-09-01 12:33:23,927 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:33:23,927 - INFO - Enhanced DataFrame 2 for player 1629021, season 2024-25
+2025-09-01 12:33:23,927 - INFO -   Original shape: (5, 30)
+2025-09-01 12:33:23,927 - INFO -   Enhanced shape: (5, 34)
+2025-09-01 12:33:23,927 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:33:23,928 - INFO - Enhanced DataFrame 3 for player 1629021, season 2024-25
+2025-09-01 12:33:23,928 - INFO -   Original shape: (7, 30)
+2025-09-01 12:33:23,928 - INFO -   Enhanced shape: (7, 34)
+2025-09-01 12:33:23,928 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:33:23,928 - INFO - Enhanced DataFrame 4 for player 1629021, season 2024-25
+2025-09-01 12:33:23,928 - INFO -   Original shape: (2, 30)
+2025-09-01 12:33:23,929 - INFO -   Enhanced shape: (2, 34)
+2025-09-01 12:33:23,929 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:33:23,929 - INFO - Enhanced DataFrame 5 for player 1629021, season 2024-25
+2025-09-01 12:33:23,929 - INFO -   Original shape: (9, 16)
+2025-09-01 12:33:23,929 - INFO -   Enhanced shape: (9, 20)
+2025-09-01 12:33:23,929 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:33:23,930 - INFO - Enhanced DataFrame 6 for player 1629021, season 2024-25
+2025-09-01 12:33:23,930 - INFO -   Original shape: (47, 30)
+2025-09-01 12:33:23,930 - INFO -   Enhanced shape: (47, 34)
+2025-09-01 12:33:23,931 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:33:23,931 - INFO - Enhanced DataFrame 7 for player 1629021, season 2024-25
+2025-09-01 12:33:23,931 - INFO -   Original shape: (10, 31)
+2025-09-01 12:33:23,931 - INFO -   Enhanced shape: (10, 35)
+2025-09-01 12:33:23,931 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:33:23,931 - INFO - Successfully enhanced 8 DataFrames
+2025-09-01 12:33:23,932 - INFO -   Processing dataframe 0 (overallplayerdashboard) -> nba_playerdashboardbyshootingsplits_overallplayerdashboard
+2025-09-01 12:33:23,932 - INFO -     Shape: (1, 34)
+2025-09-01 12:33:23,932 - INFO - Validation passed: 1 rows for player 1629021, season 2024-25
+2025-09-01 12:33:23,996 - INFO - Inserting 1 rows into nba_playerdashboardbyshootingsplits_overallplayerdashboard
+2025-09-01 12:33:24,051 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_overallplayerdashboard
+2025-09-01 12:33:24,051 - INFO -   Processing dataframe 1 (assistedby) -> nba_playerdashboardbyshootingsplits_assistedby
+2025-09-01 12:33:24,051 - INFO -     Shape: (9, 34)
+2025-09-01 12:33:24,051 - INFO - Validation passed: 9 rows for player 1629021, season 2024-25
+2025-09-01 12:33:24,106 - INFO - Inserting 9 rows into nba_playerdashboardbyshootingsplits_assistedby
+2025-09-01 12:33:24,163 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_assistedby
+2025-09-01 12:33:24,163 - INFO -   Processing dataframe 2 (byperiodplayerdashboard) -> nba_playerdashboardbyshootingsplits_byperiodplayerdashboard
+2025-09-01 12:33:24,163 - INFO -     Shape: (5, 34)
+2025-09-01 12:33:24,164 - INFO - Validation passed: 5 rows for player 1629021, season 2024-25
+2025-09-01 12:33:24,215 - INFO - Inserting 5 rows into nba_playerdashboardbyshootingsplits_byperiodplayerdashboard
+2025-09-01 12:33:24,276 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_byperiodplayerdashboard
+2025-09-01 12:33:24,276 - INFO -   Processing dataframe 3 (dayplayerdashboard) -> nba_playerdashboardbyshootingsplits_dayplayerdashboard
+2025-09-01 12:33:24,276 - INFO -     Shape: (7, 34)
+2025-09-01 12:33:24,276 - INFO - Validation passed: 7 rows for player 1629021, season 2024-25
+2025-09-01 12:33:24,335 - INFO - Inserting 7 rows into nba_playerdashboardbyshootingsplits_dayplayerdashboard
+2025-09-01 12:33:24,386 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_dayplayerdashboard
+2025-09-01 12:33:24,386 - INFO -   Processing dataframe 4 (byhalfplayerdashboard) -> nba_playerdashboardbyshootingsplits_byhalfplayerdashboard
+2025-09-01 12:33:24,386 - INFO -     Shape: (2, 34)
+2025-09-01 12:33:24,392 - INFO - Validation passed: 2 rows for player 1629021, season 2024-25
+2025-09-01 12:33:24,448 - INFO - Inserting 2 rows into nba_playerdashboardbyshootingsplits_byhalfplayerdashboard
+2025-09-01 12:33:24,503 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_byhalfplayerdashboard
+2025-09-01 12:33:24,503 - INFO -   Processing dataframe 5 (assitedshotplayerdashboard) -> nba_playerdashboardbyshootingsplits_assitedshotplayerdashboard
+2025-09-01 12:33:24,503 - INFO -     Shape: (9, 20)
+2025-09-01 12:33:24,504 - INFO - Validation passed: 9 rows for player 1629021, season 2024-25
+2025-09-01 12:33:24,559 - INFO - Inserting 9 rows into nba_playerdashboardbyshootingsplits_assitedshotplayerdashboard
+2025-09-01 12:33:24,615 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_assitedshotplayerdashboard
+2025-09-01 12:33:24,615 - INFO -   Processing dataframe 6 (shot5ftplayerdashboard) -> nba_playerdashboardbyshootingsplits_shot5ftplayerdashboard
+2025-09-01 12:33:24,615 - INFO -     Shape: (47, 34)
+2025-09-01 12:33:24,615 - INFO - Validation passed: 47 rows for player 1629021, season 2024-25
+2025-09-01 12:33:24,665 - INFO - Inserting 47 rows into nba_playerdashboardbyshootingsplits_shot5ftplayerdashboard
+2025-09-01 12:33:24,735 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_shot5ftplayerdashboard
+2025-09-01 12:33:24,735 - INFO -   Processing dataframe 7 (shot8ftplayerdashboard) -> nba_playerdashboardbyshootingsplits_shot8ftplayerdashboard
+2025-09-01 12:33:24,736 - INFO -     Shape: (10, 35)
+2025-09-01 12:33:24,736 - INFO - Validation passed: 10 rows for player 1629021, season 2024-25
+2025-09-01 12:33:24,787 - INFO - Inserting 10 rows into nba_playerdashboardbyshootingsplits_shot8ftplayerdashboard
+2025-09-01 12:33:24,855 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_shot8ftplayerdashboard
+2025-09-01 12:33:24,855 - INFO - Successfully processed Player 1629021, Season 2024-25 (8 dataframes)
+2025-09-01 12:33:25,856 - INFO - \n--- Processing Player-Season 4/1287: Player 1641711, Season 2024-25 ---
+2025-09-01 12:33:25,856 - INFO - Parameters for this call: {'player_id': '1641711', 'season': '2024-25'}
+2025-09-01 12:33:25,856 - INFO - Making API call (attempt 1/3) with params: {'player_id': '1641711', 'season': '2024-25'}
+2025-09-01 12:33:32,046 - INFO - API call successful - got 8 dataframes
+2025-09-01 12:33:32,086 - INFO - Starting advanced DataFrame matching...
+2025-09-01 12:33:32,086 - INFO - Strategy 1: Column count matching
+2025-09-01 12:33:32,086 - INFO - Strategy 2: Content-based matching
+2025-09-01 12:33:32,090 - INFO - Strategy 3: Row count heuristics
+2025-09-01 12:33:32,092 - INFO - Strategy 4: Remaining name assignment
+2025-09-01 12:33:32,096 - INFO - Final matching complete: ['byhalfplayerdashboard', 'assistedby', 'byperiodplayerdashboard', 'dayplayerdashboard', 'assitedshotplayerdashboard', 'overallplayerdashboard', 'shot5ftplayerdashboard', 'shot8ftplayerdashboard']
+2025-09-01 12:33:32,096 - INFO - Matched dataframe names: ['byhalfplayerdashboard', 'assistedby', 'byperiodplayerdashboard', 'dayplayerdashboard', 'assitedshotplayerdashboard', 'overallplayerdashboard', 'shot5ftplayerdashboard', 'shot8ftplayerdashboard']
+2025-09-01 12:33:32,098 - INFO - Enhanced DataFrame 0 for player 1641711, season 2024-25
+2025-09-01 12:33:32,098 - INFO -   Original shape: (2, 30)
+2025-09-01 12:33:32,098 - INFO -   Enhanced shape: (2, 34)
+2025-09-01 12:33:32,098 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:33:32,099 - INFO - Enhanced DataFrame 1 for player 1641711, season 2024-25
+2025-09-01 12:33:32,099 - INFO -   Original shape: (9, 30)
+2025-09-01 12:33:32,099 - INFO -   Enhanced shape: (9, 34)
+2025-09-01 12:33:32,099 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:33:32,100 - INFO - Enhanced DataFrame 2 for player 1641711, season 2024-25
+2025-09-01 12:33:32,100 - INFO -   Original shape: (5, 30)
+2025-09-01 12:33:32,100 - INFO -   Enhanced shape: (5, 34)
+2025-09-01 12:33:32,100 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:33:32,100 - INFO - Enhanced DataFrame 3 for player 1641711, season 2024-25
+2025-09-01 12:33:32,100 - INFO -   Original shape: (7, 30)
+2025-09-01 12:33:32,100 - INFO -   Enhanced shape: (7, 34)
+2025-09-01 12:33:32,101 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:33:32,101 - INFO - Enhanced DataFrame 4 for player 1641711, season 2024-25
+2025-09-01 12:33:32,101 - INFO -   Original shape: (2, 30)
+2025-09-01 12:33:32,101 - INFO -   Enhanced shape: (2, 34)
+2025-09-01 12:33:32,101 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:33:32,102 - INFO - Enhanced DataFrame 5 for player 1641711, season 2024-25
+2025-09-01 12:33:32,102 - INFO -   Original shape: (18, 16)
+2025-09-01 12:33:32,102 - INFO -   Enhanced shape: (18, 20)
+2025-09-01 12:33:32,102 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:33:32,102 - INFO - Enhanced DataFrame 6 for player 1641711, season 2024-25
+2025-09-01 12:33:32,103 - INFO -   Original shape: (46, 30)
+2025-09-01 12:33:32,103 - INFO -   Enhanced shape: (46, 34)
+2025-09-01 12:33:32,103 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:33:32,103 - INFO - Enhanced DataFrame 7 for player 1641711, season 2024-25
+2025-09-01 12:33:32,103 - INFO -   Original shape: (18, 31)
+2025-09-01 12:33:32,103 - INFO -   Enhanced shape: (18, 35)
+2025-09-01 12:33:32,103 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:33:32,103 - INFO - Successfully enhanced 8 DataFrames
+2025-09-01 12:33:32,105 - INFO -   Processing dataframe 0 (byhalfplayerdashboard) -> nba_playerdashboardbyshootingsplits_byhalfplayerdashboard
+2025-09-01 12:33:32,105 - INFO -     Shape: (2, 34)
+2025-09-01 12:33:32,105 - INFO - Validation passed: 2 rows for player 1641711, season 2024-25
+2025-09-01 12:33:32,165 - INFO - Inserting 2 rows into nba_playerdashboardbyshootingsplits_byhalfplayerdashboard
+2025-09-01 12:33:32,220 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_byhalfplayerdashboard
+2025-09-01 12:33:32,220 - INFO -   Processing dataframe 1 (assistedby) -> nba_playerdashboardbyshootingsplits_assistedby
+2025-09-01 12:33:32,220 - INFO -     Shape: (9, 34)
+2025-09-01 12:33:32,220 - INFO - Validation passed: 9 rows for player 1641711, season 2024-25
+2025-09-01 12:33:32,275 - INFO - Inserting 9 rows into nba_playerdashboardbyshootingsplits_assistedby
+2025-09-01 12:33:32,331 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_assistedby
+2025-09-01 12:33:32,332 - INFO -   Processing dataframe 2 (byperiodplayerdashboard) -> nba_playerdashboardbyshootingsplits_byperiodplayerdashboard
+2025-09-01 12:33:32,332 - INFO -     Shape: (5, 34)
+2025-09-01 12:33:32,332 - INFO - Validation passed: 5 rows for player 1641711, season 2024-25
+2025-09-01 12:33:32,385 - INFO - Inserting 5 rows into nba_playerdashboardbyshootingsplits_byperiodplayerdashboard
+2025-09-01 12:33:32,444 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_byperiodplayerdashboard
+2025-09-01 12:33:32,444 - INFO -   Processing dataframe 3 (dayplayerdashboard) -> nba_playerdashboardbyshootingsplits_dayplayerdashboard
+2025-09-01 12:33:32,444 - INFO -     Shape: (7, 34)
+2025-09-01 12:33:32,444 - INFO - Validation passed: 7 rows for player 1641711, season 2024-25
+2025-09-01 12:33:32,508 - INFO - Inserting 7 rows into nba_playerdashboardbyshootingsplits_dayplayerdashboard
+2025-09-01 12:33:32,565 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_dayplayerdashboard
+2025-09-01 12:33:32,565 - INFO -   Processing dataframe 4 (assitedshotplayerdashboard) -> nba_playerdashboardbyshootingsplits_assitedshotplayerdashboard
+2025-09-01 12:33:32,565 - INFO -     Shape: (2, 34)
+2025-09-01 12:33:32,565 - INFO - Validation passed: 2 rows for player 1641711, season 2024-25
+2025-09-01 12:33:32,631 - INFO - Inserting 2 rows into nba_playerdashboardbyshootingsplits_assitedshotplayerdashboard
+2025-09-01 12:33:32,687 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_assitedshotplayerdashboard
+2025-09-01 12:33:32,687 - INFO -   Processing dataframe 5 (overallplayerdashboard) -> nba_playerdashboardbyshootingsplits_overallplayerdashboard
+2025-09-01 12:33:32,687 - INFO -     Shape: (18, 20)
+2025-09-01 12:33:32,688 - INFO - Validation passed: 18 rows for player 1641711, season 2024-25
+2025-09-01 12:33:32,744 - INFO - Inserting 18 rows into nba_playerdashboardbyshootingsplits_overallplayerdashboard
+2025-09-01 12:33:32,800 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_overallplayerdashboard
+2025-09-01 12:33:32,800 - INFO -   Processing dataframe 6 (shot5ftplayerdashboard) -> nba_playerdashboardbyshootingsplits_shot5ftplayerdashboard
+2025-09-01 12:33:32,800 - INFO -     Shape: (46, 34)
+2025-09-01 12:33:32,800 - INFO - Validation passed: 46 rows for player 1641711, season 2024-25
+2025-09-01 12:33:32,856 - INFO - Inserting 46 rows into nba_playerdashboardbyshootingsplits_shot5ftplayerdashboard
+2025-09-01 12:33:32,919 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_shot5ftplayerdashboard
+2025-09-01 12:33:32,919 - INFO -   Processing dataframe 7 (shot8ftplayerdashboard) -> nba_playerdashboardbyshootingsplits_shot8ftplayerdashboard
+2025-09-01 12:33:32,919 - INFO -     Shape: (18, 35)
+2025-09-01 12:33:32,919 - INFO - Validation passed: 18 rows for player 1641711, season 2024-25
+2025-09-01 12:33:32,979 - INFO - Inserting 18 rows into nba_playerdashboardbyshootingsplits_shot8ftplayerdashboard
+2025-09-01 12:33:33,042 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_shot8ftplayerdashboard
+2025-09-01 12:33:33,042 - INFO - Successfully processed Player 1641711, Season 2024-25 (8 dataframes)
+2025-09-01 12:33:34,044 - INFO - \n--- Processing Player-Season 5/1287: Player 1642273, Season 2024-25 ---
+2025-09-01 12:33:34,044 - INFO - Parameters for this call: {'player_id': '1642273', 'season': '2024-25'}
+2025-09-01 12:33:34,044 - INFO - Making API call (attempt 1/3) with params: {'player_id': '1642273', 'season': '2024-25'}
+2025-09-01 12:33:41,978 - INFO - API call successful - got 8 dataframes
+2025-09-01 12:33:42,008 - INFO - Starting advanced DataFrame matching...
+2025-09-01 12:33:42,008 - INFO - Strategy 1: Column count matching
+2025-09-01 12:33:42,008 - INFO - Strategy 2: Content-based matching
+2025-09-01 12:33:42,014 - INFO - Strategy 3: Row count heuristics
+2025-09-01 12:33:42,015 - INFO - Strategy 4: Remaining name assignment
+2025-09-01 12:33:42,020 - INFO - Final matching complete: ['byhalfplayerdashboard', 'assistedby', 'byperiodplayerdashboard', 'dayplayerdashboard', 'assitedshotplayerdashboard', 'overallplayerdashboard', 'shot5ftplayerdashboard', 'shot8ftplayerdashboard']
+2025-09-01 12:33:42,020 - INFO - Matched dataframe names: ['byhalfplayerdashboard', 'assistedby', 'byperiodplayerdashboard', 'dayplayerdashboard', 'assitedshotplayerdashboard', 'overallplayerdashboard', 'shot5ftplayerdashboard', 'shot8ftplayerdashboard']
+2025-09-01 12:33:42,022 - INFO - Enhanced DataFrame 0 for player 1642273, season 2024-25
+2025-09-01 12:33:42,022 - INFO -   Original shape: (2, 30)
+2025-09-01 12:33:42,022 - INFO -   Enhanced shape: (2, 34)
+2025-09-01 12:33:42,022 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:33:42,023 - INFO - Enhanced DataFrame 1 for player 1642273, season 2024-25
+2025-09-01 12:33:42,023 - INFO -   Original shape: (9, 30)
+2025-09-01 12:33:42,023 - INFO -   Enhanced shape: (9, 34)
+2025-09-01 12:33:42,023 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:33:42,023 - INFO - Enhanced DataFrame 2 for player 1642273, season 2024-25
+2025-09-01 12:33:42,024 - INFO -   Original shape: (5, 30)
+2025-09-01 12:33:42,024 - INFO -   Enhanced shape: (5, 34)
+2025-09-01 12:33:42,024 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:33:42,024 - INFO - Enhanced DataFrame 3 for player 1642273, season 2024-25
+2025-09-01 12:33:42,024 - INFO -   Original shape: (7, 30)
+2025-09-01 12:33:42,024 - INFO -   Enhanced shape: (7, 34)
+2025-09-01 12:33:42,024 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:33:42,025 - INFO - Enhanced DataFrame 4 for player 1642273, season 2024-25
+2025-09-01 12:33:42,025 - INFO -   Original shape: (2, 30)
+2025-09-01 12:33:42,025 - INFO -   Enhanced shape: (2, 34)
+2025-09-01 12:33:42,025 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:33:42,026 - INFO - Enhanced DataFrame 5 for player 1642273, season 2024-25
+2025-09-01 12:33:42,026 - INFO -   Original shape: (18, 16)
+2025-09-01 12:33:42,026 - INFO -   Enhanced shape: (18, 20)
+2025-09-01 12:33:42,026 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:33:42,026 - INFO - Enhanced DataFrame 6 for player 1642273, season 2024-25
+2025-09-01 12:33:42,026 - INFO -   Original shape: (47, 30)
+2025-09-01 12:33:42,027 - INFO -   Enhanced shape: (47, 34)
+2025-09-01 12:33:42,027 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:33:42,027 - INFO - Enhanced DataFrame 7 for player 1642273, season 2024-25
+2025-09-01 12:33:42,027 - INFO -   Original shape: (21, 31)
+2025-09-01 12:33:42,027 - INFO -   Enhanced shape: (21, 35)
+2025-09-01 12:33:42,027 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:33:42,027 - INFO - Successfully enhanced 8 DataFrames
+2025-09-01 12:33:42,028 - INFO -   Processing dataframe 0 (byhalfplayerdashboard) -> nba_playerdashboardbyshootingsplits_byhalfplayerdashboard
+2025-09-01 12:33:42,028 - INFO -     Shape: (2, 34)
+2025-09-01 12:33:42,028 - INFO - Validation passed: 2 rows for player 1642273, season 2024-25
+2025-09-01 12:33:42,086 - INFO - Inserting 2 rows into nba_playerdashboardbyshootingsplits_byhalfplayerdashboard
+2025-09-01 12:33:42,144 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_byhalfplayerdashboard
+2025-09-01 12:33:42,144 - INFO -   Processing dataframe 1 (assistedby) -> nba_playerdashboardbyshootingsplits_assistedby
+2025-09-01 12:33:42,144 - INFO -     Shape: (9, 34)
+2025-09-01 12:33:42,144 - INFO - Validation passed: 9 rows for player 1642273, season 2024-25
+2025-09-01 12:33:42,199 - INFO - Inserting 9 rows into nba_playerdashboardbyshootingsplits_assistedby
+2025-09-01 12:33:42,264 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_assistedby
+2025-09-01 12:33:42,264 - INFO -   Processing dataframe 2 (byperiodplayerdashboard) -> nba_playerdashboardbyshootingsplits_byperiodplayerdashboard
+2025-09-01 12:33:42,265 - INFO -     Shape: (5, 34)
+2025-09-01 12:33:42,265 - INFO - Validation passed: 5 rows for player 1642273, season 2024-25
+2025-09-01 12:33:42,320 - INFO - Inserting 5 rows into nba_playerdashboardbyshootingsplits_byperiodplayerdashboard
+2025-09-01 12:33:42,375 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_byperiodplayerdashboard
+2025-09-01 12:33:42,375 - INFO -   Processing dataframe 3 (dayplayerdashboard) -> nba_playerdashboardbyshootingsplits_dayplayerdashboard
+2025-09-01 12:33:42,376 - INFO -     Shape: (7, 34)
+2025-09-01 12:33:42,376 - INFO - Validation passed: 7 rows for player 1642273, season 2024-25
+2025-09-01 12:33:42,432 - INFO - Inserting 7 rows into nba_playerdashboardbyshootingsplits_dayplayerdashboard
+2025-09-01 12:33:42,493 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_dayplayerdashboard
+2025-09-01 12:33:42,493 - INFO -   Processing dataframe 4 (assitedshotplayerdashboard) -> nba_playerdashboardbyshootingsplits_assitedshotplayerdashboard
+2025-09-01 12:33:42,493 - INFO -     Shape: (2, 34)
+2025-09-01 12:33:42,493 - INFO - Validation passed: 2 rows for player 1642273, season 2024-25
+2025-09-01 12:33:42,556 - INFO - Inserting 2 rows into nba_playerdashboardbyshootingsplits_assitedshotplayerdashboard
+2025-09-01 12:33:42,612 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_assitedshotplayerdashboard
+2025-09-01 12:33:42,612 - INFO -   Processing dataframe 5 (overallplayerdashboard) -> nba_playerdashboardbyshootingsplits_overallplayerdashboard
+2025-09-01 12:33:42,612 - INFO -     Shape: (18, 20)
+2025-09-01 12:33:42,613 - INFO - Validation passed: 18 rows for player 1642273, season 2024-25
+2025-09-01 12:33:42,669 - INFO - Inserting 18 rows into nba_playerdashboardbyshootingsplits_overallplayerdashboard
+2025-09-01 12:33:42,736 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_overallplayerdashboard
+2025-09-01 12:33:42,736 - INFO -   Processing dataframe 6 (shot5ftplayerdashboard) -> nba_playerdashboardbyshootingsplits_shot5ftplayerdashboard
+2025-09-01 12:33:42,736 - INFO -     Shape: (47, 34)
+2025-09-01 12:33:42,736 - INFO - Validation passed: 47 rows for player 1642273, season 2024-25
+2025-09-01 12:33:42,793 - INFO - Inserting 47 rows into nba_playerdashboardbyshootingsplits_shot5ftplayerdashboard
+2025-09-01 12:33:42,859 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_shot5ftplayerdashboard
+2025-09-01 12:33:42,859 - INFO -   Processing dataframe 7 (shot8ftplayerdashboard) -> nba_playerdashboardbyshootingsplits_shot8ftplayerdashboard
+2025-09-01 12:33:42,859 - INFO -     Shape: (21, 35)
+2025-09-01 12:33:42,859 - INFO - Validation passed: 21 rows for player 1642273, season 2024-25
+2025-09-01 12:33:42,921 - INFO - Inserting 21 rows into nba_playerdashboardbyshootingsplits_shot8ftplayerdashboard
+2025-09-01 12:33:42,979 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_shot8ftplayerdashboard
+2025-09-01 12:33:42,979 - INFO - Successfully processed Player 1642273, Season 2024-25 (8 dataframes)
+2025-09-01 12:33:43,981 - INFO - \n--- Processing Player-Season 6/1287: Player 202709, Season 2024-25 ---
+2025-09-01 12:33:43,981 - INFO - Parameters for this call: {'player_id': '202709', 'season': '2024-25'}
+2025-09-01 12:33:43,981 - INFO - Making API call (attempt 1/3) with params: {'player_id': '202709', 'season': '2024-25'}
+2025-09-01 12:33:49,013 - INFO - API call successful - got 8 dataframes
+2025-09-01 12:33:49,045 - INFO - Starting advanced DataFrame matching...
+2025-09-01 12:33:49,045 - INFO - Strategy 1: Column count matching
+2025-09-01 12:33:49,045 - INFO - Strategy 2: Content-based matching
+2025-09-01 12:33:49,045 - INFO - Strategy 3: Row count heuristics
+2025-09-01 12:33:49,045 - INFO - Strategy 4: Remaining name assignment
+2025-09-01 12:33:49,056 - INFO - Final matching complete: ['overallplayerdashboard', 'assistedby', 'byperiodplayerdashboard', 'dayplayerdashboard', 'byhalfplayerdashboard', 'assitedshotplayerdashboard', 'shot5ftplayerdashboard', 'shot8ftplayerdashboard']
+2025-09-01 12:33:49,056 - INFO - Matched dataframe names: ['overallplayerdashboard', 'assistedby', 'byperiodplayerdashboard', 'dayplayerdashboard', 'byhalfplayerdashboard', 'assitedshotplayerdashboard', 'shot5ftplayerdashboard', 'shot8ftplayerdashboard']
+2025-09-01 12:33:49,057 - INFO - Enhanced DataFrame 0 for player 202709, season 2024-25
+2025-09-01 12:33:49,057 - INFO -   Original shape: (1, 30)
+2025-09-01 12:33:49,057 - INFO -   Enhanced shape: (1, 34)
+2025-09-01 12:33:49,057 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:33:49,058 - INFO - Enhanced DataFrame 1 for player 202709, season 2024-25
+2025-09-01 12:33:49,058 - INFO -   Original shape: (9, 30)
+2025-09-01 12:33:49,058 - INFO -   Enhanced shape: (9, 34)
+2025-09-01 12:33:49,058 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:33:49,059 - INFO - Enhanced DataFrame 2 for player 202709, season 2024-25
+2025-09-01 12:33:49,059 - INFO -   Original shape: (5, 30)
+2025-09-01 12:33:49,059 - INFO -   Enhanced shape: (5, 34)
+2025-09-01 12:33:49,059 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:33:49,059 - INFO - Enhanced DataFrame 3 for player 202709, season 2024-25
+2025-09-01 12:33:49,060 - INFO -   Original shape: (7, 30)
+2025-09-01 12:33:49,060 - INFO -   Enhanced shape: (7, 34)
+2025-09-01 12:33:49,060 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:33:49,060 - INFO - Enhanced DataFrame 4 for player 202709, season 2024-25
+2025-09-01 12:33:49,060 - INFO -   Original shape: (2, 30)
+2025-09-01 12:33:49,060 - INFO -   Enhanced shape: (2, 34)
+2025-09-01 12:33:49,061 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:33:49,061 - INFO - Enhanced DataFrame 5 for player 202709, season 2024-25
+2025-09-01 12:33:49,061 - INFO -   Original shape: (9, 16)
+2025-09-01 12:33:49,061 - INFO -   Enhanced shape: (9, 20)
+2025-09-01 12:33:49,061 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:33:49,062 - INFO - Enhanced DataFrame 6 for player 202709, season 2024-25
+2025-09-01 12:33:49,062 - INFO -   Original shape: (44, 30)
+2025-09-01 12:33:49,062 - INFO -   Enhanced shape: (44, 34)
+2025-09-01 12:33:49,062 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:33:49,062 - INFO - Enhanced DataFrame 7 for player 202709, season 2024-25
+2025-09-01 12:33:49,062 - INFO -   Original shape: (10, 31)
+2025-09-01 12:33:49,062 - INFO -   Enhanced shape: (10, 35)
+2025-09-01 12:33:49,062 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:33:49,062 - INFO - Successfully enhanced 8 DataFrames
+2025-09-01 12:33:49,064 - INFO -   Processing dataframe 0 (overallplayerdashboard) -> nba_playerdashboardbyshootingsplits_overallplayerdashboard
+2025-09-01 12:33:49,064 - INFO -     Shape: (1, 34)
+2025-09-01 12:33:49,064 - INFO - Validation passed: 1 rows for player 202709, season 2024-25
+2025-09-01 12:33:49,125 - INFO - Inserting 1 rows into nba_playerdashboardbyshootingsplits_overallplayerdashboard
+2025-09-01 12:33:49,173 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_overallplayerdashboard
+2025-09-01 12:33:49,173 - INFO -   Processing dataframe 1 (assistedby) -> nba_playerdashboardbyshootingsplits_assistedby
+2025-09-01 12:33:49,173 - INFO -     Shape: (9, 34)
+2025-09-01 12:33:49,173 - INFO - Validation passed: 9 rows for player 202709, season 2024-25
+2025-09-01 12:33:49,225 - INFO - Inserting 9 rows into nba_playerdashboardbyshootingsplits_assistedby
+2025-09-01 12:33:49,276 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_assistedby
+2025-09-01 12:33:49,276 - INFO -   Processing dataframe 2 (byperiodplayerdashboard) -> nba_playerdashboardbyshootingsplits_byperiodplayerdashboard
+2025-09-01 12:33:49,276 - INFO -     Shape: (5, 34)
+2025-09-01 12:33:49,276 - INFO - Validation passed: 5 rows for player 202709, season 2024-25
+2025-09-01 12:33:49,326 - INFO - Inserting 5 rows into nba_playerdashboardbyshootingsplits_byperiodplayerdashboard
+2025-09-01 12:33:49,385 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_byperiodplayerdashboard
+2025-09-01 12:33:49,385 - INFO -   Processing dataframe 3 (dayplayerdashboard) -> nba_playerdashboardbyshootingsplits_dayplayerdashboard
+2025-09-01 12:33:49,385 - INFO -     Shape: (7, 34)
+2025-09-01 12:33:49,386 - INFO - Validation passed: 7 rows for player 202709, season 2024-25
+2025-09-01 12:33:49,438 - INFO - Inserting 7 rows into nba_playerdashboardbyshootingsplits_dayplayerdashboard
+2025-09-01 12:33:49,493 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_dayplayerdashboard
+2025-09-01 12:33:49,493 - INFO -   Processing dataframe 4 (byhalfplayerdashboard) -> nba_playerdashboardbyshootingsplits_byhalfplayerdashboard
+2025-09-01 12:33:49,493 - INFO -     Shape: (2, 34)
+2025-09-01 12:33:49,494 - INFO - Validation passed: 2 rows for player 202709, season 2024-25
+2025-09-01 12:33:49,546 - INFO - Inserting 2 rows into nba_playerdashboardbyshootingsplits_byhalfplayerdashboard
+2025-09-01 12:33:49,617 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_byhalfplayerdashboard
+2025-09-01 12:33:49,618 - INFO -   Processing dataframe 5 (assitedshotplayerdashboard) -> nba_playerdashboardbyshootingsplits_assitedshotplayerdashboard
+2025-09-01 12:33:49,618 - INFO -     Shape: (9, 20)
+2025-09-01 12:33:49,618 - INFO - Validation passed: 9 rows for player 202709, season 2024-25
+2025-09-01 12:33:49,672 - INFO - Inserting 9 rows into nba_playerdashboardbyshootingsplits_assitedshotplayerdashboard
+2025-09-01 12:33:49,724 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_assitedshotplayerdashboard
+2025-09-01 12:33:49,724 - INFO -   Processing dataframe 6 (shot5ftplayerdashboard) -> nba_playerdashboardbyshootingsplits_shot5ftplayerdashboard
+2025-09-01 12:33:49,724 - INFO -     Shape: (44, 34)
+2025-09-01 12:33:49,725 - INFO - Validation passed: 44 rows for player 202709, season 2024-25
+2025-09-01 12:33:49,785 - INFO - Inserting 44 rows into nba_playerdashboardbyshootingsplits_shot5ftplayerdashboard
+2025-09-01 12:33:49,858 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_shot5ftplayerdashboard
+2025-09-01 12:33:49,858 - INFO -   Processing dataframe 7 (shot8ftplayerdashboard) -> nba_playerdashboardbyshootingsplits_shot8ftplayerdashboard
+2025-09-01 12:33:49,858 - INFO -     Shape: (10, 35)
+2025-09-01 12:33:49,858 - INFO - Validation passed: 10 rows for player 202709, season 2024-25
+2025-09-01 12:33:49,914 - INFO - Inserting 10 rows into nba_playerdashboardbyshootingsplits_shot8ftplayerdashboard
+2025-09-01 12:33:49,968 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_shot8ftplayerdashboard
+2025-09-01 12:33:49,968 - INFO - Successfully processed Player 202709, Season 2024-25 (8 dataframes)
+2025-09-01 12:33:50,969 - INFO - \n--- Processing Player-Season 7/1287: Player 1641725, Season 2024-25 ---
+2025-09-01 12:33:50,969 - INFO - Parameters for this call: {'player_id': '1641725', 'season': '2024-25'}
+2025-09-01 12:33:50,969 - INFO - Making API call (attempt 1/3) with params: {'player_id': '1641725', 'season': '2024-25'}
+2025-09-01 12:33:56,914 - INFO - API call successful - got 8 dataframes
+2025-09-01 12:33:56,945 - INFO - Starting advanced DataFrame matching...
+2025-09-01 12:33:56,945 - INFO - Strategy 1: Column count matching
+2025-09-01 12:33:56,945 - INFO - Strategy 2: Content-based matching
+2025-09-01 12:33:56,945 - INFO - Strategy 3: Row count heuristics
+2025-09-01 12:33:56,953 - INFO - Strategy 4: Remaining name assignment
+2025-09-01 12:33:56,957 - INFO - Final matching complete: ['byhalfplayerdashboard', 'assistedby', 'byperiodplayerdashboard', 'dayplayerdashboard', 'assitedshotplayerdashboard', 'overallplayerdashboard', 'shot5ftplayerdashboard', 'shot8ftplayerdashboard']
+2025-09-01 12:33:56,957 - INFO - Matched dataframe names: ['byhalfplayerdashboard', 'assistedby', 'byperiodplayerdashboard', 'dayplayerdashboard', 'assitedshotplayerdashboard', 'overallplayerdashboard', 'shot5ftplayerdashboard', 'shot8ftplayerdashboard']
+2025-09-01 12:33:56,958 - INFO - Enhanced DataFrame 0 for player 1641725, season 2024-25
+2025-09-01 12:33:56,958 - INFO -   Original shape: (2, 30)
+2025-09-01 12:33:56,958 - INFO -   Enhanced shape: (2, 34)
+2025-09-01 12:33:56,958 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:33:56,959 - INFO - Enhanced DataFrame 1 for player 1641725, season 2024-25
+2025-09-01 12:33:56,959 - INFO -   Original shape: (9, 30)
+2025-09-01 12:33:56,959 - INFO -   Enhanced shape: (9, 34)
+2025-09-01 12:33:56,959 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:33:56,960 - INFO - Enhanced DataFrame 2 for player 1641725, season 2024-25
+2025-09-01 12:33:56,960 - INFO -   Original shape: (5, 30)
+2025-09-01 12:33:56,960 - INFO -   Enhanced shape: (5, 34)
+2025-09-01 12:33:56,960 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:33:56,961 - INFO - Enhanced DataFrame 3 for player 1641725, season 2024-25
+2025-09-01 12:33:56,961 - INFO -   Original shape: (7, 30)
+2025-09-01 12:33:56,961 - INFO -   Enhanced shape: (7, 34)
+2025-09-01 12:33:56,961 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:33:56,961 - INFO - Enhanced DataFrame 4 for player 1641725, season 2024-25
+2025-09-01 12:33:56,961 - INFO -   Original shape: (2, 30)
+2025-09-01 12:33:56,961 - INFO -   Enhanced shape: (2, 34)
+2025-09-01 12:33:56,962 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:33:56,962 - INFO - Enhanced DataFrame 5 for player 1641725, season 2024-25
+2025-09-01 12:33:56,962 - INFO -   Original shape: (27, 16)
+2025-09-01 12:33:56,962 - INFO -   Enhanced shape: (27, 20)
+2025-09-01 12:33:56,962 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:33:56,963 - INFO - Enhanced DataFrame 6 for player 1641725, season 2024-25
+2025-09-01 12:33:56,963 - INFO -   Original shape: (44, 30)
+2025-09-01 12:33:56,963 - INFO -   Enhanced shape: (44, 34)
+2025-09-01 12:33:56,963 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:33:56,964 - INFO - Enhanced DataFrame 7 for player 1641725, season 2024-25
+2025-09-01 12:33:56,964 - INFO -   Original shape: (16, 31)
+2025-09-01 12:33:56,964 - INFO -   Enhanced shape: (16, 35)
+2025-09-01 12:33:56,964 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:33:56,964 - INFO - Successfully enhanced 8 DataFrames
+2025-09-01 12:33:56,965 - INFO -   Processing dataframe 0 (byhalfplayerdashboard) -> nba_playerdashboardbyshootingsplits_byhalfplayerdashboard
+2025-09-01 12:33:56,965 - INFO -     Shape: (2, 34)
+2025-09-01 12:33:56,965 - INFO - Validation passed: 2 rows for player 1641725, season 2024-25
+2025-09-01 12:33:57,026 - INFO - Inserting 2 rows into nba_playerdashboardbyshootingsplits_byhalfplayerdashboard
+2025-09-01 12:33:57,085 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_byhalfplayerdashboard
+2025-09-01 12:33:57,085 - INFO -   Processing dataframe 1 (assistedby) -> nba_playerdashboardbyshootingsplits_assistedby
+2025-09-01 12:33:57,085 - INFO -     Shape: (9, 34)
+2025-09-01 12:33:57,085 - INFO - Validation passed: 9 rows for player 1641725, season 2024-25
+2025-09-01 12:33:57,164 - INFO - Inserting 9 rows into nba_playerdashboardbyshootingsplits_assistedby
+2025-09-01 12:33:57,226 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_assistedby
+2025-09-01 12:33:57,226 - INFO -   Processing dataframe 2 (byperiodplayerdashboard) -> nba_playerdashboardbyshootingsplits_byperiodplayerdashboard
+2025-09-01 12:33:57,226 - INFO -     Shape: (5, 34)
+2025-09-01 12:33:57,226 - INFO - Validation passed: 5 rows for player 1641725, season 2024-25
+2025-09-01 12:33:57,284 - INFO - Inserting 5 rows into nba_playerdashboardbyshootingsplits_byperiodplayerdashboard
+2025-09-01 12:33:57,341 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_byperiodplayerdashboard
+2025-09-01 12:33:57,341 - INFO -   Processing dataframe 3 (dayplayerdashboard) -> nba_playerdashboardbyshootingsplits_dayplayerdashboard
+2025-09-01 12:33:57,341 - INFO -     Shape: (7, 34)
+2025-09-01 12:33:57,341 - INFO - Validation passed: 7 rows for player 1641725, season 2024-25
+2025-09-01 12:33:57,404 - INFO - Inserting 7 rows into nba_playerdashboardbyshootingsplits_dayplayerdashboard
+2025-09-01 12:33:57,461 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_dayplayerdashboard
+2025-09-01 12:33:57,461 - INFO -   Processing dataframe 4 (assitedshotplayerdashboard) -> nba_playerdashboardbyshootingsplits_assitedshotplayerdashboard
+2025-09-01 12:33:57,461 - INFO -     Shape: (2, 34)
+2025-09-01 12:33:57,461 - INFO - Validation passed: 2 rows for player 1641725, season 2024-25
+2025-09-01 12:33:57,525 - INFO - Inserting 2 rows into nba_playerdashboardbyshootingsplits_assitedshotplayerdashboard
+2025-09-01 12:33:57,575 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_assitedshotplayerdashboard
+2025-09-01 12:33:57,575 - INFO -   Processing dataframe 5 (overallplayerdashboard) -> nba_playerdashboardbyshootingsplits_overallplayerdashboard
+2025-09-01 12:33:57,575 - INFO -     Shape: (27, 20)
+2025-09-01 12:33:57,575 - INFO - Validation passed: 27 rows for player 1641725, season 2024-25
+2025-09-01 12:33:57,636 - INFO - Inserting 27 rows into nba_playerdashboardbyshootingsplits_overallplayerdashboard
+2025-09-01 12:33:57,701 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_overallplayerdashboard
+2025-09-01 12:33:57,701 - INFO -   Processing dataframe 6 (shot5ftplayerdashboard) -> nba_playerdashboardbyshootingsplits_shot5ftplayerdashboard
+2025-09-01 12:33:57,701 - INFO -     Shape: (44, 34)
+2025-09-01 12:33:57,701 - INFO - Validation passed: 44 rows for player 1641725, season 2024-25
+2025-09-01 12:33:57,756 - INFO - Inserting 44 rows into nba_playerdashboardbyshootingsplits_shot5ftplayerdashboard
+2025-09-01 12:33:57,829 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_shot5ftplayerdashboard
+2025-09-01 12:33:57,829 - INFO -   Processing dataframe 7 (shot8ftplayerdashboard) -> nba_playerdashboardbyshootingsplits_shot8ftplayerdashboard
+2025-09-01 12:33:57,829 - INFO -     Shape: (16, 35)
+2025-09-01 12:33:57,829 - INFO - Validation passed: 16 rows for player 1641725, season 2024-25
+2025-09-01 12:33:57,888 - INFO - Inserting 16 rows into nba_playerdashboardbyshootingsplits_shot8ftplayerdashboard
+2025-09-01 12:33:57,946 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_shot8ftplayerdashboard
+2025-09-01 12:33:57,946 - INFO - Successfully processed Player 1641725, Season 2024-25 (8 dataframes)
+2025-09-01 12:33:58,953 - INFO - \n--- Processing Player-Season 8/1287: Player 1628401, Season 2024-25 ---
+2025-09-01 12:33:58,953 - INFO - Parameters for this call: {'player_id': '1628401', 'season': '2024-25'}
+2025-09-01 12:33:58,953 - INFO - Making API call (attempt 1/3) with params: {'player_id': '1628401', 'season': '2024-25'}
+2025-09-01 12:34:05,956 - INFO - API call successful - got 8 dataframes
+2025-09-01 12:34:05,996 - INFO - Starting advanced DataFrame matching...
+2025-09-01 12:34:05,996 - INFO - Strategy 1: Column count matching
+2025-09-01 12:34:05,996 - INFO - Strategy 2: Content-based matching
+2025-09-01 12:34:05,996 - INFO - Strategy 3: Row count heuristics
+2025-09-01 12:34:06,002 - INFO - Strategy 4: Remaining name assignment
+2025-09-01 12:34:06,006 - INFO - Final matching complete: ['overallplayerdashboard', 'assistedby', 'byperiodplayerdashboard', 'dayplayerdashboard', 'byhalfplayerdashboard', 'assitedshotplayerdashboard', 'shot5ftplayerdashboard', 'shot8ftplayerdashboard']
+2025-09-01 12:34:06,006 - INFO - Matched dataframe names: ['overallplayerdashboard', 'assistedby', 'byperiodplayerdashboard', 'dayplayerdashboard', 'byhalfplayerdashboard', 'assitedshotplayerdashboard', 'shot5ftplayerdashboard', 'shot8ftplayerdashboard']
+2025-09-01 12:34:06,007 - INFO - Enhanced DataFrame 0 for player 1628401, season 2024-25
+2025-09-01 12:34:06,007 - INFO -   Original shape: (1, 30)
+2025-09-01 12:34:06,007 - INFO -   Enhanced shape: (1, 34)
+2025-09-01 12:34:06,007 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:34:06,007 - INFO - Enhanced DataFrame 1 for player 1628401, season 2024-25
+2025-09-01 12:34:06,007 - INFO -   Original shape: (9, 30)
+2025-09-01 12:34:06,007 - INFO -   Enhanced shape: (9, 34)
+2025-09-01 12:34:06,009 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:34:06,009 - INFO - Enhanced DataFrame 2 for player 1628401, season 2024-25
+2025-09-01 12:34:06,009 - INFO -   Original shape: (5, 30)
+2025-09-01 12:34:06,009 - INFO -   Enhanced shape: (5, 34)
+2025-09-01 12:34:06,009 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:34:06,009 - INFO - Enhanced DataFrame 3 for player 1628401, season 2024-25
+2025-09-01 12:34:06,010 - INFO -   Original shape: (7, 30)
+2025-09-01 12:34:06,010 - INFO -   Enhanced shape: (7, 34)
+2025-09-01 12:34:06,010 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:34:06,010 - INFO - Enhanced DataFrame 4 for player 1628401, season 2024-25
+2025-09-01 12:34:06,010 - INFO -   Original shape: (2, 30)
+2025-09-01 12:34:06,010 - INFO -   Enhanced shape: (2, 34)
+2025-09-01 12:34:06,010 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:34:06,011 - INFO - Enhanced DataFrame 5 for player 1628401, season 2024-25
+2025-09-01 12:34:06,011 - INFO -   Original shape: (9, 16)
+2025-09-01 12:34:06,011 - INFO -   Enhanced shape: (9, 20)
+2025-09-01 12:34:06,011 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:34:06,012 - INFO - Enhanced DataFrame 6 for player 1628401, season 2024-25
+2025-09-01 12:34:06,012 - INFO -   Original shape: (47, 30)
+2025-09-01 12:34:06,012 - INFO -   Enhanced shape: (47, 34)
+2025-09-01 12:34:06,012 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:34:06,013 - INFO - Enhanced DataFrame 7 for player 1628401, season 2024-25
+2025-09-01 12:34:06,013 - INFO -   Original shape: (14, 31)
+2025-09-01 12:34:06,013 - INFO -   Enhanced shape: (14, 35)
+2025-09-01 12:34:06,013 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:34:06,013 - INFO - Successfully enhanced 8 DataFrames
+2025-09-01 12:34:06,014 - INFO -   Processing dataframe 0 (overallplayerdashboard) -> nba_playerdashboardbyshootingsplits_overallplayerdashboard
+2025-09-01 12:34:06,014 - INFO -     Shape: (1, 34)
+2025-09-01 12:34:06,014 - INFO - Validation passed: 1 rows for player 1628401, season 2024-25
+2025-09-01 12:34:06,076 - INFO - Inserting 1 rows into nba_playerdashboardbyshootingsplits_overallplayerdashboard
+2025-09-01 12:34:06,136 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_overallplayerdashboard
+2025-09-01 12:34:06,136 - INFO -   Processing dataframe 1 (assistedby) -> nba_playerdashboardbyshootingsplits_assistedby
+2025-09-01 12:34:06,136 - INFO -     Shape: (9, 34)
+2025-09-01 12:34:06,136 - INFO - Validation passed: 9 rows for player 1628401, season 2024-25
+2025-09-01 12:34:06,186 - INFO - Inserting 9 rows into nba_playerdashboardbyshootingsplits_assistedby
+2025-09-01 12:34:06,246 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_assistedby
+2025-09-01 12:34:06,246 - INFO -   Processing dataframe 2 (byperiodplayerdashboard) -> nba_playerdashboardbyshootingsplits_byperiodplayerdashboard
+2025-09-01 12:34:06,246 - INFO -     Shape: (5, 34)
+2025-09-01 12:34:06,246 - INFO - Validation passed: 5 rows for player 1628401, season 2024-25
+2025-09-01 12:34:06,305 - INFO - Inserting 5 rows into nba_playerdashboardbyshootingsplits_byperiodplayerdashboard
+2025-09-01 12:34:06,355 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_byperiodplayerdashboard
+2025-09-01 12:34:06,355 - INFO -   Processing dataframe 3 (dayplayerdashboard) -> nba_playerdashboardbyshootingsplits_dayplayerdashboard
+2025-09-01 12:34:06,355 - INFO -     Shape: (7, 34)
+2025-09-01 12:34:06,355 - INFO - Validation passed: 7 rows for player 1628401, season 2024-25
+2025-09-01 12:34:06,415 - INFO - Inserting 7 rows into nba_playerdashboardbyshootingsplits_dayplayerdashboard
+2025-09-01 12:34:06,472 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_dayplayerdashboard
+2025-09-01 12:34:06,472 - INFO -   Processing dataframe 4 (byhalfplayerdashboard) -> nba_playerdashboardbyshootingsplits_byhalfplayerdashboard
+2025-09-01 12:34:06,472 - INFO -     Shape: (2, 34)
+2025-09-01 12:34:06,472 - INFO - Validation passed: 2 rows for player 1628401, season 2024-25
+2025-09-01 12:34:06,526 - INFO - Inserting 2 rows into nba_playerdashboardbyshootingsplits_byhalfplayerdashboard
+2025-09-01 12:34:06,585 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_byhalfplayerdashboard
+2025-09-01 12:34:06,585 - INFO -   Processing dataframe 5 (assitedshotplayerdashboard) -> nba_playerdashboardbyshootingsplits_assitedshotplayerdashboard
+2025-09-01 12:34:06,585 - INFO -     Shape: (9, 20)
+2025-09-01 12:34:06,586 - INFO - Validation passed: 9 rows for player 1628401, season 2024-25
+2025-09-01 12:34:06,637 - INFO - Inserting 9 rows into nba_playerdashboardbyshootingsplits_assitedshotplayerdashboard
+2025-09-01 12:34:06,704 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_assitedshotplayerdashboard
+2025-09-01 12:34:06,704 - INFO -   Processing dataframe 6 (shot5ftplayerdashboard) -> nba_playerdashboardbyshootingsplits_shot5ftplayerdashboard
+2025-09-01 12:34:06,704 - INFO -     Shape: (47, 34)
+2025-09-01 12:34:06,705 - INFO - Validation passed: 47 rows for player 1628401, season 2024-25
+2025-09-01 12:34:06,755 - INFO - Inserting 47 rows into nba_playerdashboardbyshootingsplits_shot5ftplayerdashboard
+2025-09-01 12:34:06,824 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_shot5ftplayerdashboard
+2025-09-01 12:34:06,824 - INFO -   Processing dataframe 7 (shot8ftplayerdashboard) -> nba_playerdashboardbyshootingsplits_shot8ftplayerdashboard
+2025-09-01 12:34:06,825 - INFO -     Shape: (14, 35)
+2025-09-01 12:34:06,825 - INFO - Validation passed: 14 rows for player 1628401, season 2024-25
+2025-09-01 12:34:06,876 - INFO - Inserting 14 rows into nba_playerdashboardbyshootingsplits_shot8ftplayerdashboard
+2025-09-01 12:34:06,944 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_shot8ftplayerdashboard
+2025-09-01 12:34:06,945 - INFO - Successfully processed Player 1628401, Season 2024-25 (8 dataframes)
+2025-09-01 12:34:07,945 - INFO - \n--- Processing Player-Season 9/1287: Player 1628396, Season 2024-25 ---
+2025-09-01 12:34:07,945 - INFO - Parameters for this call: {'player_id': '1628396', 'season': '2024-25'}
+2025-09-01 12:34:07,945 - INFO - Making API call (attempt 1/3) with params: {'player_id': '1628396', 'season': '2024-25'}
+2025-09-01 12:34:13,276 - INFO - API call successful - got 8 dataframes
+2025-09-01 12:34:13,305 - INFO - Starting advanced DataFrame matching...
+2025-09-01 12:34:13,305 - INFO - Strategy 1: Column count matching
+2025-09-01 12:34:13,305 - INFO - Strategy 2: Content-based matching
+2025-09-01 12:34:13,314 - INFO - Strategy 3: Row count heuristics
+2025-09-01 12:34:13,315 - INFO - Strategy 4: Remaining name assignment
+2025-09-01 12:34:13,321 - INFO - Final matching complete: ['byhalfplayerdashboard', 'assistedby', 'byperiodplayerdashboard', 'dayplayerdashboard', 'assitedshotplayerdashboard', 'overallplayerdashboard', 'shot5ftplayerdashboard', 'shot8ftplayerdashboard']
+2025-09-01 12:34:13,321 - INFO - Matched dataframe names: ['byhalfplayerdashboard', 'assistedby', 'byperiodplayerdashboard', 'dayplayerdashboard', 'assitedshotplayerdashboard', 'overallplayerdashboard', 'shot5ftplayerdashboard', 'shot8ftplayerdashboard']
+2025-09-01 12:34:13,323 - INFO - Enhanced DataFrame 0 for player 1628396, season 2024-25
+2025-09-01 12:34:13,323 - INFO -   Original shape: (2, 30)
+2025-09-01 12:34:13,323 - INFO -   Enhanced shape: (2, 34)
+2025-09-01 12:34:13,323 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:34:13,323 - INFO - Enhanced DataFrame 1 for player 1628396, season 2024-25
+2025-09-01 12:34:13,323 - INFO -   Original shape: (9, 30)
+2025-09-01 12:34:13,323 - INFO -   Enhanced shape: (9, 34)
+2025-09-01 12:34:13,323 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:34:13,323 - INFO - Enhanced DataFrame 2 for player 1628396, season 2024-25
+2025-09-01 12:34:13,324 - INFO -   Original shape: (5, 30)
+2025-09-01 12:34:13,324 - INFO -   Enhanced shape: (5, 34)
+2025-09-01 12:34:13,324 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:34:13,325 - INFO - Enhanced DataFrame 3 for player 1628396, season 2024-25
+2025-09-01 12:34:13,325 - INFO -   Original shape: (7, 30)
+2025-09-01 12:34:13,325 - INFO -   Enhanced shape: (7, 34)
+2025-09-01 12:34:13,325 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:34:13,325 - INFO - Enhanced DataFrame 4 for player 1628396, season 2024-25
+2025-09-01 12:34:13,325 - INFO -   Original shape: (2, 30)
+2025-09-01 12:34:13,325 - INFO -   Enhanced shape: (2, 34)
+2025-09-01 12:34:13,325 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:34:13,325 - INFO - Enhanced DataFrame 5 for player 1628396, season 2024-25
+2025-09-01 12:34:13,325 - INFO -   Original shape: (34, 16)
+2025-09-01 12:34:13,325 - INFO -   Enhanced shape: (34, 20)
+2025-09-01 12:34:13,325 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:34:13,325 - INFO - Enhanced DataFrame 6 for player 1628396, season 2024-25
+2025-09-01 12:34:13,325 - INFO -   Original shape: (43, 30)
+2025-09-01 12:34:13,325 - INFO -   Enhanced shape: (43, 34)
+2025-09-01 12:34:13,325 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:34:13,328 - INFO - Enhanced DataFrame 7 for player 1628396, season 2024-25
+2025-09-01 12:34:13,328 - INFO -   Original shape: (20, 31)
+2025-09-01 12:34:13,328 - INFO -   Enhanced shape: (20, 35)
+2025-09-01 12:34:13,328 - INFO -   New columns: player_id, season, collected_at, endpoint_source
+2025-09-01 12:34:13,328 - INFO - Successfully enhanced 8 DataFrames
+2025-09-01 12:34:13,329 - INFO -   Processing dataframe 0 (byhalfplayerdashboard) -> nba_playerdashboardbyshootingsplits_byhalfplayerdashboard
+2025-09-01 12:34:13,329 - INFO -     Shape: (2, 34)
+2025-09-01 12:34:13,329 - INFO - Validation passed: 2 rows for player 1628396, season 2024-25
+2025-09-01 12:34:13,385 - INFO - Inserting 2 rows into nba_playerdashboardbyshootingsplits_byhalfplayerdashboard
+2025-09-01 12:34:13,435 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_byhalfplayerdashboard
+2025-09-01 12:34:13,435 - INFO -   Processing dataframe 1 (assistedby) -> nba_playerdashboardbyshootingsplits_assistedby
+2025-09-01 12:34:13,435 - INFO -     Shape: (9, 34)
+2025-09-01 12:34:13,435 - INFO - Validation passed: 9 rows for player 1628396, season 2024-25
+2025-09-01 12:34:13,496 - INFO - Inserting 9 rows into nba_playerdashboardbyshootingsplits_assistedby
+2025-09-01 12:34:13,548 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_assistedby
+2025-09-01 12:34:13,548 - INFO -   Processing dataframe 2 (byperiodplayerdashboard) -> nba_playerdashboardbyshootingsplits_byperiodplayerdashboard
+2025-09-01 12:34:13,548 - INFO -     Shape: (5, 34)
+2025-09-01 12:34:13,548 - INFO - Validation passed: 5 rows for player 1628396, season 2024-25
+2025-09-01 12:34:13,609 - INFO - Inserting 5 rows into nba_playerdashboardbyshootingsplits_byperiodplayerdashboard
+2025-09-01 12:34:13,665 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_byperiodplayerdashboard
+2025-09-01 12:34:13,666 - INFO -   Processing dataframe 3 (dayplayerdashboard) -> nba_playerdashboardbyshootingsplits_dayplayerdashboard
+2025-09-01 12:34:13,666 - INFO -     Shape: (7, 34)
+2025-09-01 12:34:13,666 - INFO - Validation passed: 7 rows for player 1628396, season 2024-25
+2025-09-01 12:34:13,717 - INFO - Inserting 7 rows into nba_playerdashboardbyshootingsplits_dayplayerdashboard
+2025-09-01 12:34:13,781 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_dayplayerdashboard
+2025-09-01 12:34:13,781 - INFO -   Processing dataframe 4 (assitedshotplayerdashboard) -> nba_playerdashboardbyshootingsplits_assitedshotplayerdashboard
+2025-09-01 12:34:13,781 - INFO -     Shape: (2, 34)
+2025-09-01 12:34:13,782 - INFO - Validation passed: 2 rows for player 1628396, season 2024-25
+2025-09-01 12:34:13,835 - INFO - Inserting 2 rows into nba_playerdashboardbyshootingsplits_assitedshotplayerdashboard
+2025-09-01 12:34:13,888 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_assitedshotplayerdashboard
+2025-09-01 12:34:13,888 - INFO -   Processing dataframe 5 (overallplayerdashboard) -> nba_playerdashboardbyshootingsplits_overallplayerdashboard
+2025-09-01 12:34:13,888 - INFO -     Shape: (34, 20)
+2025-09-01 12:34:13,888 - INFO - Validation passed: 34 rows for player 1628396, season 2024-25
+2025-09-01 12:34:13,949 - INFO - Inserting 34 rows into nba_playerdashboardbyshootingsplits_overallplayerdashboard
+2025-09-01 12:34:14,006 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_overallplayerdashboard
+2025-09-01 12:34:14,006 - INFO -   Processing dataframe 6 (shot5ftplayerdashboard) -> nba_playerdashboardbyshootingsplits_shot5ftplayerdashboard
+2025-09-01 12:34:14,006 - INFO -     Shape: (43, 34)
+2025-09-01 12:34:14,006 - INFO - Validation passed: 43 rows for player 1628396, season 2024-25
+2025-09-01 12:34:14,067 - INFO - Inserting 43 rows into nba_playerdashboardbyshootingsplits_shot5ftplayerdashboard
+2025-09-01 12:34:14,133 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_shot5ftplayerdashboard
+2025-09-01 12:34:14,133 - INFO -   Processing dataframe 7 (shot8ftplayerdashboard) -> nba_playerdashboardbyshootingsplits_shot8ftplayerdashboard
+2025-09-01 12:34:14,133 - INFO -     Shape: (20, 35)
+2025-09-01 12:34:14,133 - INFO - Validation passed: 20 rows for player 1628396, season 2024-25
+2025-09-01 12:34:14,185 - INFO - Inserting 20 rows into nba_playerdashboardbyshootingsplits_shot8ftplayerdashboard
+2025-09-01 12:34:14,248 - INFO - Successfully inserted data into nba_playerdashboardbyshootingsplits_shot8ftplayerdashboard
+2025-09-01 12:34:14,248 - INFO - Successfully processed Player 1628396, Season 2024-25 (8 dataframes)
+2025-09-01 12:34:15,249 - INFO - \n--- Processing Player-Season 10/1287: Player 1626162, Season 2024-25 ---
+2025-09-01 12:34:15,249 - INFO - Parameters for this call: {'player_id': '1626162', 'season': '2024-25'}
+2025-09-01 12:34:15,249 - INFO - Making API call (attempt 1/3) with params: {'player_id': '1626162', 'season': '2024-25'}

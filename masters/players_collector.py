@@ -22,13 +22,51 @@ class PlayersCollector:
     def __init__(self):
         self.db_manager = MasterTablesManager()
         
-        # League configurations
+        # League configurations with historical data settings
         self.leagues = [
-            {'name': 'NBA', 'id': '00', 'table_prefix': 'nba'},
-            {'name': 'WNBA', 'id': '10', 'table_prefix': 'wnba'},
-            {'name': 'G-League', 'id': '20', 'table_prefix': 'gleague'}
+            {
+                'name': 'NBA', 
+                'id': '00', 
+                'table_prefix': 'nba',
+                'start_year': 1984,  # NBA founded in 1946
+                'season_format': 'two_year'  # 2024-25 format
+            },
+            {
+                'name': 'WNBA', 
+                'id': '10', 
+                'table_prefix': 'wnba',
+                'start_year': 1997,  # WNBA founded in 1997
+                'season_format': 'single_year'  # 2024 format
+            },
+            {
+                'name': 'G-League', 
+                'id': '20', 
+                'table_prefix': 'gleague',
+                'start_year': 2001,  # G-League founded as NBDL in 2001
+                'season_format': 'two_year'  # 2024-25 format
+            }
         ]
     
+    def generate_historical_seasons(self, league_config, end_year=None):
+        """Generate all historical seasons for a league"""
+        if end_year is None:
+            end_year = datetime.now().year + 1
+            
+        seasons = []
+        start_year = league_config['start_year']
+        
+        if league_config['season_format'] == 'two_year':
+            # NBA/G-League format: 2023-24
+            for year in range(start_year, end_year):
+                season_str = f"{year}-{str(year+1)[2:].zfill(2)}"
+                seasons.append(season_str)
+        else:
+            # WNBA format: 2024
+            for year in range(start_year, end_year):
+                seasons.append(str(year))
+        
+        return seasons[::-1]  # Most recent first for API efficiency
+
     def get_current_season(self, league_name):
         """Get current season string based on league"""
         current_year = datetime.now().year
@@ -46,6 +84,112 @@ class PlayersCollector:
             else:
                 return str(current_year - 1)
     
+    def collect_league_players_comprehensive(self, league_name, test_mode=False):
+        """Collect players for a specific league across ALL historical seasons"""
+        league_config = next((l for l in self.leagues if l['name'] == league_name), None)
+        if not league_config:
+            print(f"❌ Unknown league: {league_name}")
+            return 0
+
+        league_id = league_config['id']
+        table_name = f"{league_config['table_prefix']}_players"
+        
+        # Generate ALL historical seasons for this league
+        historical_seasons = self.generate_historical_seasons(league_config)
+        if test_mode:
+            historical_seasons = historical_seasons[:5]  # Only recent seasons for testing
+        
+        print(f"👥 COLLECTING {league_name} PLAYERS - COMPREHENSIVE HISTORICAL MODE")
+        print(f"   Total seasons to process: {len(historical_seasons)}")
+        print(f"   Season range: {historical_seasons[-1]} → {historical_seasons[0]}")
+        print(f"   Target table: {table_name}")
+        
+        conn = self.db_manager.connect_to_database()
+        if not conn:
+            return 0
+
+        total_players_processed = 0
+        successful_seasons = []
+        failed_seasons = []
+
+        try:
+            cursor = conn.cursor()
+            
+            # Process each historical season
+            for i, season in enumerate(historical_seasons):
+                print(f"   📅 Season {i+1}/{len(historical_seasons)}: {season}")
+                
+                try:
+                    # Primary method: Use CommonAllPlayers endpoint
+                    players_data = self.get_players_from_common_historical(league_id, season)
+                    
+                    # Fallback: Try bio stats if CommonAllPlayers fails
+                    if players_data is None or len(players_data) == 0:
+                        print("      Trying bio stats as fallback...")
+                        players_data = self.get_players_from_biostats(league_id, season)
+                    
+                    if players_data is None or len(players_data) == 0:
+                        print(f"      ⚠️  No player data found for {league_name} {season}")
+                        failed_seasons.append(season)
+                        continue
+                    
+                    # Process and insert players for this season
+                    players_processed = self.process_players_data(players_data, league_name, season)
+                    
+                    if len(players_processed) > 0:
+                        players_inserted = self.bulk_insert_players(cursor, conn, players_processed, table_name)
+                        print(f"      ✅ {players_inserted} players processed")
+                        total_players_processed += players_inserted
+                        successful_seasons.append(season)
+                    else:
+                        print(f"      ⚠️  No players to insert for {season}")
+                        failed_seasons.append(season)
+                        
+                except Exception as e:
+                    print(f"      ❌ Error processing {season}: {str(e)}")
+                    failed_seasons.append(season)
+                    continue
+                
+                # Rate limiting between seasons
+                time.sleep(0.6)
+                
+        except Exception as e:
+            print(f"   ❌ Critical error collecting {league_name} players: {str(e)}")
+            return 0
+        finally:
+            if conn:
+                conn.close()
+        
+        # Summary
+        print(f"   ✅ COMPREHENSIVE COLLECTION COMPLETE")
+        print(f"   Total players processed: {total_players_processed}")
+        print(f"   Successful seasons: {len(successful_seasons)}")
+        print(f"   Failed seasons: {len(failed_seasons)}")
+        if failed_seasons:
+            print(f"   Failed season list: {failed_seasons[:10]}...")  # Show first 10 failures
+        
+        return total_players_processed
+
+    def get_players_from_common_historical(self, league_id, season):
+        """Get players using CommonAllPlayers endpoint for historical seasons"""
+        try:
+            print(f"      🔄 Fetching historical common players...", end=" ")
+            
+            # For historical seasons, do NOT use is_only_current_season=1
+            common_players = commonallplayers.CommonAllPlayers(
+                league_id=league_id,
+                season=season,
+                is_only_current_season='0'  # Get ALL players who played in that season
+            )
+            
+            players_df = common_players.get_data_frames()[0]
+            print(f"✅ {len(players_df)} players")
+            return players_df
+            
+        except Exception as e:
+            print(f"❌ Historical common players failed: {str(e)[:50]}...")
+            return None
+
     def collect_league_players(self, league_name):
         """Collect players for a specific league"""
         league_config = next((l for l in self.leagues if l['name'] == league_name), None)
@@ -68,13 +212,13 @@ class PlayersCollector:
         try:
             cursor = conn.cursor()
             
-            # Method 1: Try league-specific player bio stats
-            players_data = self.get_players_from_biostats(league_id, current_season)
+            # Primary method: Use CommonAllPlayers endpoint
+            players_data = self.get_players_from_common(league_id, current_season)
             
-            # Method 2: Fallback to common all players
+            # Fallback: Try bio stats if CommonAllPlayers fails
             if players_data is None or len(players_data) == 0:
-                print("   Trying alternative player data source...")
-                players_data = self.get_players_from_common(league_id, current_season)
+                print("   Trying bio stats as fallback...")
+                players_data = self.get_players_from_biostats(league_id, current_season)
             
             if players_data is None or len(players_data) == 0:
                 print(f"   ⚠️  No player data found for {league_name}")
@@ -186,12 +330,12 @@ class PlayersCollector:
         try:
             insert_query = f"""
                 INSERT INTO {table_name} 
-                (player_id, player_name, team_id, team_abbreviation, season, 
+                (playerid, player_name, team_id, team_abbreviation, season, 
                  position, height, weight, birth_date, age, years_experience,
                  college, country, draft_year, draft_round, draft_number, 
                  is_active)
                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-                ON CONFLICT (player_id, season) 
+                ON CONFLICT (playerid, season) 
                 DO UPDATE SET 
                     player_name = EXCLUDED.player_name,
                     team_id = EXCLUDED.team_id,
@@ -231,6 +375,47 @@ class PlayersCollector:
             conn.rollback()
             return 0
     
+    def collect_all_leagues_players_comprehensive(self, test_mode=False):
+        """Collect players for all leagues across ALL historical seasons"""
+        print("👥 COLLECTING PLAYERS FOR ALL LEAGUES - COMPREHENSIVE HISTORICAL MODE")
+        print("=" * 70)
+        
+        if test_mode:
+            print("🧪 TEST MODE: Processing only recent seasons")
+        else:
+            print("🏛️ FULL HISTORICAL MODE: Processing ALL seasons since league founding")
+        
+        total_players = 0
+        results = {}
+        
+        for league_config in self.leagues:
+            league_name = league_config['name']
+            
+            try:
+                print(f"\n📊 Starting {league_name} comprehensive collection...")
+                players_added = self.collect_league_players_comprehensive(league_name, test_mode)
+                total_players += players_added
+                results[league_name] = players_added
+                
+                # Rate limiting between leagues
+                time.sleep(3)
+                
+            except Exception as e:
+                print(f"   ❌ Error with {league_name}: {str(e)}")
+                results[league_name] = 0
+        
+        print(f"\n✅ COMPREHENSIVE PLAYERS COLLECTION COMPLETE")
+        print(f"   Total players across all leagues: {total_players}")
+        
+        for league, count in results.items():
+            print(f"   {league}: {count} players")
+        
+        print(f"\n🎯 RESULT: Master players tables now contain comprehensive historical data")
+        print(f"   Each record is unique on (player_id, season)")
+        print(f"   This provides the foundation for comprehensive dashboard collection!")
+        
+        return results
+
     def collect_all_leagues_players(self):
         """Collect players for all leagues"""
         print("👥 COLLECTING PLAYERS FOR ALL LEAGUES")
@@ -270,14 +455,23 @@ def main():
     print("🧪 TESTING PLAYERS COLLECTOR")
     print("=" * 40)
     
-    # Test single league
-    print("\n1. Testing NBA players collection...")
-    nba_result = collector.collect_league_players('NBA')
+    # Test single league comprehensive collection
+    print("\n1. Testing NBA comprehensive historical collection (TEST MODE)...")
+    nba_result = collector.collect_league_players_comprehensive('NBA', test_mode=True)
     
-    print(f"\n2. Testing all leagues...")
-    all_results = collector.collect_all_leagues_players()
+    print(f"\n2. Testing current season collection (original method)...")
+    nba_current = collector.collect_league_players('NBA')
+    
+    print(f"\n3. Comparison:")
+    print(f"   Comprehensive historical (5 recent seasons): {nba_result} players")
+    print(f"   Current season only: {nba_current} players")
     
     print(f"\n✅ Testing complete!")
+    print(f"\n💡 To run full historical collection for all leagues:")
+    print(f"   collector.collect_all_leagues_players_comprehensive(test_mode=False)")
+    print(f"   This will build complete player-season records for dashboard APIs!")
+    
+    return {"comprehensive": nba_result, "current": nba_current}
 
 
 if __name__ == "__main__":

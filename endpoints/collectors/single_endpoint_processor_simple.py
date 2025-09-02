@@ -23,6 +23,12 @@ import nba_api.stats.endpoints as nbaapi
 from endpoints.collectors.rds_connection_manager import RDSConnectionManager
 from endpoints.collectors import allintwo
 from endpoints.config.nba_endpoints_config import get_endpoint_by_name
+from endpoints.collectors.dataframe_name_matcher import match_dataframes_to_names
+from endpoints.collectors.player_dashboard_enhancer import (
+    is_player_dashboard_endpoint, 
+    enhance_player_dashboard_dataframes,
+    validate_player_dashboard_data
+)
 
 def setup_logging(node_id, log_level='INFO'):
     """Setup logging for this specific node"""
@@ -344,6 +350,80 @@ def resolve_parameters_comprehensive(endpoint_name, endpoint_config, conn_manage
                 logger.warning(f"Using fallback player_id: {fallback_player_id}")
                 resolved_params[param_key] = fallback_player_id
                 
+        elif param_source == 'from_masterplayers_all_seasons':
+            # Get ALL player-season combinations from master tables for comprehensive collection
+            try:
+                logger.info("Fetching ALL player-season combinations from master players tables...")
+                
+                # Use actual master players tables found in database  
+                league_tables = {
+                    'nba': 'nba_players',
+                    'gleague': 'gleague_players', 
+                    'wnba': 'wnba_players'
+                }
+                
+                player_season_combinations = []
+                
+                for league, table_name in league_tables.items():
+                    try:
+                        # Get ALL unique player-season combinations
+                        query = f"""
+                            SELECT DISTINCT playerid, season 
+                            FROM {table_name} 
+                            WHERE playerid IS NOT NULL 
+                            AND season IS NOT NULL
+                            ORDER BY season DESC, playerid ASC
+                        """
+                        
+                        with conn_manager.get_cursor() as cursor:
+                            cursor.execute(query)
+                            results = cursor.fetchall()
+                        
+                        if results:
+                            combinations = [(row[0], row[1]) for row in results]
+                            player_season_combinations.extend(combinations)
+                            logger.info(f"Found {len(combinations)} player-season combinations from {table_name}")
+                            logger.info(f"Sample: {combinations[:3]}...")
+                            
+                    except Exception as e:
+                        logger.debug(f"Table {table_name} not found or accessible: {e}")
+                        continue
+                
+                if player_season_combinations:
+                    # Store combinations for comprehensive processing 
+                    # The processor will iterate through all of these
+                    resolved_params['player_season_combinations'] = player_season_combinations
+                    
+                    # For now, set the first combination as the default
+                    first_player, first_season = player_season_combinations[0]
+                    if param_key == 'player_id':
+                        resolved_params[param_key] = first_player
+                    elif param_key == 'season':
+                        resolved_params[param_key] = first_season
+                        
+                    logger.info(f"Found {len(player_season_combinations)} total player-season combinations")
+                    logger.info(f"Will process comprehensive data for all players and all seasons")
+                else:
+                    # Fallback to current season approach
+                    logger.warning("No player-season combinations found, falling back to current season")
+                    if param_key == 'player_id':
+                        resolved_params[param_key] = 2544  # LeBron James
+                    elif param_key == 'season':
+                        current_year = datetime.now().year
+                        if datetime.now().month >= 10:
+                            season = f"{current_year}-{str(current_year + 1)[-2:]}"
+                        else:
+                            season = f"{current_year - 1}-{str(current_year)[-2:]}"
+                        resolved_params[param_key] = season
+                    
+            except Exception as e:
+                logger.error(f"Failed to fetch player-season combinations: {e}")
+                # Ultimate fallback
+                if param_key == 'player_id':
+                    resolved_params[param_key] = 2544
+                elif param_key == 'season':
+                    resolved_params[param_key] = "2024-25"
+                
         elif param_source == 'from_masterteams':
             # Get team IDs from master teams table
             try:
@@ -501,11 +581,20 @@ def process_single_endpoint_comprehensive(endpoint_name, node_id, rate_limit, lo
         main_param_key = None
         main_ids = []
         
-        for param_key, ids in missing_ids_by_param.items():
-            if ids:  # Find the first parameter with actual IDs
-                main_param_key = param_key
-                main_ids = ids
-                break
+        # SPECIAL CASE: Handle player-season combinations for comprehensive collection
+        if 'player_season_combinations' in missing_ids_by_param:
+            main_param_key = 'player_season_combinations'
+            main_ids = missing_ids_by_param['player_season_combinations']
+            logger.info(f"🏀 COMPREHENSIVE PLAYER-SEASON PROCESSING MODE")
+            logger.info(f"Processing {len(main_ids)} player-season combinations")
+            logger.info(f"This will collect historical data for all players across all seasons")
+        else:
+            # Standard processing - find first parameter with IDs
+            for param_key, ids in missing_ids_by_param.items():
+                if ids:  # Find the first parameter with actual IDs
+                    main_param_key = param_key
+                    main_ids = ids
+                    break
         
         if not main_param_key:
             logger.warning("No missing IDs found to process")
@@ -517,27 +606,52 @@ def process_single_endpoint_comprehensive(endpoint_name, node_id, rate_limit, lo
         if 'game' in main_param_key:
             logger.info(f"🕒 PROCESSING STRATEGY: Latest games first, working backwards through time")
             logger.info(f"📅 This prioritizes recent games for faster data availability")
+        elif main_param_key == 'player_season_combinations':
+            logger.info(f"🏀 PROCESSING STRATEGY: Comprehensive player-season data collection")
+            logger.info(f"📊 This will build complete historical player dashboard datasets")
         
-        # Process each missing ID
+        # Process each missing ID (or player-season combination)
         for i, missing_id in enumerate(main_ids):
-            logger.info(f"\\n--- Processing ID {i+1}/{len(main_ids)}: {missing_id} ---")
-            
-            # Build parameters for this specific ID
-            current_params = {}
-            
-            # Add the main ID we're iterating through
-            current_params[main_param_key] = missing_id
-            
-            # Add any static parameters from config
-            for param_key_static, param_source_static in endpoint_config.get('parameters', {}).items():
-                if param_key_static != main_param_key:  # Don't override our main parameter
-                    # Handle direct string values
-                    if isinstance(param_source_static, str):
-                        if param_source_static in ['from_current_season', 'from_recent_season']:
-                            current_params[param_key_static] = get_current_season()
-                        elif param_source_static not in ['from_mastergames', 'from_masterplayers', 'from_masterteams']:
-                            # It's a static value
+            if main_param_key == 'player_season_combinations':
+                # Handle player-season combinations specially
+                player_id, season = missing_id  # Unpack the tuple
+                logger.info(f"\\n--- Processing Player-Season {i+1}/{len(main_ids)}: Player {player_id}, Season {season} ---")
+                
+                # Build parameters for this player-season combination
+                current_params = {
+                    'player_id': player_id,
+                    'season': season
+                }
+                
+                # Add any additional static parameters from config
+                for param_key_static, param_source_static in endpoint_config.get('parameters', {}).items():
+                    if param_key_static not in ['player_id', 'season']:
+                        # Handle static values that aren't player_id or season
+                        if isinstance(param_source_static, str) and param_source_static not in ['from_masterplayers_all_seasons']:
                             current_params[param_key_static] = param_source_static
+                        elif isinstance(param_source_static, (int, float, bool)):
+                            current_params[param_key_static] = param_source_static
+                
+            else:
+                # Standard single-parameter processing
+                logger.info(f"\\n--- Processing ID {i+1}/{len(main_ids)}: {missing_id} ---")
+                
+                # Build parameters for this specific ID
+                current_params = {}
+                
+                # Add the main ID we're iterating through
+                current_params[main_param_key] = missing_id
+                
+                # Add any static parameters from config
+                for param_key_static, param_source_static in endpoint_config.get('parameters', {}).items():
+                    if param_key_static != main_param_key:  # Don't override our main parameter
+                        # Handle direct string values
+                        if isinstance(param_source_static, str):
+                            if param_source_static in ['from_current_season', 'from_recent_season']:
+                                current_params[param_key_static] = get_current_season()
+                            elif param_source_static not in ['from_mastergames', 'from_masterplayers', 'from_masterteams']:
+                                # It's a static value
+                                current_params[param_key_static] = param_source_static
                     elif isinstance(param_source_static, (int, float, bool)):
                         # Handle numeric and boolean static values (like last_n_games: 30)
                         current_params[param_key_static] = param_source_static
@@ -558,9 +672,17 @@ def process_single_endpoint_comprehensive(endpoint_name, node_id, rate_limit, lo
             # Validate parameters before making API call
             is_valid, validation_error = validate_api_parameters(endpoint_name, current_params, logger)
             if not is_valid:
-                logger.error(f"Parameter validation failed for {main_param_key}={missing_id}: {validation_error}")
+                # Create appropriate validation error identifier
+                if main_param_key == 'player_season_combinations':
+                    validation_identifier = f"Player {player_id}, Season {season}"
+                    record_key_value = f"{player_id}_{season}"
+                else:
+                    validation_identifier = f"{main_param_key}={missing_id}"
+                    record_key_value = missing_id
+                
+                logger.error(f"Parameter validation failed for {validation_identifier}: {validation_error}")
                 record_failed_id(conn_manager, failed_ids_table, f"nba_{endpoint_name.lower()}", 
-                                main_param_key, missing_id, f"Parameter validation failed: {validation_error}", logger)
+                                main_param_key, record_key_value, f"Parameter validation failed: {validation_error}", logger)
                 total_failed += 1
                 continue
             
@@ -569,23 +691,47 @@ def process_single_endpoint_comprehensive(endpoint_name, node_id, rate_limit, lo
                 dataframes = make_api_call(endpoint_class, current_params, rate_limit, logger)
                 
                 if dataframes == "PERMANENT_ERROR":
-                    logger.error(f"Permanent API error for {main_param_key}={missing_id} - recording as failed")
+                    # Create appropriate permanent error identifier
+                    if main_param_key == 'player_season_combinations':
+                        perm_error_identifier = f"Player {player_id}, Season {season}"
+                        record_key_value = f"{player_id}_{season}"
+                    else:
+                        perm_error_identifier = f"{main_param_key}={missing_id}"
+                        record_key_value = missing_id
+                    
+                    logger.error(f"Permanent API error for {perm_error_identifier} - recording as failed")
                     record_failed_id(conn_manager, failed_ids_table, f"nba_{endpoint_name.lower()}", 
-                                    main_param_key, missing_id, "Permanent API parameter error", logger)
+                                    main_param_key, record_key_value, "Permanent API parameter error", logger)
                     total_failed += 1
                     continue
                 
                 if dataframes is None:
-                    logger.warning(f"No data returned for {main_param_key}={missing_id}")
+                    # Create appropriate no data identifier
+                    if main_param_key == 'player_season_combinations':
+                        no_data_identifier = f"Player {player_id}, Season {season}"
+                        record_key_value = f"{player_id}_{season}"
+                    else:
+                        no_data_identifier = f"{main_param_key}={missing_id}"
+                        record_key_value = missing_id
+                    
+                    logger.warning(f"No data returned for {no_data_identifier}")
                     record_failed_id(conn_manager, failed_ids_table, f"nba_{endpoint_name.lower()}", 
-                                    main_param_key, missing_id, "No data returned", logger)
+                                    main_param_key, record_key_value, "No data returned", logger)
                     total_failed += 1
                     continue
                 
                 if not isinstance(dataframes, list) or len(dataframes) == 0:
-                    logger.warning(f"Empty or invalid dataframes for {main_param_key}={missing_id}")
+                    # Create appropriate empty dataframes identifier
+                    if main_param_key == 'player_season_combinations':
+                        empty_identifier = f"Player {player_id}, Season {season}"
+                        record_key_value = f"{player_id}_{season}"
+                    else:
+                        empty_identifier = f"{main_param_key}={missing_id}"
+                        record_key_value = missing_id
+                    
+                    logger.warning(f"Empty or invalid dataframes for {empty_identifier}")
                     record_failed_id(conn_manager, failed_ids_table, f"nba_{endpoint_name.lower()}", 
-                                    main_param_key, missing_id, "Empty dataframes returned", logger)
+                                    main_param_key, record_key_value, "Empty dataframes returned", logger)
                     total_failed += 1
                     continue
                 
@@ -593,19 +739,40 @@ def process_single_endpoint_comprehensive(endpoint_name, node_id, rate_limit, lo
                 success_count = 0
                 error_count = 0
                 
-                # Try to get proper dataframe names from the endpoint
-                dataframe_names = []
+                # Use advanced dataframe name matching instead of unreliable dictionary order
                 try:
                     # Create endpoint instance to get dataframe metadata
                     temp_endpoint_instance = endpoint_class(**current_params)
-                    if hasattr(temp_endpoint_instance, 'expected_data') and temp_endpoint_instance.expected_data:
-                        # Get dataframe names from expected_data attribute (the correct way!)
-                        dataframe_names = [name.lower() for name in temp_endpoint_instance.expected_data.keys()]
-                        logger.info(f"Found dataframe names from expected_data: {dataframe_names}")
-                    else:
-                        logger.info(f"No expected_data metadata found, using index-based naming")
+                    
+                    # Use our robust matching function to get correct names
+                    dataframe_names = match_dataframes_to_names(dataframes, temp_endpoint_instance, logger)
+                    logger.info(f"Matched dataframe names: {dataframe_names}")
+                    
                 except Exception as e:
-                    logger.warning(f"Could not get dataframe names: {e}")
+                    logger.warning(f"Could not match dataframe names, using fallback: {e}")
+                    # Fallback to simple index-based naming
+                    dataframe_names = [f"dataframe_{i}" for i in range(len(dataframes))]
+                
+                # SPECIAL HANDLING: Player Dashboard Enhancement
+                if is_player_dashboard_endpoint(endpoint_name):
+                    logger.info(f"🏀 Player Dashboard endpoint detected - adding player context")
+                    
+                    # Extract player_id and season from current_params
+                    player_id = current_params.get('player_id')
+                    season = current_params.get('season', 'unknown')
+                    
+                    if player_id:
+                        # Enhance dataframes with player_id and season columns
+                        dataframes = enhance_player_dashboard_dataframes(
+                            dataframes=dataframes,
+                            player_id=player_id,
+                            season=season,
+                            endpoint_name=endpoint_name,
+                            logger=logger
+                        )
+                        logger.info(f"✅ Enhanced {len(dataframes)} dataframes with player context")
+                    else:
+                        logger.warning("⚠️ Player dashboard endpoint but no player_id found in parameters!")
                 
                 for df_index, df in enumerate(dataframes):
                     try:
@@ -614,18 +781,29 @@ def process_single_endpoint_comprehensive(endpoint_name, node_id, rate_limit, lo
                             logger.warning(f"  Dataframe {df_index} is None or empty, skipping")
                             continue
                         
-                        # Use proper dataframe naming convention
+                        # Use matched dataframe name (should always be available now)
                         if df_index < len(dataframe_names):
-                            # Use the actual dataframe name from NBA API metadata
                             df_name = dataframe_names[df_index]
                             table_name = f"nba_{endpoint_name.lower()}_{df_name}"
                             logger.info(f"  Processing dataframe {df_index} ({df_name}) -> {table_name}")
                         else:
-                            # Fallback to index-based naming
-                            table_name = f"nba_{endpoint_name.lower()}_{df_index}"
-                            logger.info(f"  Processing dataframe {df_index} (unnamed) -> {table_name}")
+                            # Extra safety fallback (shouldn't happen with our new matching)
+                            table_name = f"nba_{endpoint_name.lower()}_dataframe_{df_index}"
+                            logger.warning(f"  Unexpected: dataframe {df_index} has no matched name, using fallback -> {table_name}")
                         
                         logger.info(f"    Shape: {getattr(df, 'shape', 'unknown')}")
+                        
+                        # VALIDATION: For player dashboard endpoints, validate enhanced data
+                        if is_player_dashboard_endpoint(endpoint_name):
+                            player_id = current_params.get('player_id')
+                            season = current_params.get('season', 'unknown')
+                            
+                            if not validate_player_dashboard_data(df, player_id, season, logger):
+                                logger.error(f"Player dashboard data validation failed for dataframe {df_index}")
+                                error_count += 1
+                                continue
+                            
+                            logger.info(f"✅ Player dashboard data validation passed")
                         
                         # Clean dataframe (handles reserved keywords)
                         cleaned_df = allintwo.clean_column_names(df.copy())
@@ -649,19 +827,44 @@ def process_single_endpoint_comprehensive(endpoint_name, node_id, rate_limit, lo
                 
                 if success_count > 0:
                     total_processed += 1
-                    logger.info(f"Successfully processed {main_param_key}={missing_id} ({success_count} dataframes)")
+                    
+                    # Create appropriate success identifier
+                    if main_param_key == 'player_season_combinations':
+                        success_identifier = f"Player {player_id}, Season {season}"
+                    else:
+                        success_identifier = f"{main_param_key}={missing_id}"
+                    
+                    logger.info(f"Successfully processed {success_identifier} ({success_count} dataframes)")
                 else:
                     total_failed += 1
+                    
+                    # Create appropriate failure identifier  
+                    if main_param_key == 'player_season_combinations':
+                        failure_identifier = f"Player {player_id}, Season {season}"
+                        record_key_value = f"{player_id}_{season}"  # Use combined key for database
+                    else:
+                        failure_identifier = f"{main_param_key}={missing_id}"
+                        record_key_value = missing_id
+                    
                     record_failed_id(conn_manager, failed_ids_table, f"nba_{endpoint_name.lower()}", 
-                                    main_param_key, missing_id, "All dataframes failed to process", logger)
-                    logger.error(f"All dataframes failed for {main_param_key}={missing_id}")
+                                    main_param_key, record_key_value, "All dataframes failed to process", logger)
+                    logger.error(f"All dataframes failed for {failure_identifier}")
                 
             except Exception as e:
                 total_failed += 1
                 error_msg = str(e)
-                logger.error(f"API call failed for {main_param_key}={missing_id}: {error_msg}")
+                
+                # Create appropriate error identifier
+                if main_param_key == 'player_season_combinations':
+                    error_identifier = f"Player {player_id}, Season {season}"
+                    record_key_value = f"{player_id}_{season}"  # Use combined key for database
+                else:
+                    error_identifier = f"{main_param_key}={missing_id}"
+                    record_key_value = missing_id
+                
+                logger.error(f"API call failed for {error_identifier}: {error_msg}")
                 record_failed_id(conn_manager, failed_ids_table, f"nba_{endpoint_name.lower()}", 
-                                main_param_key, missing_id, error_msg, logger)
+                                main_param_key, record_key_value, error_msg, logger)
                 continue
             
             # Rate limiting between API calls
@@ -765,6 +968,89 @@ def find_all_missing_ids(endpoint_config, conn_manager, logger):
                 all_missing.extend(missing_ids)
                 
             missing_ids_by_param[param_key] = all_missing  # Process ALL missing IDs
+            
+        elif source_value == 'from_masterplayers_all_seasons':
+            # Find ALL player-season combinations that need processing
+            # This is for comprehensive historical data collection
+            logger.info(f"Finding missing player-season combinations for comprehensive collection...")
+            
+            all_combinations = []
+            
+            league_tables = {
+                'nba': 'nba_players',
+                'gleague': 'gleague_players', 
+                'wnba': 'wnba_players'
+            }
+            
+            for league, table_name in league_tables.items():
+                try:
+                    logger.info(f"Processing {table_name} for all player-season combinations...")
+                    
+                    with conn_manager.get_cursor() as cursor:
+                        # Get ALL unique player-season combinations from master table
+                        cursor.execute(f"""
+                            SELECT DISTINCT playerid, season 
+                            FROM {table_name} 
+                            WHERE playerid IS NOT NULL 
+                            AND season IS NOT NULL
+                            ORDER BY season DESC, playerid ASC
+                        """)
+                        
+                        combinations = cursor.fetchall()
+                        
+                        if combinations:
+                            logger.info(f"Found {len(combinations)} player-season combinations in {table_name}")
+                            
+                            # Check which combinations are missing from endpoint tables
+                            endpoint_prefix = f"nba_{endpoint_config['endpoint'].lower()}"
+                            
+                            # Get existing combinations from endpoint tables
+                            cursor.execute("""
+                                SELECT table_name 
+                                FROM information_schema.tables 
+                                WHERE table_schema = 'public' 
+                                AND table_name LIKE %s
+                            """, (f"{endpoint_prefix}%",))
+                            
+                            endpoint_tables = [row[0] for row in cursor.fetchall()]
+                            existing_combinations = set()
+                            
+                            for table in endpoint_tables:
+                                try:
+                                    cursor.execute(f"""
+                                        SELECT DISTINCT player_id, season 
+                                        FROM {table} 
+                                        WHERE player_id IS NOT NULL 
+                                        AND season IS NOT NULL
+                                    """)
+                                    existing = cursor.fetchall()
+                                    existing_combinations.update(existing)
+                                except Exception as e:
+                                    logger.debug(f"Could not check existing data in {table}: {e}")
+                            
+                            # Find missing combinations
+                            all_available = set(combinations)
+                            missing_combinations = all_available - existing_combinations
+                            
+                            logger.info(f"Available: {len(all_available)}, Existing: {len(existing_combinations)}, Missing: {len(missing_combinations)}")
+                            
+                            # Convert to list format for processing
+                            missing_list = list(missing_combinations)
+                            all_combinations.extend(missing_list)
+                            
+                except Exception as e:
+                    logger.error(f"Error processing {table_name} for player-season combinations: {e}")
+                    continue
+            
+            # Store the combinations in a special format
+            # The processor will iterate through these (player_id, season) tuples
+            if all_combinations:
+                logger.info(f"Total missing player-season combinations to process: {len(all_combinations)}")
+                logger.info(f"Sample combinations: {all_combinations[:5]}...")
+                missing_ids_by_param['player_season_combinations'] = all_combinations
+            else:
+                logger.warning("No missing player-season combinations found")
+                missing_ids_by_param[param_key] = []
             
         elif source_value == 'from_masterteams':
             # Find missing team IDs across all leagues

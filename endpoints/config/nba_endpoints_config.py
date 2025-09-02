@@ -187,52 +187,80 @@ PLAYER_ENDPOINTS = [
     },
     {
         'endpoint': 'PlayerDashboardByGameSplits',
-        'description': 'Player dashboard by game splits',
-        'parameters': {'player_id': 'from_masterplayers'},
+        'description': 'Player dashboard by game splits (all seasons, all players)',
+        'parameters': {
+            'player_id': 'from_masterplayers_all_seasons',
+            'season': 'from_masterplayers_all_seasons'
+        },
         'frequency': 'weekly',
-        'priority': 'medium'
+        'priority': 'medium',
+        'data_type': 'player_season_cumulative'
     },
     {
         'endpoint': 'PlayerDashboardByGeneralSplits',
-        'description': 'Player dashboard by general splits',
-        'parameters': {'player_id': 'from_masterplayers'},
+        'description': 'Player dashboard by general splits (all seasons, all players)',
+        'parameters': {
+            'player_id': 'from_masterplayers_all_seasons',
+            'season': 'from_masterplayers_all_seasons'
+        },
         'frequency': 'weekly',
-        'priority': 'medium'
+        'priority': 'medium',
+        'data_type': 'player_season_cumulative'
     },
     {
         'endpoint': 'PlayerDashboardByShootingSplits',
-        'description': 'Player dashboard by shooting splits',
-        'parameters': {'player_id': 'from_masterplayers'},
+        'description': 'Player dashboard by shooting splits (all seasons, all players)',
+        'parameters': {
+            'player_id': 'from_masterplayers_all_seasons',
+            'season': 'from_masterplayers_all_seasons'
+        },
         'frequency': 'weekly', 
-        'priority': 'high'
+        'priority': 'high',
+        'data_type': 'player_season_cumulative'
     },
     {
         'endpoint': 'PlayerDashboardByTeamPerformance',
-        'description': 'Player dashboard by team performance',
-        'parameters': {'player_id': 'from_masterplayers'},
+        'description': 'Player dashboard by team performance (all seasons, all players)',
+        'parameters': {
+            'player_id': 'from_masterplayers_all_seasons',
+            'season': 'from_masterplayers_all_seasons'
+        },
         'frequency': 'weekly',
-        'priority': 'medium'
+        'priority': 'medium',
+        'data_type': 'player_season_cumulative'
     },
     {
         'endpoint': 'PlayerDashboardByYearOverYear',
-        'description': 'Player dashboard year over year',
-        'parameters': {'player_id': 'from_masterplayers'},
+        'description': 'Player dashboard year over year comparison (all seasons, all players)',
+        'parameters': {
+            'player_id': 'from_masterplayers_all_seasons',
+            'season': 'from_masterplayers_all_seasons'
+        },
         'frequency': 'weekly',
-        'priority': 'medium'
+        'priority': 'medium',
+        'data_type': 'player_season_cumulative'
     },
     {
         'endpoint': 'PlayerDashboardByClutch',
-        'description': 'Player dashboard by clutch situations',
-        'parameters': {'player_id': 'from_masterplayers', 'last_n_games': 30},
+        'description': 'Player dashboard by clutch situations (all seasons, all players)',
+        'parameters': {
+            'player_id': 'from_masterplayers_all_seasons',
+            'season': 'from_masterplayers_all_seasons'
+        },
         'frequency': 'weekly',
-        'priority': 'high'
+        'priority': 'high',
+        'data_type': 'player_season_cumulative'
     },
     {
         'endpoint': 'PlayerDashboardByLastNGames',
-        'description': 'Player dashboard by last N games',
-        'parameters': {'player_id': 'from_masterplayers'},
+        'description': 'Player dashboard by last N games (all seasons, all players)',
+        'parameters': {
+            'player_id': 'from_masterplayers_all_seasons',
+            'season': 'from_masterplayers_all_seasons'
+        },
         'frequency': 'weekly',
-        'priority': 'medium'
+        'priority': 'medium',
+        'data_type': 'player_season_cumulative'
     },
     {
         'endpoint': 'PlayerNextNGames',
