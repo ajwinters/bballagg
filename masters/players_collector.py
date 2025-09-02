@@ -1,18 +1,19 @@
 """
-NBA Players Data Collector
+NBA Players Data Collector - Enhanced Version
 
-Handles bi-weekly collection of player data for all leagues:
-- Player roster information
-- Player statistics
-- Bulk insert with conflict handling
-- League-separated tables (nba_players, wnba_players, gleague_players)
+Comprehensive master players table builder:
+1. Pull ALL players from CommonAllPlayers (complete historical dataset)
+2. Enhance each player with detailed info from CommonPlayerInfo
+3. Merge datasets with duplicate removal
+4. Support both backfill and incremental updates
+5. League-separated tables (nba_players, wnba_players, gleague_players)
 """
 
 import pandas as pd
 import time
 from datetime import datetime
 from psycopg2.extras import execute_batch
-from nba_api.stats.endpoints import leaguedashplayerbiostats, commonallplayers
+from nba_api.stats.endpoints import commonallplayers, commonplayerinfo
 from database_manager import MasterTablesManager
 
 
@@ -47,7 +48,298 @@ class PlayersCollector:
             }
         ]
     
-    def generate_historical_seasons(self, league_config, end_year=None):
+    def collect_comprehensive_players(self, league_name, backfill_mode=True):
+        """
+        Comprehensive players collection using CommonAllPlayers + CommonPlayerInfo
+        
+        Process:
+        1. Get ALL players from CommonAllPlayers (historical complete dataset)
+        2. For each player, get detailed info from CommonPlayerInfo
+        3. Merge datasets with duplicate removal
+        4. Insert with conflict handling
+        
+        Args:
+            league_name: 'NBA', 'WNBA', or 'G-League'
+            backfill_mode: If True, process all players. If False, only new players.
+        """
+        league_config = next((l for l in self.leagues if l['name'] == league_name), None)
+        if not league_config:
+            print(f"❌ Unknown league: {league_name}")
+            return 0
+
+        league_id = league_config['id']
+        table_name = f"{league_config['table_prefix']}_players"
+        
+        print(f"🏀 COMPREHENSIVE {league_name} PLAYERS COLLECTION")
+        print(f"   Mode: {'BACKFILL (All Players)' if backfill_mode else 'INCREMENTAL (New Players Only)'}")
+        print(f"   Target table: {table_name}")
+        
+        conn = self.db_manager.connect_to_database()
+        if not conn:
+            return 0
+
+        try:
+            cursor = conn.cursor()
+            
+            # Step 1: Get ALL players from CommonAllPlayers
+            print(f"   📋 Step 1: Fetching all players from CommonAllPlayers...")
+            all_players_df = self.get_all_players_comprehensive(league_id)
+            
+            if all_players_df is None or len(all_players_df) == 0:
+                print(f"   ❌ No players found in CommonAllPlayers for {league_name}")
+                return 0
+            
+            print(f"   ✅ Found {len(all_players_df)} total players in {league_name}")
+            
+            # Step 2: Filter players if incremental mode
+            if not backfill_mode:
+                all_players_df = self.filter_new_players_only(cursor, all_players_df, table_name)
+                print(f"   📊 After filtering: {len(all_players_df)} new players to process")
+            
+            if len(all_players_df) == 0:
+                print(f"   ✅ No new players to process")
+                return 0
+            
+            # Step 3: Enhance each player with CommonPlayerInfo
+            print(f"   🔍 Step 2: Enhancing players with detailed info...")
+            enhanced_players_df = self.enhance_players_with_detailed_info(all_players_df)
+            
+            # Step 4: Process and insert enhanced data
+            print(f"   💾 Step 3: Processing and inserting enhanced player data...")
+            players_processed = self.process_enhanced_players_data(enhanced_players_df, league_name)
+            
+            if len(players_processed) > 0:
+                players_inserted = self.bulk_insert_enhanced_players(cursor, conn, players_processed, table_name)
+                print(f"   ✅ {players_inserted} players processed successfully")
+                return players_inserted
+            else:
+                print(f"   ⚠️  No players to insert")
+                return 0
+                
+        except Exception as e:
+            print(f"   ❌ Error in comprehensive collection: {str(e)}")
+            return 0
+        finally:
+            if conn:
+                conn.close()
+
+    def get_all_players_comprehensive(self, league_id):
+        """Get ALL players using CommonAllPlayers - complete historical dataset"""
+        try:
+            print(f"      🔄 Fetching comprehensive player list...", end=" ")
+            
+            # Get ALL players who ever played in this league
+            all_players = commonallplayers.CommonAllPlayers(
+                league_id=league_id,
+                season='2024-25',  # Use current season as reference
+                is_only_current_season='0'  # KEY: Get ALL historical players
+            )
+            
+            players_df = all_players.get_data_frames()[0]
+            print(f"✅ {len(players_df)} players")
+            
+            # Clean and standardize the base dataset
+            return self.clean_base_players_data(players_df)
+            
+        except Exception as e:
+            print(f"❌ Failed: {str(e)[:50]}...")
+            return None
+
+    def filter_new_players_only(self, cursor, all_players_df, table_name):
+        """Filter to only players not already in the database"""
+        try:
+            # Get existing player IDs from database
+            cursor.execute(f"SELECT DISTINCT playerid FROM {table_name}")
+            existing_ids = set([str(row[0]) for row in cursor.fetchall()])
+            
+            # Filter to only new players
+            all_players_df['PLAYER_ID'] = all_players_df['PERSON_ID'].astype(str)
+            new_players_df = all_players_df[~all_players_df['PLAYER_ID'].isin(existing_ids)]
+            
+            print(f"      Existing players in DB: {len(existing_ids)}")
+            print(f"      New players found: {len(new_players_df)}")
+            
+            return new_players_df
+            
+        except Exception as e:
+            print(f"      ⚠️ Error filtering players, processing all: {str(e)}")
+            return all_players_df
+
+    def enhance_players_with_detailed_info(self, base_players_df):
+        """Enhance each player with detailed info from CommonPlayerInfo"""
+        enhanced_data = []
+        total_players = len(base_players_df)
+        
+        print(f"      Processing {total_players} players with detailed info...")
+        
+        for i, (_, player) in enumerate(base_players_df.iterrows()):
+            player_id = str(player.get('PERSON_ID', ''))
+            
+            if i % 50 == 0:  # Progress update every 50 players
+                print(f"      Progress: {i}/{total_players} ({(i/total_players)*100:.1f}%)")
+            
+            try:
+                # Get detailed player info
+                detailed_info = self.get_player_detailed_info(player_id)
+                
+                if detailed_info is not None:
+                    # Merge base data with detailed info
+                    merged_player = self.merge_player_data(player, detailed_info)
+                    enhanced_data.append(merged_player)
+                else:
+                    # Use base data only if detailed info fails
+                    enhanced_data.append(player.to_dict())
+                
+                # Rate limiting
+                time.sleep(0.1)
+                
+            except Exception as e:
+                print(f"      ⚠️ Error enhancing player {player_id}: {str(e)[:30]}...")
+                # Add base data as fallback
+                enhanced_data.append(player.to_dict())
+                continue
+        
+        print(f"      ✅ Enhanced {len(enhanced_data)} players")
+        return pd.DataFrame(enhanced_data)
+
+    def get_player_detailed_info(self, player_id):
+        """Get detailed info for a specific player using CommonPlayerInfo"""
+        try:
+            player_info = commonplayerinfo.CommonPlayerInfo(player_id=player_id)
+            info_df = player_info.get_data_frames()[0]
+            
+            if len(info_df) > 0:
+                return info_df.iloc[0]  # Return first (and only) row as Series
+            return None
+            
+        except Exception as e:
+            # Fail silently - many historical players may not have detailed info
+            return None
+
+    def merge_player_data(self, base_player, detailed_info):
+        """Merge base player data with detailed info, removing duplicates"""
+        merged = base_player.to_dict().copy()
+        
+        if detailed_info is not None:
+            detailed_dict = detailed_info.to_dict()
+            
+            # Mapping of duplicate fields (detailed_info_key: base_key)
+            field_mappings = {
+                'PERSON_ID': 'PERSON_ID',
+                'FIRST_NAME': 'FIRST_NAME', 
+                'LAST_NAME': 'LAST_NAME',
+                'DISPLAY_FIRST_LAST': 'DISPLAY_FIRST_LAST'
+            }
+            
+            # Add detailed info, avoiding duplicates
+            for detailed_key, detailed_value in detailed_dict.items():
+                # Skip if this field is already covered by base data
+                if detailed_key not in field_mappings:
+                    merged[detailed_key] = detailed_value
+                # For mapped fields, prefer detailed info if base is empty/null
+                elif detailed_key in field_mappings:
+                    base_key = field_mappings[detailed_key]
+                    if pd.isna(merged.get(base_key)) or merged.get(base_key) == '':
+                        merged[base_key] = detailed_value
+        
+        return merged
+
+    def clean_base_players_data(self, players_df):
+        """Clean and standardize the base players dataset"""
+        # Standardize column names for consistency
+        column_mapping = {
+            'PERSON_ID': 'PERSON_ID',
+            'DISPLAY_FIRST_LAST': 'DISPLAY_FIRST_LAST', 
+            'FIRST_NAME': 'FIRST_NAME',
+            'LAST_NAME': 'LAST_NAME',
+            'IS_ACTIVE': 'IS_ACTIVE'
+        }
+        
+        # Keep only columns we have
+        available_columns = [col for col in column_mapping.keys() if col in players_df.columns]
+        cleaned_df = players_df[available_columns].copy()
+        
+        return cleaned_df
+
+    def process_enhanced_players_data(self, enhanced_df, league_name):
+        """Process the enhanced players data for database insertion"""
+        processed_players = []
+        
+        try:
+            for _, player in enhanced_df.iterrows():
+                # Extract key fields with fallbacks
+                player_id = str(player.get('PERSON_ID', ''))
+                player_name = str(player.get('DISPLAY_FIRST_LAST', ''))
+                
+                # Skip if essential data is missing
+                if not player_id or not player_name:
+                    continue
+                
+                # Build comprehensive player record
+                processed_player = (
+                    player_id,
+                    player_name,
+                    str(player.get('FIRST_NAME', '')),
+                    str(player.get('LAST_NAME', '')),
+                    str(player.get('BIRTHDATE', '')),
+                    str(player.get('SCHOOL', '')),  # College
+                    str(player.get('COUNTRY', '')),
+                    str(player.get('HEIGHT', '')),
+                    str(player.get('WEIGHT', '')),
+                    str(player.get('POSITION', '')),
+                    int(player.get('DRAFT_YEAR', 0)) if player.get('DRAFT_YEAR') else None,
+                    int(player.get('DRAFT_ROUND', 0)) if player.get('DRAFT_ROUND') else None,
+                    int(player.get('DRAFT_NUMBER', 0)) if player.get('DRAFT_NUMBER') else None,
+                    bool(player.get('IS_ACTIVE', True)),
+                    league_name
+                )
+                
+                processed_players.append(processed_player)
+                
+        except Exception as e:
+            print(f"Error processing enhanced players data: {str(e)}")
+        
+        return processed_players
+
+    def bulk_insert_enhanced_players(self, cursor, conn, players_data, table_name):
+        """Bulk insert enhanced players with conflict handling"""
+        if not players_data:
+            return 0
+        
+        try:
+            insert_query = f"""
+                INSERT INTO {table_name} 
+                (playerid, playername, firstname, lastname, birthdate, 
+                 college, country, height, weight, position, 
+                 draftyear, draftround, draftnumber, isactive, league)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                ON CONFLICT (playerid) 
+                DO UPDATE SET 
+                    playername = EXCLUDED.playername,
+                    firstname = EXCLUDED.firstname,
+                    lastname = EXCLUDED.lastname,
+                    birthdate = EXCLUDED.birthdate,
+                    college = EXCLUDED.college,
+                    country = EXCLUDED.country,
+                    height = EXCLUDED.height,
+                    weight = EXCLUDED.weight,
+                    position = EXCLUDED.position,
+                    draftyear = EXCLUDED.draftyear,
+                    draftround = EXCLUDED.draftround,
+                    draftnumber = EXCLUDED.draftnumber,
+                    isactive = EXCLUDED.isactive,
+                    updatedat = CURRENT_TIMESTAMP;
+            """
+            
+            execute_batch(cursor, insert_query, players_data, page_size=100)
+            conn.commit()
+            
+            return len(players_data)
+            
+        except Exception as e:
+            print(f"Error bulk inserting enhanced players: {str(e)}")
+            conn.rollback()
+            return 0
         """Generate all historical seasons for a league"""
         if end_year is None:
             end_year = datetime.now().year + 1
@@ -330,23 +622,23 @@ class PlayersCollector:
         try:
             insert_query = f"""
                 INSERT INTO {table_name} 
-                (playerid, player_name, team_id, team_abbreviation, season, 
-                 position, height, weight, birth_date, age, years_experience,
-                 college, country, draft_year, draft_round, draft_number, 
-                 is_active)
+                (playerid, playername, teamid, teamabbreviation, season, 
+                 position, height, weight, birthdate, age, yearsexperience,
+                 college, country, draftyear, draftround, draftnumber, 
+                 isactive)
                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                 ON CONFLICT (playerid, season) 
                 DO UPDATE SET 
-                    player_name = EXCLUDED.player_name,
-                    team_id = EXCLUDED.team_id,
-                    team_abbreviation = EXCLUDED.team_abbreviation,
+                    playername = EXCLUDED.playername,
+                    teamid = EXCLUDED.teamid,
+                    teamabbreviation = EXCLUDED.teamabbreviation,
                     position = EXCLUDED.position,
                     height = EXCLUDED.height,
                     weight = EXCLUDED.weight,
                     age = EXCLUDED.age,
-                    years_experience = EXCLUDED.years_experience,
-                    is_active = EXCLUDED.is_active,
-                    updated_at = CURRENT_TIMESTAMP;
+                    yearsexperience = EXCLUDED.yearsexperience,
+                    isactive = EXCLUDED.isactive,
+                    updatedat = CURRENT_TIMESTAMP;
             """
             
             # Remove league_name from processed data if present (keep first 17 elements)
@@ -375,15 +667,13 @@ class PlayersCollector:
             conn.rollback()
             return 0
     
-    def collect_all_leagues_players_comprehensive(self, test_mode=False):
-        """Collect players for all leagues across ALL historical seasons"""
-        print("👥 COLLECTING PLAYERS FOR ALL LEAGUES - COMPREHENSIVE HISTORICAL MODE")
+    def collect_all_leagues_players_comprehensive(self, backfill_mode=True):
+        """Collect comprehensive players for all leagues using enhanced method"""
+        print("🏀 COMPREHENSIVE PLAYERS COLLECTION - ALL LEAGUES")
         print("=" * 70)
         
-        if test_mode:
-            print("🧪 TEST MODE: Processing only recent seasons")
-        else:
-            print("🏛️ FULL HISTORICAL MODE: Processing ALL seasons since league founding")
+        mode_text = "BACKFILL (All Players)" if backfill_mode else "INCREMENTAL (New Players Only)"
+        print(f"Mode: {mode_text}")
         
         total_players = 0
         results = {}
@@ -393,7 +683,7 @@ class PlayersCollector:
             
             try:
                 print(f"\n📊 Starting {league_name} comprehensive collection...")
-                players_added = self.collect_league_players_comprehensive(league_name, test_mode)
+                players_added = self.collect_comprehensive_players(league_name, backfill_mode)
                 total_players += players_added
                 results[league_name] = players_added
                 
@@ -410,9 +700,10 @@ class PlayersCollector:
         for league, count in results.items():
             print(f"   {league}: {count} players")
         
-        print(f"\n🎯 RESULT: Master players tables now contain comprehensive historical data")
-        print(f"   Each record is unique on (player_id, season)")
-        print(f"   This provides the foundation for comprehensive dashboard collection!")
+        print(f"\n🎯 RESULT: Master players tables now contain:")
+        print(f"   - ALL historical players from CommonAllPlayers")
+        print(f"   - Enhanced with detailed info from CommonPlayerInfo")  
+        print(f"   - Comprehensive dataset ready for dashboard endpoints!")
         
         return results
 
@@ -449,29 +740,34 @@ class PlayersCollector:
 
 
 def main():
-    """Test the players collector"""
+    """Test the enhanced comprehensive players collector"""
     collector = PlayersCollector()
     
-    print("🧪 TESTING PLAYERS COLLECTOR")
-    print("=" * 40)
+    print("🏀 TESTING ENHANCED COMPREHENSIVE PLAYERS COLLECTOR")
+    print("=" * 60)
     
     # Test single league comprehensive collection
-    print("\n1. Testing NBA comprehensive historical collection (TEST MODE)...")
-    nba_result = collector.collect_league_players_comprehensive('NBA', test_mode=True)
+    print("\n1. Testing NBA comprehensive collection (BACKFILL MODE)...")
+    print("   This will:")
+    print("   - Get ALL NBA players from CommonAllPlayers")
+    print("   - Enhance each with CommonPlayerInfo details")
+    print("   - Merge and deduplicate data")
+    print("   - Insert comprehensive player records")
     
-    print(f"\n2. Testing current season collection (original method)...")
-    nba_current = collector.collect_league_players('NBA')
+    nba_result = collector.collect_comprehensive_players('NBA', backfill_mode=True)
     
-    print(f"\n3. Comparison:")
-    print(f"   Comprehensive historical (5 recent seasons): {nba_result} players")
-    print(f"   Current season only: {nba_current} players")
+    print(f"\n✅ COMPREHENSIVE COLLECTION TEST COMPLETE!")
+    print(f"   Players processed: {nba_result}")
     
-    print(f"\n✅ Testing complete!")
-    print(f"\n💡 To run full historical collection for all leagues:")
-    print(f"   collector.collect_all_leagues_players_comprehensive(test_mode=False)")
-    print(f"   This will build complete player-season records for dashboard APIs!")
+    print(f"\n💡 USAGE:")
+    print(f"   Backfill Mode: collector.collect_all_leagues_players_comprehensive(backfill_mode=True)")
+    print(f"   Incremental Mode: collector.collect_all_leagues_players_comprehensive(backfill_mode=False)")
+    print(f"\n🎯 This creates a complete master players dataset:")
+    print(f"   - All historical NBA players (CommonAllPlayers)")
+    print(f"   - Enhanced with detailed biographical info (CommonPlayerInfo)")  
+    print(f"   - Perfect foundation for comprehensive dashboard data collection!")
     
-    return {"comprehensive": nba_result, "current": nba_current}
+    return {"comprehensive": nba_result}
 
 
 if __name__ == "__main__":
