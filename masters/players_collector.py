@@ -13,7 +13,7 @@ import pandas as pd
 import time
 from datetime import datetime
 from psycopg2.extras import execute_batch
-from nba_api.stats.endpoints import commonallplayers, commonplayerinfo
+from nba_api.stats.endpoints import commonallplayers, commonplayerinfo, leaguedashplayerbiostats
 from database_manager import MasterTablesManager
 
 
@@ -275,7 +275,16 @@ class PlayersCollector:
                 if not player_id or not player_name:
                     continue
                 
-                # Build comprehensive player record
+                # Build comprehensive player record with proper data cleaning
+                def safe_int_convert(value, default=None):
+                    """Safely convert value to int, handling 'Undrafted' and other non-numeric values"""
+                    if not value or value == '' or str(value).lower() in ['undrafted', 'none', 'null', 'nan']:
+                        return default
+                    try:
+                        return int(float(str(value)))  # Handle both int and float strings
+                    except (ValueError, TypeError):
+                        return default
+                
                 processed_player = (
                     player_id,
                     player_name,
@@ -287,9 +296,9 @@ class PlayersCollector:
                     str(player.get('HEIGHT', '')),
                     str(player.get('WEIGHT', '')),
                     str(player.get('POSITION', '')),
-                    int(player.get('DRAFT_YEAR', 0)) if player.get('DRAFT_YEAR') else None,
-                    int(player.get('DRAFT_ROUND', 0)) if player.get('DRAFT_ROUND') else None,
-                    int(player.get('DRAFT_NUMBER', 0)) if player.get('DRAFT_NUMBER') else None,
+                    safe_int_convert(player.get('DRAFT_YEAR')),
+                    safe_int_convert(player.get('DRAFT_ROUND')),
+                    safe_int_convert(player.get('DRAFT_NUMBER')),
                     bool(player.get('IS_ACTIVE', True)),
                     league_name
                 )
@@ -302,7 +311,7 @@ class PlayersCollector:
         return processed_players
 
     def bulk_insert_enhanced_players(self, cursor, conn, players_data, table_name):
-        """Bulk insert enhanced players with conflict handling"""
+        """Bulk insert enhanced players with conflict handling and batch processing"""
         if not players_data:
             return 0
         
@@ -331,15 +340,36 @@ class PlayersCollector:
                     updatedat = CURRENT_TIMESTAMP;
             """
             
-            execute_batch(cursor, insert_query, players_data, page_size=100)
-            conn.commit()
+            # Process in smaller batches to avoid connection timeouts
+            batch_size = 50
+            total_inserted = 0
             
-            return len(players_data)
+            for i in range(0, len(players_data), batch_size):
+                batch = players_data[i:i + batch_size]
+                
+                try:
+                    execute_batch(cursor, insert_query, batch, page_size=batch_size)
+                    conn.commit()
+                    total_inserted += len(batch)
+                    
+                    # Progress update for large datasets
+                    if len(players_data) > 100 and i % (batch_size * 10) == 0:
+                        progress = (i / len(players_data)) * 100
+                        print(f"      Insert progress: {i}/{len(players_data)} ({progress:.1f}%)")
+                
+                except Exception as batch_error:
+                    print(f"      ⚠️ Error inserting batch {i//batch_size + 1}: {str(batch_error)[:50]}...")
+                    conn.rollback()
+                    continue
+            
+            return total_inserted
             
         except Exception as e:
             print(f"Error bulk inserting enhanced players: {str(e)}")
             conn.rollback()
             return 0
+
+    def generate_historical_seasons(self, league_config, end_year=None):
         """Generate all historical seasons for a league"""
         if end_year is None:
             end_year = datetime.now().year + 1

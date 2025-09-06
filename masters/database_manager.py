@@ -151,6 +151,101 @@ class MasterTablesManager:
         else:
             return 'TEXT'
     
+    def drop_table(self, conn, table_name):
+        """Drop a table if it exists"""
+        try:
+            cursor = conn.cursor()
+            cursor.execute(f"DROP TABLE IF EXISTS {table_name} CASCADE;")
+            conn.commit()
+            print(f"✓ Table {table_name} dropped successfully")
+            return True
+        except Exception as e:
+            print(f"❌ Error dropping table {table_name}: {str(e)}")
+            conn.rollback()
+            return False
+    
+    def create_players_table(self, conn, table_name, league_name='NBA'):
+        """Create a properly structured players table for the collection system"""
+        try:
+            cursor = conn.cursor()
+            
+            create_table_sql = f"""
+                CREATE TABLE {table_name} (
+                    playerid VARCHAR(50) PRIMARY KEY,
+                    playername VARCHAR(200) NOT NULL,
+                    firstname VARCHAR(100),
+                    lastname VARCHAR(100),
+                    birthdate VARCHAR(50),
+                    college VARCHAR(200),
+                    country VARCHAR(100),
+                    height VARCHAR(20),
+                    weight VARCHAR(20),
+                    position VARCHAR(20),
+                    draftyear INTEGER,
+                    draftround INTEGER,
+                    draftnumber INTEGER,
+                    isactive BOOLEAN DEFAULT TRUE,
+                    league VARCHAR(20) DEFAULT '{league_name}',
+                    createdat TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    updatedat TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                );
+            """
+            
+            cursor.execute(create_table_sql)
+            
+            # Create indexes for performance
+            cursor.execute(f"CREATE INDEX IF NOT EXISTS idx_{table_name}_league ON {table_name} (league);")
+            cursor.execute(f"CREATE INDEX IF NOT EXISTS idx_{table_name}_active ON {table_name} (isactive);")
+            cursor.execute(f"CREATE INDEX IF NOT EXISTS idx_{table_name}_name ON {table_name} (playername);")
+            
+            conn.commit()
+            print(f"✓ Players table {table_name} created successfully with proper structure")
+            return True
+            
+        except Exception as e:
+            print(f"❌ Error creating players table {table_name}: {str(e)}")
+            conn.rollback()
+            return False
+    
+    def recreate_players_tables(self):
+        """Drop and recreate all player tables with correct structure"""
+        conn = self.connect_to_database()
+        if not conn:
+            print("❌ Could not connect to database")
+            return False
+        
+        league_tables = [
+            ('nba_players', 'NBA'),
+            ('wnba_players', 'WNBA'), 
+            ('gleague_players', 'G-League')
+        ]
+        
+        success_count = 0
+        
+        try:
+            for table_name, league_name in league_tables:
+                print(f"\n🔄 Recreating {table_name} table...")
+                
+                # Drop existing table
+                if self.drop_table(conn, table_name):
+                    # Create new table with correct structure
+                    if self.create_players_table(conn, table_name, league_name):
+                        success_count += 1
+                        print(f"✅ {table_name} recreated successfully")
+                    else:
+                        print(f"❌ Failed to create {table_name}")
+                else:
+                    print(f"❌ Failed to drop {table_name}")
+            
+            print(f"\n🎉 Successfully recreated {success_count}/{len(league_tables)} player tables!")
+            return success_count == len(league_tables)
+            
+        except Exception as e:
+            print(f"❌ Error during table recreation: {str(e)}")
+            return False
+        finally:
+            conn.close()
+
     def create_master_table_schema(self, conn, table_name, sample_df, table_type):
         """Create master table with proper schema and indexes"""
         cursor = conn.cursor()
