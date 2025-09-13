@@ -4,402 +4,686 @@
       "priority": "high",
       "required_params": [
         "game_id"
-      ]
+      ],
+      "usable": true,
+      "notes": "",
+      "latest_version": false,
+      "policy": "standard"
     },
     "BoxScoreAdvancedV3": {
       "priority": "high",
       "required_params": [
         "game_id"
-      ]
+      ],
+      "usable": true,
+      "notes": "",
+      "latest_version": true,
+      "policy": "standard"
     },
     "BoxScoreDefensiveV2": {
       "priority": "high",
       "required_params": [
         "game_id"
-      ]
+      ],
+      "usable": true,
+      "notes": "",
+      "latest_version": true,
+      "policy": "standard"
     },
     "BoxScoreFourFactorsV2": {
       "priority": "high",
       "required_params": [
         "game_id"
-      ]
+      ],
+      "usable": true,
+      "notes": "",
+      "latest_version": false,
+      "policy": "standard"
     },
     "BoxScoreFourFactorsV3": {
       "priority": "high",
       "required_params": [
         "game_id"
-      ]
+      ],
+      "usable": true,
+      "notes": "",
+      "latest_version": true,
+      "policy": "standard"
     },
     "BoxScoreHustleV2": {
       "priority": "high",
       "required_params": [
         "game_id"
-      ]
+      ],
+      "usable": true,
+      "notes": "",
+      "latest_version": true,
+      "policy": "standard"
     },
     "BoxScoreMatchupsV3": {
       "priority": "high",
       "required_params": [
         "game_id"
-      ]
+      ],
+      "usable": true,
+      "notes": "",
+      "latest_version": true,
+      "policy": "standard"
     },
     "BoxScoreMiscV2": {
       "priority": "high",
       "required_params": [
         "game_id"
-      ]
+      ],
+      "usable": true,
+      "notes": "",
+      "latest_version": false,
+      "policy": "standard"
     },
     "BoxScoreMiscV3": {
       "priority": "high",
       "required_params": [
         "game_id"
-      ]
+      ],
+      "usable": true,
+      "notes": "",
+      "latest_version": true,
+      "policy": "standard"
     },
     "BoxScorePlayerTrackV2": {
       "priority": "high",
       "required_params": [
         "game_id"
-      ]
+      ],
+      "usable": false,
+      "notes": "",
+      "latest_version": false,
+      "policy": "standard"
     },
     "BoxScorePlayerTrackV3": {
       "priority": "high",
       "required_params": [
         "game_id"
-      ]
+      ],
+      "usable": true,
+      "notes": "",
+      "latest_version": true,
+      "policy": "standard"
     },
     "BoxScoreScoringV2": {
       "priority": "high",
       "required_params": [
         "game_id"
-      ]
+      ],
+      "usable": true,
+      "notes": "",
+      "latest_version": false,
+      "policy": "standard"
     },
     "BoxScoreScoringV3": {
       "priority": "high",
       "required_params": [
         "game_id"
-      ]
+      ],
+      "usable": true,
+      "notes": "",
+      "latest_version": true,
+      "policy": "standard"
     },
     "BoxScoreSimilarityScore": {
       "priority": "high",
       "required_params": [
         "person2_id",
         "person1_id"
-      ]
+      ],
+      "usable": false,
+      "notes": "",
+      "latest_version": true,
+      "policy": "standard"
     },
     "BoxScoreSummaryV2": {
       "priority": "high",
       "required_params": [
         "game_id"
-      ]
+      ],
+      "usable": true,
+      "notes": "",
+      "latest_version": true,
+      "policy": "standard"
     },
     "BoxScoreTraditionalV2": {
       "priority": "high",
       "required_params": [
         "game_id"
-      ]
+      ],
+      "usable": true,
+      "notes": "",
+      "latest_version": false,
+      "policy": "standard"
     },
     "BoxScoreTraditionalV3": {
       "priority": "high",
       "required_params": [
         "game_id"
-      ]
+      ],
+      "usable": true,
+      "notes": "",
+      "latest_version": true,
+      "policy": "standard"
     },
     "BoxScoreUsageV2": {
       "priority": "high",
       "required_params": [
         "game_id"
-      ]
+      ],
+      "usable": true,
+      "notes": "",
+      "latest_version": false,
+      "policy": "standard"
     },
     "BoxScoreUsageV3": {
       "priority": "high",
       "required_params": [
         "game_id"
-      ]
+      ],
+      "usable": true,
+      "notes": "",
+      "latest_version": true,
+      "policy": "standard"
     },
     "CumeStatsPlayerGames": {
       "priority": "low",
       "required_params": [
         "player_id"
-      ]
+      ],
+      "usable": false,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "CumeStatsTeamGames": {
       "priority": "low",
       "required_params": [
         "team_id"
-      ]
+      ],
+      "usable": false,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "GLAlumBoxScoreSimilarityScore": {
       "priority": "skip",
       "required_params": [
         "person2_id",
         "person1_id"
-      ]
+      ],
+      "usable": false,
+      "notes": "",
+      "latest_version": true,
+      "policy": "standard"
     },
     "GameRotation": {
       "priority": "unknown",
       "required_params": [
         "game_id"
-      ]
+      ],
+      "usable": true,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "HustleStatsBoxScore": {
       "priority": "unknown",
       "required_params": [
         "game_id"
-      ]
+      ],
+      "usable": true,
+      "notes": "",
+      "latest_version": true,
+      "policy": "standard"
     },
     "LeagueGameFinder": {
       "priority": "high",
-      "required_params": []
+      "required_params": [],
+      "usable": true,
+      "notes": "select on season",
+      "latest_version": true,
+      "policy": "master"
     },
     "LeagueGameLog": {
       "priority": "high",
-      "required_params": []
+      "required_params": [],
+      "usable": true,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "PlayByPlay": {
       "priority": "high",
       "required_params": [
         "game_id"
-      ]
+      ],
+      "usable": true,
+      "notes": "",
+      "latest_version": false,
+      "policy": ""
     },
     "PlayByPlayV2": {
       "priority": "high",
       "required_params": [
         "game_id"
-      ]
+      ],
+      "usable": true,
+      "notes": "",
+      "latest_version": false,
+      "policy": ""
     },
     "PlayByPlayV3": {
       "priority": "high",
       "required_params": [
         "game_id"
-      ]
+      ],
+      "usable": true,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "PlayerDashboardByGameSplits": {
       "priority": "medium",
       "required_params": [
         "player_id"
-      ]
+      ],
+      "usable": true,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "PlayerDashboardByLastNGames": {
       "priority": "medium",
       "required_params": [
         "player_id"
-      ]
+      ],
+      "usable": false,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "PlayerGameLog": {
       "priority": "high",
       "required_params": [
         "player_id"
-      ]
+      ],
+      "usable": false,
+      "notes": "Same as PlayerLogs, but granulate on player_id",
+      "latest_version": true,
+      "policy": ""
     },
     "PlayerGameLogs": {
       "priority": "high",
-      "required_params": []
+      "required_params": [],
+      "usable": true,
+      "notes": "Use season_nullable, returns all games for all players during that season ~52000 records per season",
+      "latest_version": true,
+      "policy": ""
     },
     "PlayerGameStreakFinder": {
       "priority": "unknown",
-      "required_params": []
+      "required_params": [],
+      "usable": false,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "PlayerNextNGames": {
       "priority": "unknown",
       "required_params": [
         "player_id"
-      ]
+      ],
+      "usable": true,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "TeamGameLog": {
       "priority": "unknown",
       "required_params": [
         "team_id"
-      ]
+      ],
+      "usable": false,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "TeamGameLogs": {
       "priority": "unknown",
-      "required_params": []
+      "required_params": [],
+      "usable": null,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "TeamGameStreakFinder": {
       "priority": "unknown",
-      "required_params": []
+      "required_params": [],
+      "usable": false,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "CommonAllPlayers": {
       "priority": "high",
-      "required_params": []
+      "required_params": [],
+      "usable": true,
+      "notes": "",
+      "latest_version": true,
+      "policy": "master_players"
     },
     "CommonPlayerInfo": {
       "priority": "high",
       "required_params": [
         "player_id"
-      ]
+      ],
+      "usable": true,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "CumeStatsPlayer": {
       "priority": "unknown",
       "required_params": [
         "player_id",
         "game_ids"
-      ]
+      ],
+      "usable": false,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "DraftCombinePlayerAnthro": {
       "priority": "low",
-      "required_params": []
+      "required_params": [],
+      "usable": true,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "FranchisePlayers": {
       "priority": "unknown",
       "required_params": [
         "team_id"
-      ]
+      ],
+      "usable": false,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "InfographicFanDuelPlayer": {
       "priority": "unknown",
       "required_params": [
         "game_id"
-      ]
+      ],
+      "usable": false,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "LeagueDashPlayerBioStats": {
       "priority": "unknown",
-      "required_params": []
+      "required_params": [],
+      "usable": true,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "LeagueDashPlayerClutch": {
       "priority": "unknown",
-      "required_params": []
+      "required_params": [],
+      "usable": false,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "LeagueDashPlayerPtShot": {
       "priority": "unknown",
-      "required_params": []
+      "required_params": [],
+      "usable": false,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "LeagueDashPlayerShotLocations": {
       "priority": "unknown",
-      "required_params": []
+      "required_params": [],
+      "usable": true,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "LeagueDashPlayerStats": {
       "priority": "unknown",
-      "required_params": []
+      "required_params": [],
+      "usable": false,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "LeagueHustleStatsPlayer": {
       "priority": "unknown",
-      "required_params": []
+      "required_params": [],
+      "usable": true,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "LeaguePlayerOnDetails": {
       "priority": "unknown",
       "required_params": [
         "team_id"
-      ]
+      ],
+      "usable": false,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "PlayerAwards": {
       "priority": "unknown",
       "required_params": [
         "player_id"
-      ]
+      ],
+      "usable": false,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "PlayerCareerByCollege": {
       "priority": "skip",
       "required_params": [
         "college"
-      ]
+      ],
+      "usable": false,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "PlayerCareerByCollegeRollup": {
       "priority": "skip",
-      "required_params": []
+      "required_params": [],
+      "usable": false,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "PlayerCareerStats": {
       "priority": "unknown",
       "required_params": [
         "player_id"
-      ]
+      ],
+      "usable": false,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "PlayerCompare": {
       "priority": "skip",
       "required_params": [
         "vs_player_id_list",
         "player_id_list"
-      ]
+      ],
+      "usable": false,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "PlayerDashPtPass": {
       "priority": "low",
       "required_params": [
         "team_id",
         "player_id"
-      ]
+      ],
+      "usable": true,
+      "notes": "Don't do every combination of player and team, just the player and their team",
+      "latest_version": true,
+      "policy": ""
     },
     "PlayerDashPtReb": {
       "priority": "low",
       "required_params": [
         "team_id",
         "player_id"
-      ]
+      ],
+      "usable": true,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "PlayerDashPtShotDefend": {
       "priority": "low",
       "required_params": [
         "team_id",
         "player_id"
-      ]
+      ],
+      "usable": true,
+      "notes": "use opposing team id",
+      "latest_version": true,
+      "policy": ""
     },
     "PlayerDashPtShots": {
-      "priority": "low",
+      "priority": "high",
       "required_params": [
         "team_id",
         "player_id"
-      ]
+      ],
+      "usable": true,
+      "notes": "interesting shot data, dribbles, shot clock, shot type",
+      "latest_version": true,
+      "policy": ""
     },
     "PlayerDashboardByClutch": {
       "priority": "low",
       "required_params": [
         "player_id"
-      ]
+      ],
+      "usable": false,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "PlayerDashboardByGeneralSplits": {
       "priority": "low",
       "required_params": [
         "player_id"
-      ]
+      ],
+      "usable": true,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "PlayerDashboardByShootingSplits": {
       "priority": "low",
       "required_params": [
         "player_id"
-      ]
+      ],
+      "usable": true,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "PlayerDashboardByTeamPerformance": {
       "priority": "low",
       "required_params": [
         "player_id"
-      ]
+      ],
+      "usable": true,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "PlayerDashboardByYearOverYear": {
       "priority": "unknown",
       "required_params": [
         "player_id"
-      ]
+      ],
+      "usable": true,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "PlayerEstimatedMetrics": {
       "priority": "unknown",
-      "required_params": []
+      "required_params": [],
+      "usable": false,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "PlayerFantasyProfile": {
       "priority": "skip",
       "required_params": [
         "player_id"
-      ]
+      ],
+      "usable": false,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "PlayerFantasyProfileBarGraph": {
       "priority": "skip",
       "required_params": [
         "player_id"
-      ]
+      ],
+      "usable": false,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "PlayerIndex": {
       "priority": "unknown",
-      "required_params": []
+      "required_params": [],
+      "usable": false,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "PlayerProfileV2": {
       "priority": "unknown",
       "required_params": [
         "player_id"
-      ]
+      ],
+      "usable": false,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "PlayerVsPlayer": {
       "priority": "skip",
       "required_params": [
         "vs_player_id",
         "player_id"
-      ]
+      ],
+      "usable": false,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "TeamAndPlayersVsPlayers": {
       "priority": "unknown",
@@ -416,314 +700,574 @@
         "player_id3",
         "player_id2",
         "player_id1"
-      ]
+      ],
+      "usable": false,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "TeamPlayerDashboard": {
       "priority": "unknown",
       "required_params": [
         "team_id"
-      ]
+      ],
+      "usable": true,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "TeamPlayerOnOffDetails": {
       "priority": "unknown",
       "required_params": [
         "team_id"
-      ]
+      ],
+      "usable": true,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "TeamPlayerOnOffSummary": {
       "priority": "unknown",
       "required_params": [
         "team_id"
-      ]
+      ],
+      "usable": true,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "TeamVsPlayer": {
       "priority": "unknown",
       "required_params": [
         "vs_player_id",
         "team_id"
-      ]
+      ],
+      "usable": false,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "CommonTeamRoster": {
       "priority": "medium",
       "required_params": [
         "team_id"
-      ]
+      ],
+      "usable": true,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "CommonTeamYears": {
       "priority": "unknown",
-      "required_params": []
+      "required_params": [],
+      "usable": false,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "CumeStatsTeam": {
       "priority": "unknown",
       "required_params": [
         "team_id",
         "game_ids"
-      ]
+      ],
+      "usable": false,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "LeagueDashPtTeamDefend": {
       "priority": "unknown",
-      "required_params": []
+      "required_params": [],
+      "usable": true,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "LeagueDashTeamClutch": {
       "priority": "unknown",
-      "required_params": []
+      "required_params": [],
+      "usable": false,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "LeagueDashTeamPtShot": {
       "priority": "unknown",
-      "required_params": []
+      "required_params": [],
+      "usable": true,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "LeagueDashTeamShotLocations": {
       "priority": "unknown",
-      "required_params": []
+      "required_params": [],
+      "usable": true,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "LeagueDashTeamStats": {
       "priority": "unknown",
-      "required_params": []
+      "required_params": [],
+      "usable": true,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "LeagueHustleStatsTeam": {
       "priority": "unknown",
-      "required_params": []
+      "required_params": [],
+      "usable": true,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "TeamDashLineups": {
       "priority": "unknown",
       "required_params": [
         "team_id"
-      ]
+      ],
+      "usable": true,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "TeamDashPtPass": {
       "priority": "unknown",
       "required_params": [
         "team_id"
-      ]
+      ],
+      "usable": true,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "TeamDashPtReb": {
       "priority": "unknown",
       "required_params": [
         "team_id"
-      ]
+      ],
+      "usable": true,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "TeamDashPtShots": {
       "priority": "unknown",
       "required_params": [
         "team_id"
-      ]
+      ],
+      "usable": true,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "TeamDashboardByGeneralSplits": {
       "priority": "unknown",
       "required_params": [
         "team_id"
-      ]
+      ],
+      "usable": true,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "TeamDashboardByShootingSplits": {
       "priority": "unknown",
       "required_params": [
         "team_id"
-      ]
+      ],
+      "usable": true,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "TeamDetails": {
       "priority": "unknown",
       "required_params": [
         "team_id"
-      ]
+      ],
+      "usable": false,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "TeamEstimatedMetrics": {
       "priority": "unknown",
-      "required_params": []
+      "required_params": [],
+      "usable": false,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "TeamHistoricalLeaders": {
       "priority": "unknown",
       "required_params": [
         "team_id"
-      ]
+      ],
+      "usable": false,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "TeamInfoCommon": {
       "priority": "unknown",
       "required_params": [
         "team_id"
-      ]
+      ],
+      "usable": false,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "TeamYearByYearStats": {
       "priority": "unknown",
       "required_params": [
         "team_id"
-      ]
+      ],
+      "usable": false,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "DraftBoard": {
       "priority": "skip",
-      "required_params": []
+      "required_params": [],
+      "usable": false,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "DraftCombineDrillResults": {
       "priority": "skip",
-      "required_params": []
+      "required_params": [],
+      "usable": true,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "DraftCombineNonStationaryShooting": {
       "priority": "skip",
-      "required_params": []
+      "required_params": [],
+      "usable": false,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "DraftCombineSpotShooting": {
       "priority": "skip",
-      "required_params": []
+      "required_params": [],
+      "usable": false,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "DraftCombineStats": {
       "priority": "skip",
-      "required_params": []
+      "required_params": [],
+      "usable": false,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "DraftHistory": {
       "priority": "skip",
-      "required_params": []
+      "required_params": [],
+      "usable": false,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "LeagueDashLineups": {
       "priority": "unknown",
-      "required_params": []
+      "required_params": [],
+      "usable": true,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "LeagueDashOppPtShot": {
       "priority": "unknown",
-      "required_params": []
+      "required_params": [],
+      "usable": true,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "LeagueDashPtDefend": {
       "priority": "unknown",
-      "required_params": []
+      "required_params": [],
+      "usable": true,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "LeagueDashPtStats": {
       "priority": "unknown",
-      "required_params": []
+      "required_params": [],
+      "usable": true,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "LeagueLeaders": {
       "priority": "unknown",
-      "required_params": []
+      "required_params": [],
+      "usable": false,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "LeagueLineupViz": {
       "priority": "unknown",
       "required_params": [
         "minutes_min"
-      ]
+      ],
+      "usable": false,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "LeagueSeasonMatchups": {
       "priority": "unknown",
-      "required_params": []
+      "required_params": [],
+      "usable": true,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "LeagueStandings": {
       "priority": "unknown",
-      "required_params": []
+      "required_params": [],
+      "usable": false,
+      "notes": "",
+      "latest_version": false,
+      "policy": ""
     },
     "LeagueStandingsV3": {
       "priority": "unknown",
-      "required_params": []
+      "required_params": [],
+      "usable": false,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "ShotChartLeagueWide": {
       "priority": "unknown",
-      "required_params": []
+      "required_params": [],
+      "usable": false,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "AllTimeLeadersGrids": {
       "priority": "skip",
-      "required_params": []
+      "required_params": [],
+      "usable": false,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "AssistLeaders": {
       "priority": "skip",
-      "required_params": []
+      "required_params": [],
+      "usable": false,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "AssistTracker": {
       "priority": "skip",
-      "required_params": []
+      "required_params": [],
+      "usable": false,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "CommonPlayoffSeries": {
       "priority": "unknown",
-      "required_params": []
+      "required_params": [],
+      "usable": true,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "DefenseHub": {
       "priority": "unknown",
-      "required_params": []
+      "required_params": [],
+      "usable": false,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "FantasyWidget": {
       "priority": "skip",
-      "required_params": []
+      "required_params": [],
+      "usable": false,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "FranchiseHistory": {
       "priority": "skip",
-      "required_params": []
+      "required_params": [],
+      "usable": false,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "FranchiseLeaders": {
       "priority": "skip",
       "required_params": [
         "team_id"
-      ]
+      ],
+      "usable": false,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "HomePageLeaders": {
       "priority": "skip",
-      "required_params": []
+      "required_params": [],
+      "usable": false,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "HomePageV2": {
       "priority": "skip",
-      "required_params": []
+      "required_params": [],
+      "usable": false,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "ISTStandings": {
       "priority": "low",
-      "required_params": []
+      "required_params": [],
+      "usable": false,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "LeadersTiles": {
       "priority": "unknown",
-      "required_params": []
+      "required_params": [],
+      "usable": false,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "MatchupsRollup": {
       "priority": "unknown",
-      "required_params": []
+      "required_params": [],
+      "usable": false,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "PlayoffPicture": {
       "priority": "unknown",
-      "required_params": []
+      "required_params": [],
+      "usable": false,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "Scoreboard": {
       "priority": "high",
-      "required_params": []
+      "required_params": [],
+      "usable": false,
+      "notes": "",
+      "latest_version": false,
+      "policy": ""
     },
     "ScoreboardV2": {
       "priority": "high",
-      "required_params": []
+      "required_params": [],
+      "usable": false,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "ShotChartDetail": {
-      "priority": "low",
+      "priority": "medium",
       "required_params": [
         "team_id",
         "player_id"
-      ]
+      ],
+      "usable": true,
+      "notes": "needs season, playerid on teamid",
+      "latest_version": true,
+      "policy": ""
     },
     "ShotChartLineupDetail": {
       "priority": "unknown",
-      "required_params": []
+      "required_params": [],
+      "usable": null,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "SynergyPlayTypes": {
       "priority": "unknown",
-      "required_params": []
+      "required_params": [],
+      "usable": false,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "VideoDetails": {
       "priority": "low",
       "required_params": [
         "team_id",
         "player_id"
-      ]
+      ],
+      "usable": false,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "VideoDetailsAsset": {
       "priority": "low",
       "required_params": [
         "team_id",
         "player_id"
-      ]
+      ],
+      "usable": false,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "VideoEvents": {
       "priority": "low",
       "required_params": [
         "game_id"
-      ]
+      ],
+      "usable": false,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "VideoStatus": {
       "priority": "low",
-      "required_params": []
+      "required_params": [],
+      "usable": false,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     },
     "WinProbabilityPBP": {
       "priority": "low",
       "required_params": [
         "game_id"
-      ]
+      ],
+      "usable": false,
+      "notes": "",
+      "latest_version": true,
+      "policy": ""
     }
   },
   "priority_legend": {

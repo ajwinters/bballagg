@@ -5,6 +5,23 @@
 
 ---
 
+Need to add iterable collumns ie: 'season' + others
+Need to add update frequency
+Add priority??
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## 🎯 **IMMEDIATE PRIORITIES**
 
 ### **1. Complete Endpoint Configuration** `[IN PROGRESS]`
