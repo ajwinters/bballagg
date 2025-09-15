@@ -45,6 +45,21 @@ latest_versions = analyze_endpoint_versions()
 # Add fields to every endpoint
 updated_count = 0
 fields_added = []
+skip_updates = 0
+league_dash_updates = 0
+
+# Define specific endpoints to update
+league_dash_endpoints = [
+    'LeagueDashOppPtShot',
+    'LeagueDashPlayerBioStats',
+    'LeagueDashPlayerShotLocations',
+    'LeagueDashPtDefend',
+    'LeagueDashPtStats',
+    'LeagueDashPtTeamDefend',
+    'LeagueDashTeamPtShot',
+    'LeagueDashTeamShotLocations',
+    'LeagueDashTeamStats'
+]
 
 for endpoint_name, endpoint_info in config['endpoints'].items():
     # Add latest_version field
@@ -54,12 +69,32 @@ for endpoint_name, endpoint_info in config['endpoints'].items():
         if 'latest_version' not in fields_added:
             fields_added.append('latest_version')
     
-    # Add policy field (new)
+    # Add policy field
     if 'policy' not in endpoint_info:
         endpoint_info['policy'] = ""  # Empty string for policy instructions
         updated_count += 1
         if 'policy' not in fields_added:
             fields_added.append('policy')
+    
+    # Add frequency field
+    if 'frequency' not in endpoint_info:
+        endpoint_info['frequency'] = ""  # Empty string for frequency instructions
+        updated_count += 1
+        if 'frequency' not in fields_added:
+            fields_added.append('frequency')
+    
+    # Update endpoints with priority 'skip'
+    if endpoint_info.get('priority') == 'skip':
+        endpoint_info['usable'] = False
+        endpoint_info['priority'] = ''
+        skip_updates += 1
+    
+    # Update specific League Dash endpoints
+    if endpoint_name in league_dash_endpoints:
+        endpoint_info['frequency'] = 'daily'
+        endpoint_info['priority'] = 'medium'
+        endpoint_info['policy'] = 'replacing'
+        league_dash_updates += 1
 
 print(f"Added {len(fields_added)} field(s) to endpoints: {', '.join(fields_added)}")
 print(f"Total field additions: {updated_count}")
@@ -93,6 +128,26 @@ if 'latest_version' in fields_added:
 if 'policy' in fields_added:
     print(f"\n📋 Added 'policy' field to all {len(config['endpoints'])} endpoints")
     print("Policy field initialized as empty string - ready for data collection instructions")
+
+if 'frequency' in fields_added:
+    print(f"\n📅 Added 'frequency' field to all {len(config['endpoints'])} endpoints")
+    print("Frequency field initialized as empty string - ready for collection frequency instructions")
+    print("Example values: 'daily', 'weekly', 'monthly', 'yearly', 'historical_once', 'manual'")
+
+if skip_updates > 0:
+    print(f"\n🚫 Updated {skip_updates} endpoints with priority 'skip':")
+    print("   - Set usable = False")
+    print("   - Set priority = '' (empty)")
+
+if league_dash_updates > 0:
+    print(f"\n📊 Updated {league_dash_updates} League Dash endpoints:")
+    print("   - Set frequency = 'daily'")
+    print("   - Set priority = 'medium'") 
+    print("   - Set policy = 'replacing'")
+    print("   Updated endpoints:")
+    for endpoint in league_dash_endpoints:
+        if endpoint in config['endpoints']:
+            print(f"     • {endpoint}")
 
 # Save the updated configuration back to the file
 with open('endpoint_priority_review.json', 'w') as f:

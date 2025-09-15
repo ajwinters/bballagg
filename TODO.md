@@ -9,6 +9,8 @@ Need to add iterable collumns ie: 'season' + others
 Need to add update frequency
 Add priority??
 
+Need to figure out how the seasonal update policy will look. Many of the endpoints update during the season and need to be replaced based off of the params/keys that are being used to pull the data. Stacking the data doesn't quite make sense. Some of these can be potentially constituted by the game based tables, but some are unique enough that the data should be pulled. 
+
 
 
 
