@@ -11,7 +11,9 @@ Add priority??
 
 Need to figure out how the seasonal update policy will look. Many of the endpoints update during the season and need to be replaced based off of the params/keys that are being used to pull the data. Stacking the data doesn't quite make sense. Some of these can be potentially constituted by the game based tables, but some are unique enough that the data should be pulled. 
 
+I think in order to reduce api requests for teh player tables, we should only be pulling data for players who are getting meaningful minutes in a game. That might be measured by games played, or time on the corut during important games moments. 
 
+Don't forget to exclude 'rank' variables
 
 
 

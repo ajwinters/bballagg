@@ -295,8 +295,8 @@
       ],
       "notes": "",
       "latest_version": true,
-      "policy": "",
-      "frequency": ""
+      "policy": "replacing",
+      "frequency": "daily"
     },
     "PlayerDashboardByLastNGames": {
       "priority": "None",
@@ -335,14 +335,14 @@
       "frequency": ""
     },
     "PlayerNextNGames": {
-      "priority": "unknown",
+      "priority": "low",
       "required_params": [
         "player_id"
       ],
-      "notes": "",
+      "notes": "revisit for how to pull during season. make monthly and just get every 30 days",
       "latest_version": true,
-      "policy": "",
-      "frequency": ""
+      "policy": "replacing",
+      "frequency": "monthly"
     },
     "TeamGameLog": {
       "priority": "None",
@@ -379,14 +379,14 @@
       "frequency": ""
     },
     "CommonPlayerInfo": {
-      "priority": "high",
+      "priority": "low",
       "required_params": [
         "player_id"
       ],
-      "notes": "",
+      "notes": "height and weight seem to be the only useful data, think that can be found elsewhere",
       "latest_version": true,
-      "policy": "",
-      "frequency": ""
+      "policy": "stacking",
+      "frequency": "monthly"
     },
     "CumeStatsPlayer": {
       "priority": "None",
@@ -542,8 +542,8 @@
       ],
       "notes": "Don't do every combination of player and team, just the player and their team",
       "latest_version": true,
-      "policy": "",
-      "frequency": ""
+      "policy": "replacing",
+      "frequency": "daily"
     },
     "PlayerDashPtReb": {
       "priority": "low",
@@ -553,8 +553,8 @@
       ],
       "notes": "",
       "latest_version": true,
-      "policy": "",
-      "frequency": ""
+      "policy": "replacing",
+      "frequency": "daily"
     },
     "PlayerDashPtShotDefend": {
       "priority": "low",
@@ -564,8 +564,8 @@
       ],
       "notes": "use opposing team id",
       "latest_version": true,
-      "policy": "",
-      "frequency": ""
+      "policy": "replacing",
+      "frequency": "daily"
     },
     "PlayerDashPtShots": {
       "priority": "high",
@@ -575,8 +575,8 @@
       ],
       "notes": "interesting shot data, dribbles, shot clock, shot type",
       "latest_version": true,
-      "policy": "",
-      "frequency": ""
+      "policy": "replacing",
+      "frequency": "daily"
     },
     "PlayerDashboardByClutch": {
       "priority": "None",
@@ -585,8 +585,8 @@
       ],
       "notes": "",
       "latest_version": true,
-      "policy": "",
-      "frequency": ""
+      "policy": "replacing",
+      "frequency": "daily"
     },
     "PlayerDashboardByGeneralSplits": {
       "priority": "low",
@@ -595,8 +595,8 @@
       ],
       "notes": "",
       "latest_version": true,
-      "policy": "",
-      "frequency": ""
+      "policy": "replacing",
+      "frequency": "daily"
     },
     "PlayerDashboardByShootingSplits": {
       "priority": "low",
@@ -605,8 +605,8 @@
       ],
       "notes": "",
       "latest_version": true,
-      "policy": "",
-      "frequency": ""
+      "policy": "replacing",
+      "frequency": "daily"
     },
     "PlayerDashboardByTeamPerformance": {
       "priority": "low",
@@ -615,8 +615,8 @@
       ],
       "notes": "",
       "latest_version": true,
-      "policy": "",
-      "frequency": ""
+      "policy": "replacing",
+      "frequency": "daily"
     },
     "PlayerDashboardByYearOverYear": {
       "priority": "unknown",
@@ -625,8 +625,8 @@
       ],
       "notes": "",
       "latest_version": true,
-      "policy": "",
-      "frequency": ""
+      "policy": "replacing",
+      "frequency": "daily"
     },
     "PlayerEstimatedMetrics": {
       "priority": "None",
@@ -707,34 +707,34 @@
       "frequency": ""
     },
     "TeamPlayerDashboard": {
-      "priority": "unknown",
+      "priority": "low",
       "required_params": [
         "team_id"
       ],
-      "notes": "",
+      "notes": "think TeamLineups is higher priority",
       "latest_version": true,
-      "policy": "",
-      "frequency": ""
+      "policy": "replacing",
+      "frequency": "weekly"
     },
     "TeamPlayerOnOffDetails": {
-      "priority": "unknown",
+      "priority": "medium",
       "required_params": [
         "team_id"
       ],
       "notes": "",
       "latest_version": true,
-      "policy": "",
-      "frequency": ""
+      "policy": "replacing",
+      "frequency": "daily"
     },
     "TeamPlayerOnOffSummary": {
-      "priority": "unknown",
+      "priority": "medium",
       "required_params": [
         "team_id"
       ],
       "notes": "",
       "latest_version": true,
-      "policy": "",
-      "frequency": ""
+      "policy": "replacing",
+      "frequency": "daily"
     },
     "TeamVsPlayer": {
       "priority": "None",
@@ -748,14 +748,14 @@
       "frequency": ""
     },
     "CommonTeamRoster": {
-      "priority": "medium",
+      "priority": "high",
       "required_params": [
         "team_id"
       ],
-      "notes": "",
+      "notes": "policy is replacing on team aggregate",
       "latest_version": true,
-      "policy": "",
-      "frequency": ""
+      "policy": "replacing", 
+      "frequency": "biweekly"
     },
     "CommonTeamYears": {
       "priority": "None",
@@ -825,64 +825,64 @@
       "frequency": "daily"
     },
     "TeamDashLineups": {
-      "priority": "unknown",
+      "priority": "medium",
       "required_params": [
         "team_id"
       ],
       "notes": "",
       "latest_version": true,
-      "policy": "",
-      "frequency": ""
+      "policy": "replacing",
+      "frequency": "daily"
     },
     "TeamDashPtPass": {
-      "priority": "unknown",
+      "priority": "medium",
       "required_params": [
         "team_id"
       ],
       "notes": "",
       "latest_version": true,
-      "policy": "",
-      "frequency": ""
+      "policy": "replacing",
+      "frequency": "daily"
     },
     "TeamDashPtReb": {
-      "priority": "unknown",
+      "priority": "medium",
       "required_params": [
         "team_id"
       ],
       "notes": "",
       "latest_version": true,
-      "policy": "",
-      "frequency": ""
+      "policy": "replacing",
+      "frequency": "daily"
     },
     "TeamDashPtShots": {
-      "priority": "unknown",
+      "priority": "medium",
       "required_params": [
         "team_id"
       ],
       "notes": "",
       "latest_version": true,
-      "policy": "",
-      "frequency": ""
+      "policy": "replacing",
+      "frequency": "daily"
     },
     "TeamDashboardByGeneralSplits": {
-      "priority": "unknown",
+      "priority": "low",
       "required_params": [
         "team_id"
       ],
       "notes": "",
       "latest_version": true,
-      "policy": "",
-      "frequency": ""
+      "policy": "replacing",
+      "frequency": "daily"
     },
     "TeamDashboardByShootingSplits": {
-      "priority": "unknown",
+      "priority": "low",
       "required_params": [
         "team_id"
       ],
       "notes": "",
       "latest_version": true,
-      "policy": "",
-      "frequency": ""
+      "policy": "replacing",
+      "frequency": "daily"
     },
     "TeamDetails": {
       "priority": "None",
@@ -1198,10 +1198,10 @@
         "team_id",
         "player_id"
       ],
-      "notes": "needs season, playerid on teamid",
+      "notes": "needs season, playerid on teamid. Interesting. Might not be complete",
       "latest_version": true,
-      "policy": "",
-      "frequency": ""
+      "policy": "stacking",
+      "frequency": "daily"
     },
     "ShotChartLineupDetail": {
       "priority": "None",
