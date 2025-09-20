@@ -383,7 +383,7 @@
       "required_params": [
         "player_id"
       ],
-      "notes": "height and weight seem to be the only useful data, think that can be found elsewhere",
+      "notes": "height and weight seem to be the only useful data, can be found in BioStats",
       "latest_version": true,
       "policy": "stacking",
       "frequency": "monthly"
@@ -430,7 +430,7 @@
     "LeagueDashPlayerBioStats": {
       "priority": "medium",
       "required_params": [],
-      "notes": "",
+      "notes": "contains player height and weight",
       "latest_version": true,
       "policy": "replacing",
       "frequency": "daily"
@@ -454,7 +454,7 @@
     "LeagueDashPlayerShotLocations": {
       "priority": "medium",
       "required_params": [],
-      "notes": "",
+      "notes": "!!! has multiindex",
       "latest_version": true,
       "policy": "replacing",
       "frequency": "daily"
@@ -462,15 +462,15 @@
     "LeagueDashPlayerStats": {
       "priority": "None",
       "required_params": [],
-      "notes": "",
+      "notes": "Can be rebuilt from other endpoints",
       "latest_version": true,
       "policy": "",
       "frequency": ""
     },
     "LeagueHustleStatsPlayer": {
-      "priority": "medium",
+      "priority": "low",
       "required_params": [],
-      "notes": "",
+      "notes": "can be aggregated elsewhere",
       "latest_version": true,
       "policy": "replacing",
       "frequency": "daily"
@@ -777,9 +777,9 @@
       "frequency": ""
     },
     "LeagueDashPtTeamDefend": {
-      "priority": "medium",
+      "priority": "low",
       "required_params": [],
-      "notes": "",
+      "notes": "defense differentials at a team level, feels a bit too broad",
       "latest_version": true,
       "policy": "replacing",
       "frequency": "daily"
@@ -793,9 +793,9 @@
       "frequency": ""
     },
     "LeagueDashTeamPtShot": {
-      "priority": "medium",
+      "priority": "low",
       "required_params": [],
-      "notes": "",
+      "notes": "shot type and percentages at a team level, more granular data elsewhere",
       "latest_version": true,
       "policy": "replacing",
       "frequency": "daily"
@@ -809,17 +809,17 @@
       "frequency": "daily"
     },
     "LeagueDashTeamStats": {
-      "priority": "medium",
+      "priority": "low",
       "required_params": [],
-      "notes": "",
+      "notes": "can be aggregated elsewhere",
       "latest_version": true,
       "policy": "replacing",
       "frequency": "daily"
     },
     "LeagueHustleStatsTeam": {
-      "priority": "medium",
+      "priority": "low",
       "required_params": [],
-      "notes": "",
+      "notes": "can be aggregated elsewhere",
       "latest_version": true,
       "policy": "replacing",
       "frequency": "daily"
@@ -997,9 +997,9 @@
       "frequency": "daily"
     },
     "LeagueDashPtDefend": {
-      "priority": "medium",
+      "priority": "low",
       "required_params": [],
-      "notes": "",
+      "notes": "simple but maybe not useful",
       "latest_version": true,
       "policy": "replacing",
       "frequency": "daily"
@@ -1007,7 +1007,7 @@
     "LeagueDashPtStats": {
       "priority": "medium",
       "required_params": [],
-      "notes": "",
+      "notes": "contains distance and speed for players, can be used for 'whos dogging it on defense'",
       "latest_version": true,
       "policy": "replacing",
       "frequency": "daily"
