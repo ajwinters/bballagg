@@ -56,7 +56,27 @@ class MasterTablesManager:
         
         # League configurations with proper season formatting and realistic start years
         self.league_configs = [
-            
+            {
+                'id': '00', 
+                'name': 'NBA', 
+                'full_name': 'National Basketball Association',
+                'season_format': 'two_year',  # 2023-24 format
+                'start_year': 1983  # NBA API data availability starts here
+            },
+            {
+                'id': '10', 
+                'name': 'WNBA', 
+                'full_name': 'Women\'s National Basketball Association',
+                'season_format': 'single_year',  # 2024 format  
+                'start_year': 1997  # WNBA founded in 1997
+            },
+            {
+                'id': '20', 
+                'name': 'G-League', 
+                'full_name': 'G League',
+                'season_format': 'two_year',  # 2023-24 format
+                'start_year': 2001  # G-League data available from 2001
+            }
         ]
         
         # Season types to collect

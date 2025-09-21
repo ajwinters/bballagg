@@ -15,7 +15,16 @@ I think in order to reduce api requests for teh player tables, we should only be
 
 Don't forget to exclude 'rank' variables
 
-
+___
+Process needs
+-uniforming naming, no special characters
+-create ids for endpoints/tables that don't automatically return a column for the id that was being pulled
+-make sure data types are being identified in the intial table build
+-make sure tables are delininated on league
+-season should be included in every pull 
+-only pull for active seasons
+-exclude 'rank' variables
+-replacing policy should only replace for current season
 
 
 
