@@ -319,9 +319,9 @@
       "frequency": "daily"
     },
     "PlayerGameLogs": {
-      "priority": "high",
+      "priority": "low",
       "required_params": [],
-      "notes": "Use season_nullable, returns all games for all players during that season ~52000 records per season",
+      "notes": "Use season_nullable, returns all games for all players during that season ~52000 records per season. Actually going to move this to low. This info is convenient for bulk data retrieval but more complete data can be aggregated from the boxscores. It's nearly identical to LeagueGameLog but with player ids.",
       "latest_version": true,
       "policy": "stacking",
       "frequency": "daily"
@@ -546,7 +546,7 @@
       "frequency": "daily"
     },
     "PlayerDashPtReb": {
-      "priority": "low",
+      "priority": "high",
       "required_params": [
         "team_id",
         "player_id"
@@ -562,7 +562,7 @@
         "team_id",
         "player_id"
       ],
-      "notes": "use opposing team id",
+      "notes": "use opposing team id, interesting but limited. Good for player vs team analysis",
       "latest_version": true,
       "policy": "replacing",
       "frequency": "daily"
@@ -748,11 +748,11 @@
       "frequency": ""
     },
     "CommonTeamRoster": {
-      "priority": "high",
+      "priority": "master",
       "required_params": [
         "team_id"
       ],
-      "notes": "policy is replacing on team aggregate",
+      "notes": "policy is replacing on team aggregate, might need to find a way to create a hashing for lineups, for historic purposes",
       "latest_version": true,
       "policy": "replacing", 
       "frequency": "biweekly"
