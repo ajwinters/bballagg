@@ -1,0 +1,71 @@
+{
+  "description": "Parameter mappings from API parameter names to standard database column names",
+  "mappings": {
+    "league_id": "league_id",
+    "league_id_nullable": "league_id",
+    "leagueid": "league_id",
+    "leagueid_nullable": "league_id",
+    "season": "season",
+    "season_nullable": "season",
+    "season_id": "season",
+    "season_id_nullable": "season",
+    "seasonid": "season",
+    "seasonid_nullable": "season",
+    "season_type": "season_type",
+    "season_type_nullable": "season_type",
+    "seasontype": "season_type",
+    "seasontype_nullable": "season_type",
+    "team_id": "team_id",
+    "team_id_nullable": "team_id",
+    "teamid": "team_id",
+    "teamid_nullable": "team_id",
+    "player_id": "player_id",
+    "player_id_nullable": "player_id",
+    "playerid": "player_id",
+    "playerid_nullable": "player_id",
+    "game_id": "game_id",
+    "game_id_nullable": "game_id",
+    "gameid": "game_id",
+    "gameid_nullable": "game_id"
+  },
+  "variant_groups": {
+    "league_id": [
+      "league_id",
+      "league_id_nullable",
+      "leagueid",
+      "leagueid_nullable"
+    ],
+    "season": [
+      "season",
+      "season_nullable",
+      "season_id",
+      "season_id_nullable",
+      "seasonid",
+      "seasonid_nullable"
+    ],
+    "season_type": [
+      "season_type",
+      "season_type_nullable",
+      "seasontype",
+      "seasontype_nullable"
+    ],
+    "team_id": [
+      "team_id",
+      "team_id_nullable",
+      "teamid",
+      "teamid_nullable"
+    ],
+    "player_id": [
+      "player_id",
+      "player_id_nullable",
+      "playerid",
+      "playerid_nullable"
+    ],
+    "game_id": [
+      "game_id",
+      "game_id_nullable",
+      "gameid",
+      "gameid_nullable"
+    ]
+  }
+}

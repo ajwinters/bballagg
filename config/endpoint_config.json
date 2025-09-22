@@ -194,7 +194,9 @@
     "CumeStatsPlayerGames": {
       "priority": "None",
       "required_params": [
-        "player_id"
+        "league_id",
+        "player_id",
+        "season"
       ],
       "notes": "",
       "latest_version": true,
@@ -204,6 +206,9 @@
     "CumeStatsTeamGames": {
       "priority": "None",
       "required_params": [
+        "league_id",
+        "season",
+        "season_id_nullable",
         "team_id"
       ],
       "notes": "",
@@ -225,7 +230,8 @@
     "GameRotation": {
       "priority": "low",
       "required_params": [
-        "game_id"
+        "game_id",
+        "league_id"
       ],
       "notes": "",
       "latest_version": true,
@@ -243,16 +249,25 @@
       "frequency": ""
     },
     "LeagueGameFinder": {
-      "priority": "master",
-      "required_params": [],
+      "priority": "high",
+      "master": "game_id",
+      "required_params": [
+        "league_id_nullable",
+        "season_nullable",
+        "season_type_nullable"
+      ],
       "notes": "select on season",
       "latest_version": true,
       "policy": "stacking",
       "frequency": "daily"
     },
     "LeagueGameLog": {
-      "priority": "master",
-      "required_params": [],
+      "priority": "high",
+      "master": "game_id",
+      "required_params": [
+        "league_id",
+        "season"
+      ],
       "notes": "defaults to current regular season, season, season_type, league will need to be specified",
       "latest_version": true,
       "policy": "stacking",
@@ -291,7 +306,9 @@
     "PlayerDashboardByGameSplits": {
       "priority": "medium",
       "required_params": [
-        "player_id"
+        "league_id_nullable",
+        "player_id",
+        "season"
       ],
       "notes": "",
       "latest_version": true,
@@ -301,7 +318,9 @@
     "PlayerDashboardByLastNGames": {
       "priority": "None",
       "required_params": [
-        "player_id"
+        "league_id_nullable",
+        "player_id",
+        "season"
       ],
       "notes": "",
       "latest_version": true,
@@ -311,7 +330,9 @@
     "PlayerGameLog": {
       "priority": "None",
       "required_params": [
-        "player_id"
+        "league_id_nullable",
+        "player_id",
+        "season"
       ],
       "notes": "Same as PlayerLogs, but granulate on player_id",
       "latest_version": true,
@@ -320,7 +341,11 @@
     },
     "PlayerGameLogs": {
       "priority": "low",
-      "required_params": [],
+      "required_params": [
+        "league_id_nullable",
+        "season_nullable",
+        "season_type_nullable"
+      ],
       "notes": "Use season_nullable, returns all games for all players during that season ~52000 records per season. Actually going to move this to low. This info is convenient for bulk data retrieval but more complete data can be aggregated from the boxscores. It's nearly identical to LeagueGameLog but with player ids.",
       "latest_version": true,
       "policy": "stacking",
@@ -328,7 +353,11 @@
     },
     "PlayerGameStreakFinder": {
       "priority": "None",
-      "required_params": [],
+      "required_params": [
+        "league_id_nullable",
+        "season_nullable",
+        "season_type_nullable"
+      ],
       "notes": "",
       "latest_version": true,
       "policy": "",
@@ -337,6 +366,7 @@
     "PlayerNextNGames": {
       "priority": "low",
       "required_params": [
+        "league_id_nullable",
         "player_id"
       ],
       "notes": "revisit for how to pull during season. make monthly and just get every 30 days",
@@ -347,6 +377,8 @@
     "TeamGameLog": {
       "priority": "None",
       "required_params": [
+        "league_id_nullable",
+        "season",
         "team_id"
       ],
       "notes": "",
@@ -356,7 +388,11 @@
     },
     "TeamGameLogs": {
       "priority": "high",
-      "required_params": [],
+      "required_params": [
+        "league_id_nullable",
+        "season_nullable",
+        "season_type_nullable"
+      ],
       "notes": "",
       "latest_version": true,
       "policy": "stacking",
@@ -364,15 +400,23 @@
     },
     "TeamGameStreakFinder": {
       "priority": "None",
-      "required_params": [],
+      "required_params": [
+        "league_id_nullable",
+        "season_nullable",
+        "season_type_nullable"
+      ],
       "notes": "",
       "latest_version": true,
       "policy": "",
       "frequency": ""
     },
     "CommonAllPlayers": {
-      "priority": "master",
-      "required_params": [],
+      "priority": "high",
+      "master": "player_id",
+      "required_params": [
+        "league_id",
+        "season"
+      ],
       "notes": "",
       "latest_version": true,
       "policy": "replacing",
@@ -381,6 +425,7 @@
     "CommonPlayerInfo": {
       "priority": "low",
       "required_params": [
+        "league_id_nullable",
         "player_id"
       ],
       "notes": "height and weight seem to be the only useful data, can be found in BioStats",
@@ -391,8 +436,10 @@
     "CumeStatsPlayer": {
       "priority": "None",
       "required_params": [
+        "game_ids",
+        "league_id",
         "player_id",
-        "game_ids"
+        "season"
       ],
       "notes": "",
       "latest_version": true,
@@ -401,7 +448,9 @@
     },
     "DraftCombinePlayerAnthro": {
       "priority": "low",
-      "required_params": [],
+      "required_params": [
+        "league_id"
+      ],
       "notes": "",
       "latest_version": true,
       "policy": "stacking",
@@ -410,6 +459,7 @@
     "FranchisePlayers": {
       "priority": "None",
       "required_params": [
+        "league_id",
         "team_id"
       ],
       "notes": "",
@@ -429,7 +479,10 @@
     },
     "LeagueDashPlayerBioStats": {
       "priority": "medium",
-      "required_params": [],
+      "required_params": [
+        "league_id",
+        "season"
+      ],
       "notes": "contains player height and weight",
       "latest_version": true,
       "policy": "replacing",
@@ -437,7 +490,10 @@
     },
     "LeagueDashPlayerClutch": {
       "priority": "None",
-      "required_params": [],
+      "required_params": [
+        "league_id_nullable",
+        "season"
+      ],
       "notes": "",
       "latest_version": true,
       "policy": "",
@@ -445,7 +501,10 @@
     },
     "LeagueDashPlayerPtShot": {
       "priority": "None",
-      "required_params": [],
+      "required_params": [
+        "league_id",
+        "season"
+      ],
       "notes": "",
       "latest_version": true,
       "policy": "",
@@ -453,7 +512,10 @@
     },
     "LeagueDashPlayerShotLocations": {
       "priority": "medium",
-      "required_params": [],
+      "required_params": [
+        "league_id_nullable",
+        "season"
+      ],
       "notes": "!!! has multiindex",
       "latest_version": true,
       "policy": "replacing",
@@ -461,7 +523,10 @@
     },
     "LeagueDashPlayerStats": {
       "priority": "None",
-      "required_params": [],
+      "required_params": [
+        "league_id_nullable",
+        "season"
+      ],
       "notes": "Can be rebuilt from other endpoints",
       "latest_version": true,
       "policy": "",
@@ -469,7 +534,10 @@
     },
     "LeagueHustleStatsPlayer": {
       "priority": "low",
-      "required_params": [],
+      "required_params": [
+        "league_id_nullable",
+        "season"
+      ],
       "notes": "can be aggregated elsewhere",
       "latest_version": true,
       "policy": "replacing",
@@ -478,6 +546,8 @@
     "LeaguePlayerOnDetails": {
       "priority": "None",
       "required_params": [
+        "league_id_nullable",
+        "season",
         "team_id"
       ],
       "notes": "",
@@ -498,7 +568,9 @@
     "PlayerCareerByCollege": {
       "priority": "None",
       "required_params": [
-        "college"
+        "college",
+        "league_id",
+        "season_nullable"
       ],
       "notes": "",
       "latest_version": true,
@@ -507,7 +579,10 @@
     },
     "PlayerCareerByCollegeRollup": {
       "priority": "None",
-      "required_params": [],
+      "required_params": [
+        "league_id",
+        "season_nullable"
+      ],
       "notes": "",
       "latest_version": true,
       "policy": "",
@@ -516,6 +591,7 @@
     "PlayerCareerStats": {
       "priority": "None",
       "required_params": [
+        "league_id_nullable",
         "player_id"
       ],
       "notes": "",
@@ -526,8 +602,10 @@
     "PlayerCompare": {
       "priority": "None",
       "required_params": [
-        "vs_player_id_list",
-        "player_id_list"
+        "league_id_nullable",
+        "player_id_list",
+        "season",
+        "vs_player_id_list"
       ],
       "notes": "",
       "latest_version": true,
@@ -537,8 +615,10 @@
     "PlayerDashPtPass": {
       "priority": "low",
       "required_params": [
-        "team_id",
-        "player_id"
+        "league_id",
+        "player_id",
+        "season",
+        "team_id"
       ],
       "notes": "Don't do every combination of player and team, just the player and their team",
       "latest_version": true,
@@ -548,8 +628,10 @@
     "PlayerDashPtReb": {
       "priority": "high",
       "required_params": [
-        "team_id",
-        "player_id"
+        "league_id",
+        "player_id",
+        "season",
+        "team_id"
       ],
       "notes": "",
       "latest_version": true,
@@ -559,8 +641,10 @@
     "PlayerDashPtShotDefend": {
       "priority": "low",
       "required_params": [
-        "team_id",
-        "player_id"
+        "league_id",
+        "player_id",
+        "season",
+        "team_id"
       ],
       "notes": "use opposing team id, interesting but limited. Good for player vs team analysis",
       "latest_version": true,
@@ -570,8 +654,10 @@
     "PlayerDashPtShots": {
       "priority": "high",
       "required_params": [
-        "team_id",
-        "player_id"
+        "league_id",
+        "player_id",
+        "season",
+        "team_id"
       ],
       "notes": "interesting shot data, dribbles, shot clock, shot type",
       "latest_version": true,
@@ -581,7 +667,9 @@
     "PlayerDashboardByClutch": {
       "priority": "None",
       "required_params": [
-        "player_id"
+        "league_id_nullable",
+        "player_id",
+        "season"
       ],
       "notes": "",
       "latest_version": true,
@@ -591,7 +679,9 @@
     "PlayerDashboardByGeneralSplits": {
       "priority": "low",
       "required_params": [
-        "player_id"
+        "league_id_nullable",
+        "player_id",
+        "season"
       ],
       "notes": "",
       "latest_version": true,
@@ -601,7 +691,9 @@
     "PlayerDashboardByShootingSplits": {
       "priority": "low",
       "required_params": [
-        "player_id"
+        "league_id_nullable",
+        "player_id",
+        "season"
       ],
       "notes": "",
       "latest_version": true,
@@ -611,7 +703,9 @@
     "PlayerDashboardByTeamPerformance": {
       "priority": "low",
       "required_params": [
-        "player_id"
+        "league_id_nullable",
+        "player_id",
+        "season"
       ],
       "notes": "",
       "latest_version": true,
@@ -621,7 +715,9 @@
     "PlayerDashboardByYearOverYear": {
       "priority": "unknown",
       "required_params": [
-        "player_id"
+        "league_id_nullable",
+        "player_id",
+        "season"
       ],
       "notes": "",
       "latest_version": true,
@@ -630,7 +726,11 @@
     },
     "PlayerEstimatedMetrics": {
       "priority": "None",
-      "required_params": [],
+      "required_params": [
+        "league_id",
+        "season",
+        "season_type"
+      ],
       "notes": "",
       "latest_version": true,
       "policy": "",
@@ -639,7 +739,9 @@
     "PlayerFantasyProfile": {
       "priority": "None",
       "required_params": [
-        "player_id"
+        "league_id_nullable",
+        "player_id",
+        "season"
       ],
       "notes": "",
       "latest_version": true,
@@ -649,7 +751,9 @@
     "PlayerFantasyProfileBarGraph": {
       "priority": "None",
       "required_params": [
-        "player_id"
+        "league_id_nullable",
+        "player_id",
+        "season"
       ],
       "notes": "",
       "latest_version": true,
@@ -658,7 +762,10 @@
     },
     "PlayerIndex": {
       "priority": "None",
-      "required_params": [],
+      "required_params": [
+        "league_id",
+        "season"
+      ],
       "notes": "",
       "latest_version": true,
       "policy": "",
@@ -667,6 +774,7 @@
     "PlayerProfileV2": {
       "priority": "None",
       "required_params": [
+        "league_id_nullable",
         "player_id"
       ],
       "notes": "",
@@ -677,8 +785,10 @@
     "PlayerVsPlayer": {
       "priority": "None",
       "required_params": [
-        "vs_player_id",
-        "player_id"
+        "league_id_nullable",
+        "player_id",
+        "season",
+        "vs_player_id"
       ],
       "notes": "",
       "latest_version": true,
@@ -688,18 +798,20 @@
     "TeamAndPlayersVsPlayers": {
       "priority": "None",
       "required_params": [
-        "vs_team_id",
-        "vs_player_id5",
-        "vs_player_id4",
-        "vs_player_id3",
-        "vs_player_id2",
-        "vs_player_id1",
-        "team_id",
-        "player_id5",
-        "player_id4",
-        "player_id3",
+        "league_id_nullable",
+        "player_id1",
         "player_id2",
-        "player_id1"
+        "player_id3",
+        "player_id4",
+        "player_id5",
+        "season",
+        "team_id",
+        "vs_player_id1",
+        "vs_player_id2",
+        "vs_player_id3",
+        "vs_player_id4",
+        "vs_player_id5",
+        "vs_team_id"
       ],
       "notes": "",
       "latest_version": true,
@@ -709,6 +821,8 @@
     "TeamPlayerDashboard": {
       "priority": "low",
       "required_params": [
+        "league_id_nullable",
+        "season",
         "team_id"
       ],
       "notes": "think TeamLineups is higher priority",
@@ -719,6 +833,8 @@
     "TeamPlayerOnOffDetails": {
       "priority": "medium",
       "required_params": [
+        "league_id_nullable",
+        "season",
         "team_id"
       ],
       "notes": "",
@@ -729,6 +845,8 @@
     "TeamPlayerOnOffSummary": {
       "priority": "medium",
       "required_params": [
+        "league_id_nullable",
+        "season",
         "team_id"
       ],
       "notes": "",
@@ -739,8 +857,10 @@
     "TeamVsPlayer": {
       "priority": "None",
       "required_params": [
-        "vs_player_id",
-        "team_id"
+        "league_id_nullable",
+        "season",
+        "team_id",
+        "vs_player_id"
       ],
       "notes": "",
       "latest_version": true,
@@ -748,18 +868,22 @@
       "frequency": ""
     },
     "CommonTeamRoster": {
-      "priority": "master",
+      "priority": "high",
       "required_params": [
+        "league_id_nullable",
+        "season",
         "team_id"
       ],
       "notes": "policy is replacing on team aggregate, might need to find a way to create a hashing for lineups, for historic purposes",
       "latest_version": true,
-      "policy": "replacing", 
+      "policy": "replacing",
       "frequency": "biweekly"
     },
     "CommonTeamYears": {
       "priority": "None",
-      "required_params": [],
+      "required_params": [
+        "league_id"
+      ],
       "notes": "",
       "latest_version": true,
       "policy": "",
@@ -768,8 +892,10 @@
     "CumeStatsTeam": {
       "priority": "None",
       "required_params": [
-        "team_id",
-        "game_ids"
+        "game_ids",
+        "league_id",
+        "season",
+        "team_id"
       ],
       "notes": "",
       "latest_version": true,
@@ -778,7 +904,10 @@
     },
     "LeagueDashPtTeamDefend": {
       "priority": "low",
-      "required_params": [],
+      "required_params": [
+        "league_id",
+        "season"
+      ],
       "notes": "defense differentials at a team level, feels a bit too broad",
       "latest_version": true,
       "policy": "replacing",
@@ -786,7 +915,10 @@
     },
     "LeagueDashTeamClutch": {
       "priority": "None",
-      "required_params": [],
+      "required_params": [
+        "league_id_nullable",
+        "season"
+      ],
       "notes": "",
       "latest_version": true,
       "policy": "",
@@ -794,7 +926,10 @@
     },
     "LeagueDashTeamPtShot": {
       "priority": "low",
-      "required_params": [],
+      "required_params": [
+        "league_id",
+        "season"
+      ],
       "notes": "shot type and percentages at a team level, more granular data elsewhere",
       "latest_version": true,
       "policy": "replacing",
@@ -802,7 +937,10 @@
     },
     "LeagueDashTeamShotLocations": {
       "priority": "medium",
-      "required_params": [],
+      "required_params": [
+        "league_id_nullable",
+        "season"
+      ],
       "notes": "",
       "latest_version": true,
       "policy": "replacing",
@@ -810,7 +948,10 @@
     },
     "LeagueDashTeamStats": {
       "priority": "low",
-      "required_params": [],
+      "required_params": [
+        "league_id_nullable",
+        "season"
+      ],
       "notes": "can be aggregated elsewhere",
       "latest_version": true,
       "policy": "replacing",
@@ -818,7 +959,10 @@
     },
     "LeagueHustleStatsTeam": {
       "priority": "low",
-      "required_params": [],
+      "required_params": [
+        "league_id_nullable",
+        "season"
+      ],
       "notes": "can be aggregated elsewhere",
       "latest_version": true,
       "policy": "replacing",
@@ -827,6 +971,8 @@
     "TeamDashLineups": {
       "priority": "medium",
       "required_params": [
+        "league_id_nullable",
+        "season",
         "team_id"
       ],
       "notes": "",
@@ -837,6 +983,8 @@
     "TeamDashPtPass": {
       "priority": "medium",
       "required_params": [
+        "league_id",
+        "season",
         "team_id"
       ],
       "notes": "",
@@ -847,6 +995,8 @@
     "TeamDashPtReb": {
       "priority": "medium",
       "required_params": [
+        "league_id",
+        "season",
         "team_id"
       ],
       "notes": "",
@@ -857,6 +1007,8 @@
     "TeamDashPtShots": {
       "priority": "medium",
       "required_params": [
+        "league_id",
+        "season",
         "team_id"
       ],
       "notes": "",
@@ -867,6 +1019,8 @@
     "TeamDashboardByGeneralSplits": {
       "priority": "low",
       "required_params": [
+        "league_id_nullable",
+        "season",
         "team_id"
       ],
       "notes": "",
@@ -877,6 +1031,8 @@
     "TeamDashboardByShootingSplits": {
       "priority": "low",
       "required_params": [
+        "league_id_nullable",
+        "season",
         "team_id"
       ],
       "notes": "",
@@ -896,7 +1052,11 @@
     },
     "TeamEstimatedMetrics": {
       "priority": "None",
-      "required_params": [],
+      "required_params": [
+        "league_id",
+        "season",
+        "season_type"
+      ],
       "notes": "",
       "latest_version": true,
       "policy": "",
@@ -905,6 +1065,8 @@
     "TeamHistoricalLeaders": {
       "priority": "None",
       "required_params": [
+        "league_id",
+        "season_id",
         "team_id"
       ],
       "notes": "",
@@ -915,6 +1077,9 @@
     "TeamInfoCommon": {
       "priority": "None",
       "required_params": [
+        "league_id",
+        "season_nullable",
+        "season_type_nullable",
         "team_id"
       ],
       "notes": "",
@@ -925,6 +1090,7 @@
     "TeamYearByYearStats": {
       "priority": "None",
       "required_params": [
+        "league_id",
         "team_id"
       ],
       "notes": "",
@@ -934,7 +1100,9 @@
     },
     "DraftBoard": {
       "priority": "None",
-      "required_params": [],
+      "required_params": [
+        "league_id"
+      ],
       "notes": "",
       "latest_version": true,
       "policy": "",
@@ -942,7 +1110,9 @@
     },
     "DraftCombineDrillResults": {
       "priority": "None",
-      "required_params": [],
+      "required_params": [
+        "league_id"
+      ],
       "notes": "",
       "latest_version": true,
       "policy": "",
@@ -950,7 +1120,9 @@
     },
     "DraftCombineNonStationaryShooting": {
       "priority": "None",
-      "required_params": [],
+      "required_params": [
+        "league_id"
+      ],
       "notes": "",
       "latest_version": true,
       "policy": "",
@@ -958,7 +1130,9 @@
     },
     "DraftCombineSpotShooting": {
       "priority": "None",
-      "required_params": [],
+      "required_params": [
+        "league_id"
+      ],
       "notes": "",
       "latest_version": true,
       "policy": "",
@@ -966,7 +1140,9 @@
     },
     "DraftCombineStats": {
       "priority": "None",
-      "required_params": [],
+      "required_params": [
+        "league_id"
+      ],
       "notes": "",
       "latest_version": true,
       "policy": "",
@@ -974,7 +1150,9 @@
     },
     "DraftHistory": {
       "priority": "None",
-      "required_params": [],
+      "required_params": [
+        "league_id"
+      ],
       "notes": "",
       "latest_version": true,
       "policy": "",
@@ -982,7 +1160,10 @@
     },
     "LeagueDashLineups": {
       "priority": "medium",
-      "required_params": [],
+      "required_params": [
+        "league_id_nullable",
+        "season"
+      ],
       "notes": "",
       "latest_version": true,
       "policy": "replacing",
@@ -990,7 +1171,10 @@
     },
     "LeagueDashOppPtShot": {
       "priority": "medium",
-      "required_params": [],
+      "required_params": [
+        "league_id",
+        "season"
+      ],
       "notes": "",
       "latest_version": true,
       "policy": "replacing",
@@ -998,7 +1182,10 @@
     },
     "LeagueDashPtDefend": {
       "priority": "low",
-      "required_params": [],
+      "required_params": [
+        "league_id",
+        "season"
+      ],
       "notes": "simple but maybe not useful",
       "latest_version": true,
       "policy": "replacing",
@@ -1006,7 +1193,10 @@
     },
     "LeagueDashPtStats": {
       "priority": "medium",
-      "required_params": [],
+      "required_params": [
+        "league_id_nullable",
+        "season"
+      ],
       "notes": "contains distance and speed for players, can be used for 'whos dogging it on defense'",
       "latest_version": true,
       "policy": "replacing",
@@ -1014,7 +1204,10 @@
     },
     "LeagueLeaders": {
       "priority": "None",
-      "required_params": [],
+      "required_params": [
+        "league_id",
+        "season"
+      ],
       "notes": "",
       "latest_version": true,
       "policy": "",
@@ -1023,7 +1216,9 @@
     "LeagueLineupViz": {
       "priority": "None",
       "required_params": [
-        "minutes_min"
+        "league_id_nullable",
+        "minutes_min",
+        "season"
       ],
       "notes": "",
       "latest_version": true,
@@ -1032,7 +1227,10 @@
     },
     "LeagueSeasonMatchups": {
       "priority": "high",
-      "required_params": [],
+      "required_params": [
+        "league_id",
+        "season"
+      ],
       "notes": "very interesting, returns every combination of player matchups for a season",
       "latest_version": true,
       "policy": "replacing",
@@ -1040,7 +1238,12 @@
     },
     "LeagueStandings": {
       "priority": "None",
-      "required_params": [],
+      "required_params": [
+        "league_id",
+        "season",
+        "season_nullable",
+        "season_type"
+      ],
       "notes": "",
       "latest_version": false,
       "policy": "",
@@ -1048,7 +1251,12 @@
     },
     "LeagueStandingsV3": {
       "priority": "None",
-      "required_params": [],
+      "required_params": [
+        "league_id",
+        "season",
+        "season_nullable",
+        "season_type"
+      ],
       "notes": "",
       "latest_version": true,
       "policy": "",
@@ -1056,7 +1264,10 @@
     },
     "ShotChartLeagueWide": {
       "priority": "None",
-      "required_params": [],
+      "required_params": [
+        "league_id",
+        "season"
+      ],
       "notes": "",
       "latest_version": true,
       "policy": "",
@@ -1064,7 +1275,10 @@
     },
     "AllTimeLeadersGrids": {
       "priority": "None",
-      "required_params": [],
+      "required_params": [
+        "league_id",
+        "season_type"
+      ],
       "notes": "",
       "latest_version": true,
       "policy": "",
@@ -1072,7 +1286,10 @@
     },
     "AssistLeaders": {
       "priority": "None",
-      "required_params": [],
+      "required_params": [
+        "league_id",
+        "season"
+      ],
       "notes": "",
       "latest_version": true,
       "policy": "",
@@ -1080,7 +1297,10 @@
     },
     "AssistTracker": {
       "priority": "None",
-      "required_params": [],
+      "required_params": [
+        "league_id_nullable",
+        "season_nullable"
+      ],
       "notes": "",
       "latest_version": true,
       "policy": "",
@@ -1088,7 +1308,10 @@
     },
     "CommonPlayoffSeries": {
       "priority": "low",
-      "required_params": [],
+      "required_params": [
+        "league_id",
+        "season"
+      ],
       "notes": "",
       "latest_version": true,
       "policy": "stacking",
@@ -1096,7 +1319,10 @@
     },
     "DefenseHub": {
       "priority": "None",
-      "required_params": [],
+      "required_params": [
+        "league_id",
+        "season"
+      ],
       "notes": "",
       "latest_version": true,
       "policy": "",
@@ -1104,7 +1330,10 @@
     },
     "FantasyWidget": {
       "priority": "None",
-      "required_params": [],
+      "required_params": [
+        "league_id",
+        "season"
+      ],
       "notes": "",
       "latest_version": true,
       "policy": "",
@@ -1112,7 +1341,9 @@
     },
     "FranchiseHistory": {
       "priority": "None",
-      "required_params": [],
+      "required_params": [
+        "league_id"
+      ],
       "notes": "",
       "latest_version": true,
       "policy": "",
@@ -1121,6 +1352,7 @@
     "FranchiseLeaders": {
       "priority": "None",
       "required_params": [
+        "league_id_nullable",
         "team_id"
       ],
       "notes": "",
@@ -1130,7 +1362,10 @@
     },
     "HomePageLeaders": {
       "priority": "None",
-      "required_params": [],
+      "required_params": [
+        "league_id",
+        "season"
+      ],
       "notes": "",
       "latest_version": true,
       "policy": "",
@@ -1138,7 +1373,10 @@
     },
     "HomePageV2": {
       "priority": "None",
-      "required_params": [],
+      "required_params": [
+        "league_id",
+        "season"
+      ],
       "notes": "",
       "latest_version": true,
       "policy": "",
@@ -1146,7 +1384,10 @@
     },
     "ISTStandings": {
       "priority": "None",
-      "required_params": [],
+      "required_params": [
+        "league_id",
+        "season"
+      ],
       "notes": "",
       "latest_version": true,
       "policy": "",
@@ -1154,7 +1395,10 @@
     },
     "LeadersTiles": {
       "priority": "None",
-      "required_params": [],
+      "required_params": [
+        "league_id",
+        "season"
+      ],
       "notes": "",
       "latest_version": true,
       "policy": "",
@@ -1162,7 +1406,10 @@
     },
     "MatchupsRollup": {
       "priority": "None",
-      "required_params": [],
+      "required_params": [
+        "league_id",
+        "season"
+      ],
       "notes": "",
       "latest_version": true,
       "policy": "",
@@ -1170,7 +1417,10 @@
     },
     "PlayoffPicture": {
       "priority": "None",
-      "required_params": [],
+      "required_params": [
+        "league_id",
+        "season_id"
+      ],
       "notes": "",
       "latest_version": true,
       "policy": "",
@@ -1186,7 +1436,9 @@
     },
     "ScoreboardV2": {
       "priority": "None",
-      "required_params": [],
+      "required_params": [
+        "league_id"
+      ],
       "notes": "",
       "latest_version": true,
       "policy": "",
@@ -1195,8 +1447,10 @@
     "ShotChartDetail": {
       "priority": "medium",
       "required_params": [
-        "team_id",
-        "player_id"
+        "league_id",
+        "player_id",
+        "season_nullable",
+        "team_id"
       ],
       "notes": "needs season, playerid on teamid. Interesting. Might not be complete",
       "latest_version": true,
@@ -1205,7 +1459,10 @@
     },
     "ShotChartLineupDetail": {
       "priority": "None",
-      "required_params": [],
+      "required_params": [
+        "league_id",
+        "season"
+      ],
       "notes": "not sure how to pull this data, need group id from lineup data at least",
       "latest_version": true,
       "policy": "",
@@ -1213,7 +1470,10 @@
     },
     "SynergyPlayTypes": {
       "priority": "None",
-      "required_params": [],
+      "required_params": [
+        "league_id",
+        "season"
+      ],
       "notes": "",
       "latest_version": true,
       "policy": "",
@@ -1222,8 +1482,10 @@
     "VideoDetails": {
       "priority": "None",
       "required_params": [
-        "team_id",
-        "player_id"
+        "league_id_nullable",
+        "player_id",
+        "season",
+        "team_id"
       ],
       "notes": "",
       "latest_version": true,
@@ -1233,8 +1495,10 @@
     "VideoDetailsAsset": {
       "priority": "None",
       "required_params": [
-        "team_id",
-        "player_id"
+        "league_id_nullable",
+        "player_id",
+        "season",
+        "team_id"
       ],
       "notes": "",
       "latest_version": true,
@@ -1253,7 +1517,9 @@
     },
     "VideoStatus": {
       "priority": "None",
-      "required_params": [],
+      "required_params": [
+        "league_id"
+      ],
       "notes": "",
       "latest_version": true,
       "policy": "",

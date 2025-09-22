@@ -1,0 +1,806 @@
+#!/usr/bin/env python3
+"""
+NBA API Data Collection Engine - New Configuration-Driven System
+
+This system processes NBA API endpoints based on endpoint_config.json with the following features:
+- Master tables processed first (endpoints with 'master' field)
+- Processes high priority, latest version endpoints
+- League-specific table naming (e.g., nba_{endpoint}_{dataframe})
+- Dynamic table creation using expected_data matching
+- Error tracking for failed API calls
+- Test mode for development
+- Season-aware processing
+- SLURM distribution ready
+
+Author: NBA Data Pipeline
+Date: September 2025
+"""
+
+import argparse
+import json
+import logging
+import os
+import sys
+import time
+from datetime import datetime, timedelta
+from typing import Dict, List, Optional, Tuple, Any
+
+# Add project paths
+project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(project_root)
+
+import pandas as pd
+import nba_api.stats.endpoints as nbaapi
+from rds_connection_manager import RDSConnectionManager
+
+
+class NBADataProcessor:
+    """
+    Main NBA Data Processor - Configuration-driven endpoint processing
+    """
+    
+    def __init__(self, league: str = 'NBA', test_mode: bool = False, 
+                 max_items_per_endpoint: int = None, log_level: str = 'INFO'):
+        """
+        Initialize the NBA Data Processor
+        
+        Args:
+            league: League to process (NBA, WNBA, G-League)
+            test_mode: Whether to run in test mode with limited data
+            max_items_per_endpoint: Maximum items to process per endpoint (for test mode)
+            log_level: Logging level
+        """
+        self.league = league.upper()
+        self.test_mode = test_mode
+        self.max_items_per_endpoint = max_items_per_endpoint or (10 if test_mode else None)
+        
+        # Setup logging
+        self.logger = self._setup_logging(log_level)
+        
+        # Load configurations
+        self.endpoint_config = self._load_endpoint_config()
+        self.league_config = self._load_league_config()
+        self.database_config = self._load_database_config()
+        self.parameter_mappings = self._load_parameter_mappings()
+        
+        # Initialize database connection
+        self.db_manager = RDSConnectionManager(self.database_config)
+        
+        # Get current season info
+        self.current_season = self._get_current_season()
+        self.is_current_season = True  # Will be set per season iteration
+        
+        self.logger.info(f"=== NBA Data Processor Initialized ===")
+        self.logger.info(f"League: {self.league}")
+        self.logger.info(f"Test Mode: {self.test_mode}")
+        self.logger.info(f"Current Season: {self.current_season}")
+        if self.max_items_per_endpoint:
+            self.logger.info(f"Max items per endpoint: {self.max_items_per_endpoint}")
+    
+    def _setup_logging(self, log_level: str) -> logging.Logger:
+        """Setup logging configuration"""
+        # Create logs directory
+        logs_dir = os.path.join(project_root, 'logs')
+        os.makedirs(logs_dir, exist_ok=True)
+        
+        # Create log filename
+        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+        log_filename = os.path.join(logs_dir, f'nba_processor_{self.league.lower()}_{timestamp}.log')
+        
+        # Configure logging
+        logging.basicConfig(
+            level=getattr(logging, log_level.upper()),
+            format='%(asctime)s - %(levelname)s - %(message)s',
+            handlers=[
+                logging.FileHandler(log_filename, encoding='utf-8'),
+                logging.StreamHandler(sys.stdout)
+            ]
+        )
+        
+        logger = logging.getLogger(__name__)
+        logger.info(f"Log file: {log_filename}")
+        return logger
+    
+    def _load_endpoint_config(self) -> dict:
+        """Load endpoint configuration from JSON"""
+        config_path = os.path.join(project_root, 'config', 'endpoint_config.json')
+        try:
+            with open(config_path, 'r') as f:
+                config = json.load(f)
+            self.logger.info(f"Loaded {len(config['endpoints'])} endpoint configurations")
+            return config
+        except Exception as e:
+            self.logger.error(f"Failed to load endpoint config: {e}")
+            raise
+    
+    def _load_league_config(self) -> dict:
+        """Load league configuration"""
+        config_path = os.path.join(project_root, 'config', 'leagues_config.json')
+        try:
+            with open(config_path, 'r') as f:
+                leagues = json.load(f)
+            
+            # Find our league
+            league_config = None
+            for league in leagues:
+                if league['name'].upper() == self.league:
+                    league_config = league
+                    break
+            
+            if not league_config:
+                raise ValueError(f"League {self.league} not found in configuration")
+                
+            self.logger.info(f"Loaded league config for {league_config['full_name']}")
+            return league_config
+            
+        except Exception as e:
+            self.logger.error(f"Failed to load league config: {e}")
+            raise
+    
+    def _load_database_config(self) -> dict:
+        """Load database configuration"""
+        config_path = os.path.join(project_root, 'config', 'database_config.json')
+        try:
+            with open(config_path, 'r') as f:
+                config = json.load(f)
+            return {
+                'host': config['host'],
+                'database': config['name'],
+                'user': config['user'],
+                'password': config['password'],
+                'port': int(config['port']),
+                'sslmode': config.get('ssl_mode', 'require'),
+                'connect_timeout': 60
+            }
+        except Exception as e:
+            self.logger.error(f"Failed to load database config: {e}")
+            raise
+    
+    def _load_parameter_mappings(self) -> dict:
+        """Load parameter mappings for consistent column naming"""
+        config_path = os.path.join(project_root, 'config', 'parameter_mappings.json')
+        try:
+            with open(config_path, 'r') as f:
+                mappings_config = json.load(f)
+            self.logger.info("Loaded parameter mappings for consistent column naming")
+            return mappings_config
+        except FileNotFoundError:
+            self.logger.warning("Parameter mappings file not found - using default column names")
+            return {"mappings": {}, "variant_groups": {}}
+        except Exception as e:
+            self.logger.error(f"Failed to load parameter mappings: {e}")
+            return {"mappings": {}, "variant_groups": {}}
+    
+    def _get_current_season(self) -> str:
+        """
+        Determine current NBA season based on date
+        Returns season in the format expected by the league
+        """
+        current_date = datetime.now()
+        current_year = current_date.year
+        
+        if self.league_config['season_format'] == 'two_year':
+            # NBA/G-League: 2024-25 format
+            if current_date.month >= 10:  # Season starts in October
+                season = f"{current_year}-{str(current_year + 1)[-2:]}"
+            else:
+                season = f"{current_year - 1}-{str(current_year)[-2:]}"
+        else:
+            # WNBA: 2024 format
+            if current_date.month >= 5:  # WNBA season roughly May-Oct
+                season = str(current_year)
+            else:
+                season = str(current_year - 1)
+        
+        return season
+    
+    def get_master_endpoints(self) -> List[Tuple[str, dict]]:
+        """
+        Get endpoints that have a 'master' field - these must be processed first
+        Returns list of (endpoint_name, config) tuples
+        """
+        master_endpoints = []
+        
+        for endpoint_name, config in self.endpoint_config['endpoints'].items():
+            if 'master' in config:
+                master_endpoints.append((endpoint_name, config))
+        
+        self.logger.info(f"Found {len(master_endpoints)} master endpoints")
+        for endpoint_name, config in master_endpoints:
+            self.logger.info(f"  - {endpoint_name}: master for {config['master']}")
+        
+        return master_endpoints
+    
+    def get_processable_endpoints(self) -> List[Tuple[str, dict]]:
+        """
+        Get endpoints that should be processed based on priority and latest_version
+        Excludes master endpoints (they're processed separately)
+        Returns list of (endpoint_name, config) tuples
+        """
+        processable_endpoints = []
+        
+        for endpoint_name, config in self.endpoint_config['endpoints'].items():
+            # Skip if it's a master endpoint
+            if 'master' in config:
+                continue
+                
+            # Check priority and latest_version criteria
+            if (config.get('priority') == 'high' and 
+                config.get('latest_version') == True):
+                processable_endpoints.append((endpoint_name, config))
+        
+        self.logger.info(f"Found {len(processable_endpoints)} processable endpoints")
+        return processable_endpoints
+    
+    def get_table_prefix(self) -> str:
+        """Get table prefix for current league"""
+        return self.league.lower()
+    
+    def clean_column_names(self, df: pd.DataFrame) -> pd.DataFrame:
+        """
+        Clean column names for PostgreSQL compatibility with special handling
+        Apply parameter mappings for consistent naming
+        """
+        # Special case mappings
+        special_mappings = {
+            'to': 'turnovers',
+            'from': 'from_field',
+            'order': 'order_field',
+            'group': 'group_field',
+            'select': 'select_field',
+            'where': 'where_field',
+            'having': 'having_field',
+            'union': 'union_field',
+            'user': 'user_field',
+            'rank': None  # Remove rank columns entirely
+        }
+        
+        cleaned_columns = []
+        columns_to_drop = []
+        
+        for i, col in enumerate(df.columns):
+            # Convert to lowercase for consistency
+            col_lower = str(col).lower()
+            
+            # Apply parameter mappings first (for standardized naming)
+            parameter_mappings = self.parameter_mappings.get("mappings", {})
+            if col_lower in parameter_mappings:
+                mapped_name = parameter_mappings[col_lower]
+                # Clean the mapped name
+                cleaned = ''.join(c.lower() if c.isalnum() else '' for c in mapped_name)
+            else:
+                # Convert to lowercase and remove special characters
+                cleaned = ''.join(c.lower() if c.isalnum() else '' for c in col_lower)
+            
+            # Handle special cases
+            if cleaned in special_mappings:
+                if special_mappings[cleaned] is None:
+                    # Mark for removal
+                    columns_to_drop.append(i)
+                    continue
+                else:
+                    cleaned = special_mappings[cleaned]
+            
+            # Ensure no duplicates by adding suffix if needed
+            original_cleaned = cleaned
+            suffix = 1
+            while cleaned in cleaned_columns:
+                cleaned = f"{original_cleaned}_{suffix}"
+                suffix += 1
+            
+            cleaned_columns.append(cleaned)
+        
+        # Drop columns marked for removal (like 'rank' columns)
+        if columns_to_drop:
+            df = df.drop(df.columns[columns_to_drop], axis=1)
+            self.logger.debug(f"Dropped {len(columns_to_drop)} rank columns")
+        
+        # Apply cleaned column names
+        df.columns = cleaned_columns
+        return df
+    
+    def add_missing_id_columns(self, df: pd.DataFrame, required_params: List[str], 
+                              param_values: dict) -> pd.DataFrame:
+        """
+        Add ID columns to the front of DataFrame if they're missing
+        Uses parameter mappings for consistent column naming
+        
+        Args:
+            df: DataFrame to modify
+            required_params: List of required parameter names
+            param_values: Dict of parameter values used in API call
+        """
+        for param in required_params:
+            # Use parameter mappings for standardized column name
+            mappings = self.parameter_mappings.get("mappings", {})
+            standard_param = mappings.get(param, param)
+            
+            # Clean the standardized parameter name for column naming
+            clean_param = ''.join(c.lower() if c.isalnum() else '' for c in standard_param)
+            
+            # Check if this parameter column already exists
+            if clean_param not in [col.lower() for col in df.columns]:
+                # Add the column to the front
+                df.insert(0, clean_param, param_values.get(param))
+                self.logger.debug(f"Added missing ID column: {clean_param} = {param_values.get(param)} (from API param: {param})")
+        
+        return df
+    
+    def add_metadata_columns(self, df: pd.DataFrame) -> pd.DataFrame:
+        """
+        Add metadata columns to DataFrame (only if not already present)
+        """
+        # Add date column for when data was collected (only if not present)
+        if 'data_collected_date' not in df.columns:
+            df['data_collected_date'] = datetime.now()
+        
+        return df
+
+    def match_dataframes_to_expected_data(self, endpoint_name: str, dataframes: List[pd.DataFrame]) -> Dict[str, pd.DataFrame]:
+        """
+        Match DataFrames returned from get_data_frames() to their expected names
+        Uses the expected_data attribute from the endpoint to determine correct names
+        
+        Args:
+            endpoint_name: Name of the endpoint
+            dataframes: List of DataFrames returned from get_data_frames()
+            
+        Returns:
+            Dictionary mapping expected names to DataFrames
+        """
+        try:
+            # Get the endpoint class
+            endpoint_class = getattr(nbaapi, endpoint_name)
+            
+            # Get expected data if available
+            if hasattr(endpoint_class, 'expected_data'):
+                expected_data = endpoint_class.expected_data
+                self.logger.debug(f"Expected data for {endpoint_name}: {list(expected_data.keys())}")
+            else:
+                # Fallback to generic names if no expected_data
+                self.logger.warning(f"No expected_data found for {endpoint_name}, using generic names")
+                expected_data = {f"data_{i}": {} for i in range(len(dataframes))}
+            
+            matched_data = {}
+            
+            # Strategy 1: Try to match by number of columns (when unique)
+            if len(dataframes) == len(expected_data):
+                # Simple case: same number of dataframes and expected datasets
+                for i, (expected_name, df) in enumerate(zip(expected_data.keys(), dataframes)):
+                    if df is not None and not df.empty:
+                        matched_data[expected_name] = df
+                        self.logger.debug(f"Matched {expected_name}: {df.shape}")
+            else:
+                # Complex case: Try to match by column patterns or content
+                self.logger.warning(f"DataFrame count mismatch for {endpoint_name}: "
+                                  f"{len(dataframes)} DFs vs {len(expected_data)} expected")
+                
+                # Use generic names for now
+                for i, df in enumerate(dataframes):
+                    if df is not None and not df.empty:
+                        name = f"dataset_{i}"
+                        matched_data[name] = df
+            
+            self.logger.info(f"Matched {len(matched_data)} datasets for {endpoint_name}")
+            return matched_data
+            
+        except Exception as e:
+            self.logger.error(f"Error matching DataFrames for {endpoint_name}: {e}")
+            # Fallback to generic naming
+            matched_data = {}
+            for i, df in enumerate(dataframes):
+                if df is not None and not df.empty:
+                    matched_data[f"dataset_{i}"] = df
+            return matched_data
+    
+    def create_table_if_needed(self, table_name: str, df: pd.DataFrame) -> bool:
+        """
+        Create table if it doesn't exist, using DataFrame structure
+        
+        Args:
+            table_name: Name of the table to create
+            df: Sample DataFrame to base structure on (should already be processed)
+            
+        Returns:
+            True if table exists or was created successfully
+        """
+        try:
+            if self.db_manager.check_table_exists(table_name):
+                self.logger.debug(f"Table {table_name} already exists")
+                return True
+            
+            # Use the DataFrame as-is since it should already be processed
+            self.db_manager.create_table(table_name, df)
+            self.logger.info(f"Created table: {table_name}")
+            return True
+            
+        except Exception as e:
+            self.logger.error(f"Failed to create table {table_name}: {e}")
+            return False
+    
+    def insert_dataframe_to_table(self, df: pd.DataFrame, table_name: str, 
+                                 required_params: List[str], param_values: dict) -> bool:
+        """
+        Insert DataFrame to database table with proper preprocessing
+        
+        Args:
+            df: DataFrame to insert
+            table_name: Target table name
+            required_params: Required parameters for the endpoint
+            param_values: Values used in the API call
+            
+        Returns:
+            True if insertion successful
+        """
+        try:
+            if df.empty:
+                self.logger.warning(f"Empty DataFrame for {table_name}, skipping insert")
+                return False
+            
+            # Preprocess the DataFrame
+            processed_df = df.copy()
+            
+            # Add missing ID columns if needed
+            processed_df = self.add_missing_id_columns(processed_df, required_params, param_values)
+            
+            # Clean column names
+            processed_df = self.clean_column_names(processed_df)
+            
+            # Add metadata columns
+            processed_df = self.add_metadata_columns(processed_df)
+            
+            # Ensure table exists
+            if not self.create_table_if_needed(table_name, processed_df):
+                return False
+            
+            # Insert the data
+            self.db_manager.insert_dataframe_to_rds(processed_df, table_name)
+            self.logger.info(f"Inserted {len(processed_df)} rows into {table_name}")
+            return True
+            
+        except Exception as e:
+            self.logger.error(f"Failed to insert data into {table_name}: {e}")
+            return False
+    
+    def record_api_error(self, endpoint_name: str, param_values: dict, error_message: str):
+        """
+        Record API call errors in error tracking table
+        
+        Args:
+            endpoint_name: Name of the endpoint that failed
+            param_values: Parameter values used in the failed call
+            error_message: Error message from the API call
+        """
+        try:
+            # Create error tracking table if needed
+            error_table = f"{self.get_table_prefix()}_api_errors"
+            
+            # Create error record
+            error_data = {
+                'endpoint_name': endpoint_name,
+                'league': self.league,
+                'parameters': json.dumps(param_values),
+                'error_message': str(error_message)[:1000],  # Truncate long messages
+                'failed_at': datetime.now(),
+                'season': self.current_season
+            }
+            
+            error_df = pd.DataFrame([error_data])
+            
+            # Ensure error table exists
+            if not self.db_manager.check_table_exists(error_table):
+                self.db_manager.create_table(error_table, error_df)
+            
+            # Insert error record
+            self.db_manager.insert_dataframe_to_rds(error_df, error_table)
+            self.logger.debug(f"Recorded API error for {endpoint_name}")
+            
+        except Exception as e:
+            self.logger.error(f"Failed to record API error: {e}")
+    
+    def get_missing_ids_for_endpoint(self, endpoint_name: str, config: dict) -> List[Any]:
+        """
+        Get missing IDs for an endpoint by comparing master tables to endpoint tables
+        
+        Args:
+            endpoint_name: Name of the endpoint
+            config: Endpoint configuration
+            
+        Returns:
+            List of missing IDs to process
+        """
+        try:
+            required_params = config.get('required_params', [])
+            
+            if not required_params:
+                # No parameters needed, return empty list (endpoint will be called once)
+                return [{}]
+            
+            missing_ids = []
+            
+            # Handle different parameter types
+            if 'game_id' in required_params:
+                # Use game master tables
+                master_table = f"{self.get_table_prefix()}_games"  # Assumes games master table exists
+                missing_ids = self._get_missing_game_ids(endpoint_name, master_table)
+                
+            elif 'player_id' in required_params:
+                # Use player master tables
+                master_table = f"{self.get_table_prefix()}_players"  # Assumes players master table exists
+                missing_ids = self._get_missing_player_ids(endpoint_name, master_table)
+                
+            elif 'team_id' in required_params:
+                # Use team master tables
+                master_table = f"{self.get_table_prefix()}_teams"  # Assumes teams master table exists
+                missing_ids = self._get_missing_team_ids(endpoint_name, master_table)
+            
+            # Apply test mode limits
+            if self.test_mode and missing_ids:
+                original_count = len(missing_ids)
+                missing_ids = missing_ids[:self.max_items_per_endpoint]
+                self.logger.info(f"Test mode: Limited {endpoint_name} from {original_count} to {len(missing_ids)} items")
+            
+            return missing_ids
+            
+        except Exception as e:
+            self.logger.error(f"Error getting missing IDs for {endpoint_name}: {e}")
+            return []
+    
+    def _get_missing_game_ids(self, endpoint_name: str, master_table: str) -> List[dict]:
+        """Get missing game IDs for game-based endpoints"""
+        # Implementation will be added based on the error tracking logic you described
+        # For now, return empty list
+        return []
+    
+    def _get_missing_player_ids(self, endpoint_name: str, master_table: str) -> List[dict]:
+        """Get missing player IDs for player-based endpoints"""
+        # Implementation will be added
+        return []
+    
+    def _get_missing_team_ids(self, endpoint_name: str, master_table: str) -> List[dict]:
+        """Get missing team IDs for team-based endpoints"""
+        # Implementation will be added
+        return []
+    
+    def process_single_endpoint(self, endpoint_name: str, config: dict) -> bool:
+        """
+        Process a single endpoint - main processing logic
+        
+        Args:
+            endpoint_name: Name of the endpoint to process
+            config: Endpoint configuration dictionary
+            
+        Returns:
+            True if processing completed successfully
+        """
+        self.logger.info(f"Processing endpoint: {endpoint_name}")
+        
+        try:
+            # Get the endpoint class
+            endpoint_class = getattr(nbaapi, endpoint_name)
+            
+            # Get missing IDs for this endpoint
+            missing_ids = self.get_missing_ids_for_endpoint(endpoint_name, config)
+            
+            if not missing_ids:
+                self.logger.info(f"No missing data for {endpoint_name}")
+                return True
+            
+            self.logger.info(f"Processing {len(missing_ids)} items for {endpoint_name}")
+            
+            # Process each set of parameters
+            for i, param_values in enumerate(missing_ids):
+                try:
+                    self.logger.debug(f"Processing item {i+1}/{len(missing_ids)} for {endpoint_name}")
+                    
+                    # Add league and season parameters
+                    api_params = param_values.copy()
+                    
+                    # Add league parameter (check for different parameter names)
+                    import inspect
+                    sig = inspect.signature(endpoint_class.__init__)
+                    if 'league_id' in sig.parameters:
+                        api_params['league_id'] = self.league_config['id']
+                    elif 'league_id_nullable' in sig.parameters:
+                        api_params['league_id_nullable'] = self.league_config['id']
+                    
+                    # Add season parameter (check for different parameter names)
+                    if 'season' in sig.parameters:
+                        api_params['season'] = self.current_season
+                    elif 'season_nullable' in sig.parameters:
+                        api_params['season_nullable'] = self.current_season
+                    
+                    # Make API call
+                    self.logger.debug(f"API call: {endpoint_name}({api_params})")
+                    endpoint_instance = endpoint_class(**api_params)
+                    
+                    # Get DataFrames
+                    dataframes = endpoint_instance.get_data_frames()
+                    
+                    if not dataframes:
+                        self.logger.warning(f"No DataFrames returned for {endpoint_name}")
+                        continue
+                    
+                    # Match DataFrames to expected names
+                    matched_data = self.match_dataframes_to_expected_data(endpoint_name, dataframes)
+                    
+                    # Insert each DataFrame into its respective table
+                    for dataset_name, df in matched_data.items():
+                        if df is not None and not df.empty:
+                            table_name = f"{self.get_table_prefix()}_{endpoint_name.lower()}_{dataset_name.lower()}"
+                            
+                            success = self.insert_dataframe_to_table(
+                                df, table_name, 
+                                config.get('required_params', []), 
+                                param_values
+                            )
+                            
+                            if not success:
+                                self.logger.warning(f"Failed to insert {dataset_name} for {endpoint_name}")
+                    
+                    # Rate limiting
+                    time.sleep(0.6)  # 100 requests per minute limit
+                    
+                except Exception as e:
+                    error_msg = str(e)
+                    self.logger.error(f"API call failed for {endpoint_name}: {error_msg}")
+                    
+                    # Record the error
+                    self.record_api_error(endpoint_name, param_values, error_msg)
+                    
+                    # Continue with next item
+                    continue
+            
+            self.logger.info(f"Completed processing {endpoint_name}")
+            return True
+            
+        except Exception as e:
+            self.logger.error(f"Fatal error processing {endpoint_name}: {e}")
+            return False
+    
+    def run_master_endpoints(self) -> bool:
+        """
+        Run all master endpoints first - these populate the master tables
+        
+        Returns:
+            True if all master endpoints completed successfully
+        """
+        self.logger.info("Processing Master Endpoints")
+        
+        master_endpoints = self.get_master_endpoints()
+        
+        if not master_endpoints:
+            self.logger.warning("No master endpoints found")
+            return True
+        
+        success_count = 0
+        
+        for endpoint_name, config in master_endpoints:
+            self.logger.info(f"Processing master endpoint: {endpoint_name}")
+            
+            if self.process_single_endpoint(endpoint_name, config):
+                success_count += 1
+            else:
+                self.logger.error(f"❌ Master endpoint failed: {endpoint_name}")
+        
+        self.logger.info(f"Master endpoints completed: {success_count}/{len(master_endpoints)} successful")
+        return success_count == len(master_endpoints)
+    
+    def run_processable_endpoints(self) -> bool:
+        """
+        Run all processable endpoints (high priority, latest version)
+        
+        Returns:
+            True if processing completed
+        """
+        self.logger.info("🚀 Processing Regular Endpoints")
+        
+        processable_endpoints = self.get_processable_endpoints()
+        
+        if not processable_endpoints:
+            self.logger.warning("No processable endpoints found")
+            return True
+        
+        success_count = 0
+        
+        for endpoint_name, config in processable_endpoints:
+            if self.process_single_endpoint(endpoint_name, config):
+                success_count += 1
+        
+        self.logger.info(f"Regular endpoints completed: {success_count}/{len(processable_endpoints)} successful")
+        return True
+    
+    def run_full_collection(self) -> bool:
+        """
+        Run the complete data collection process
+        1. Master endpoints first
+        2. Regular endpoints second
+        
+        Returns:
+            True if collection completed successfully
+        """
+        self.logger.info("🎯 Starting Full NBA Data Collection")
+        
+        start_time = datetime.now()
+        
+        # Step 1: Process master endpoints
+        self.logger.info("STEP 1: Processing Master Endpoints")
+        if not self.run_master_endpoints():
+            self.logger.error("❌ Master endpoints failed - stopping collection")
+            return False
+        
+        # Step 2: Process regular endpoints
+        self.logger.info("STEP 2: Processing Regular Endpoints")
+        self.run_processable_endpoints()
+        
+        # Summary
+        end_time = datetime.now()
+        duration = end_time - start_time
+        
+        self.logger.info("✅ NBA Data Collection Complete")
+        self.logger.info(f"Duration: {duration}")
+        self.logger.info(f"League: {self.league}")
+        self.logger.info(f"Test Mode: {self.test_mode}")
+        
+        return True
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description='NBA Data Collection Engine')
+    parser.add_argument('--league', default='NBA', choices=['NBA', 'WNBA', 'G-League'],
+                       help='League to process')
+    parser.add_argument('--test-mode', action='store_true',
+                       help='Run in test mode with limited data')
+    parser.add_argument('--max-items', type=int,
+                       help='Maximum items to process per endpoint (for testing)')
+    parser.add_argument('--log-level', default='INFO',
+                       choices=['DEBUG', 'INFO', 'WARNING', 'ERROR'],
+                       help='Logging level')
+    parser.add_argument('--endpoint', 
+                       help='Process a specific endpoint only')
+    parser.add_argument('--run-full', action='store_true',
+                       help='Run full data collection process')
+    parser.add_argument('--masters-only', action='store_true',
+                       help='Run master endpoints only')
+    
+    args = parser.parse_args()
+    
+    # Initialize processor
+    processor = NBADataProcessor(
+        league=args.league,
+        test_mode=args.test_mode,
+        max_items_per_endpoint=args.max_items,
+        log_level=args.log_level
+    )
+    
+    # Execute based on arguments
+    if args.run_full:
+        # Run complete data collection
+        processor.run_full_collection()
+    elif args.masters_only:
+        # Run master endpoints only
+        processor.run_master_endpoints()
+    elif args.endpoint:
+        # Process specific endpoint
+        endpoint_config = processor.endpoint_config['endpoints'].get(args.endpoint)
+        if endpoint_config:
+            processor.process_single_endpoint(args.endpoint, endpoint_config)
+        else:
+            print(f"Error: Endpoint '{args.endpoint}' not found")
+    else:
+        # Default: Show available endpoints
+        master_endpoints = processor.get_master_endpoints()
+        print(f"\nMaster endpoints for {args.league}:")
+        for name, config in master_endpoints:
+            print(f"  - {name}: master for {config['master']}")
+        
+        processable_endpoints = processor.get_processable_endpoints()
+        print(f"\nProcessable endpoints for {args.league}: {len(processable_endpoints)}")
+        print("First 10:")
+        for name, config in processable_endpoints[:10]:
+            print(f"  - {name}")
+        
+        print(f"\nUsage examples:")
+        print(f"  python {sys.argv[0]} --masters-only --test-mode")
+        print(f"  python {sys.argv[0]} --endpoint CommonAllPlayers --test-mode")
+        print(f"  python {sys.argv[0]} --run-full --test-mode")
