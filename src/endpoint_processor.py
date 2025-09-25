@@ -584,7 +584,7 @@ def process_single_endpoint_comprehensive(endpoint_name, node_id, rate_limit, lo
         if 'player_season_combinations' in missing_ids_by_param:
             main_param_key = 'player_season_combinations'
             main_ids = missing_ids_by_param['player_season_combinations']
-            logger.info(f"🏀 COMPREHENSIVE PLAYER-SEASON PROCESSING MODE")
+            logger.info(f"COMPREHENSIVE PLAYER-SEASON PROCESSING MODE")
             logger.info(f"Processing {len(main_ids)} player-season combinations")
             logger.info(f"This will collect historical data for all players across all seasons")
         else:
@@ -606,8 +606,8 @@ def process_single_endpoint_comprehensive(endpoint_name, node_id, rate_limit, lo
             logger.info(f"🕒 PROCESSING STRATEGY: Latest games first, working backwards through time")
             logger.info(f"📅 This prioritizes recent games for faster data availability")
         elif main_param_key == 'player_season_combinations':
-            logger.info(f"🏀 PROCESSING STRATEGY: Comprehensive player-season data collection")
-            logger.info(f"📊 This will build complete historical player dashboard datasets")
+            logger.info(f"PROCESSING STRATEGY: Comprehensive player-season data collection")
+            logger.info(f"DATA SCOPE: This will build complete historical player dashboard datasets")
         
         # Process each missing ID (or player-season combination)
         for i, missing_id in enumerate(main_ids):
@@ -754,7 +754,7 @@ def process_single_endpoint_comprehensive(endpoint_name, node_id, rate_limit, lo
                 
                 # SPECIAL HANDLING: Player Dashboard Enhancement
                 if is_player_dashboard_endpoint(endpoint_name):
-                    logger.info(f"🏀 Player Dashboard endpoint detected - adding player context")
+                    logger.info(f"PLAYER DASHBOARD: Player Dashboard endpoint detected - adding player context")
                     
                     # Extract player_id and season from current_params
                     player_id = current_params.get('player_id')
@@ -769,9 +769,9 @@ def process_single_endpoint_comprehensive(endpoint_name, node_id, rate_limit, lo
                             endpoint_name=endpoint_name,
                             logger=logger
                         )
-                        logger.info(f"✅ Enhanced {len(dataframes)} dataframes with player context")
+                        logger.info(f"SUCCESS: Enhanced {len(dataframes)} dataframes with player context")
                     else:
-                        logger.warning("⚠️ Player dashboard endpoint but no player_id found in parameters!")
+                        logger.warning("WARNING: Player dashboard endpoint but no player_id found in parameters!")
                 
                 for df_index, df in enumerate(dataframes):
                     try:
@@ -802,7 +802,7 @@ def process_single_endpoint_comprehensive(endpoint_name, node_id, rate_limit, lo
                                 error_count += 1
                                 continue
                             
-                            logger.info(f"✅ Player dashboard data validation passed")
+                            logger.info(f"SUCCESS: Player dashboard data validation passed")
                         
                         # Clean dataframe (handles reserved keywords)
                         cleaned_df = conn_manager.clean_column_names(df.copy())
@@ -1177,12 +1177,12 @@ def validate_api_parameters(endpoint_name, params, logger):
                 # Insert data
                 logger.info(f"Inserting {len(cleaned_df)} rows into {table_name}")
                 conn_manager.insert_dataframe_to_rds(cleaned_df, table_name)
-                logger.info(f"✅ Successfully inserted data into {table_name}")
+                logger.info(f"SUCCESS: Successfully inserted data into {table_name}")
                 success_count += 1
                 
             except Exception as e:
                 error_count += 1
-                logger.error(f"❌ Failed to process dataframe {df_index}: {str(e)}")
+                logger.error(f"ERROR: Failed to process dataframe {df_index}: {str(e)}")
                 continue
 
 def main():
@@ -1216,13 +1216,13 @@ def main():
         
         if result["status"] == "complete":
             if result["processed"] > 0:
-                logger.info("🎉 Comprehensive endpoint processing completed successfully!")
+                logger.info("SUCCESS: Comprehensive endpoint processing completed successfully!")
                 logger.info(f"Final stats: {result['processed']} processed, {result['failed']} failed")
             else:
-                logger.info("✅ No new data to process - everything is up to date!")
+                logger.info("SUCCESS: No new data to process - everything is up to date!")
             sys.exit(0)
         else:
-            logger.error("❌ Comprehensive endpoint processing failed")
+            logger.error("ERROR: Comprehensive endpoint processing failed")
             sys.exit(1)
             
     except Exception as e:

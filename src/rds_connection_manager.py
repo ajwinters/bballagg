@@ -483,13 +483,13 @@ if __name__ == "__main__":
     
     with RDSConnectionManager() as conn_manager:
         if conn_manager.ensure_connection():
-            print("✅ Connection successful!")
+            print("SUCCESS: Connection successful!")
             
             # Test a simple query
             result = conn_manager.execute_query("SELECT 1 as test")
             if result:
-                print(f"✅ Query test successful: {result}")
+                print(f"SUCCESS: Query test successful: {result}")
             else:
-                print("❌ Query test failed")
+                print("ERROR: Query test failed")
         else:
-            print("❌ Connection failed")
+            print("ERROR: Connection failed")

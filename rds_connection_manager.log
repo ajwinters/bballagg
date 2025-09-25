@@ -1,95 +1,306 @@
-2025-09-21 20:38:21,853 - INFO - Log file: C:\Users\ajwin\Projects\Personal\thebigone\logs\endpoint_validation_20250921_203821.log
-2025-09-21 20:38:21,855 - INFO - Loaded 136 endpoint configurations
-2025-09-21 20:38:21,855 - INFO - Loaded league config for National Basketball Association
-2025-09-21 20:38:21,857 - INFO - === NBA API Endpoint Parameter Validation ===
-2025-09-21 20:38:21,857 - INFO - League: NBA
-2025-09-21 20:38:21,857 - INFO - Test Mode: True
-2025-09-21 20:38:21,857 - INFO - Sample Size: 30
-2025-09-21 20:38:21,857 - INFO - Loading master table data for parameter resolution...
-2025-09-21 20:38:21,858 - WARNING - [RECONNECT] Connection lost - attempting to reconnect...
-2025-09-21 20:38:21,858 - INFO - [RECONNECT] Reconnection attempt 1/3
-2025-09-21 20:38:21,858 - INFO - [CONNECT] Creating new database connection...
-2025-09-21 20:38:22,403 - INFO - [SUCCESS] Database connection established
-2025-09-21 20:38:22,403 - INFO - [SUCCESS] Reconnection successful
-2025-09-21 20:38:22,497 - ERROR - [ERROR] Database operation failed: column "game_id" does not exist
-LINE 2:                         SELECT DISTINCT game_id
-                                                ^
-HINT:  Perhaps you meant to reference the column "nba_leaguegamefinder_leaguegamefinderresults.gameid".
+2025-09-22 15:25:57,521 - WARNING - [RECONNECT] Connection lost - attempting to reconnect...
+2025-09-22 15:25:57,521 - INFO - [RECONNECT] Reconnection attempt 1/3
+2025-09-22 15:25:57,521 - INFO - [CONNECT] Creating new database connection...
+2025-09-22 15:25:57,829 - INFO - [SUCCESS] Database connection established
+2025-09-22 15:25:57,830 - INFO - [SUCCESS] Reconnection successful
+2025-09-22 15:26:37,039 - WARNING - [RECONNECT] Connection lost - attempting to reconnect...
+2025-09-22 15:26:37,039 - INFO - [RECONNECT] Reconnection attempt 1/3
+2025-09-22 15:26:37,039 - INFO - [CONNECT] Creating new database connection...
+2025-09-22 15:26:37,393 - INFO - [SUCCESS] Database connection established
+2025-09-22 15:26:37,393 - INFO - [SUCCESS] Reconnection successful
+2025-09-22 15:26:48,956 - WARNING - [RECONNECT] Connection lost - attempting to reconnect...
+2025-09-22 15:26:48,956 - INFO - [RECONNECT] Reconnection attempt 1/3
+2025-09-22 15:26:48,956 - INFO - [CONNECT] Creating new database connection...
+2025-09-22 15:26:49,274 - INFO - [SUCCESS] Database connection established
+2025-09-22 15:26:49,274 - INFO - [SUCCESS] Reconnection successful
+2025-09-22 15:27:09,396 - WARNING - [RECONNECT] Connection lost - attempting to reconnect...
+2025-09-22 15:27:09,396 - INFO - [RECONNECT] Reconnection attempt 1/3
+2025-09-22 15:27:09,396 - INFO - [CONNECT] Creating new database connection...
+2025-09-22 15:27:09,725 - INFO - [SUCCESS] Database connection established
+2025-09-22 15:27:09,725 - INFO - [SUCCESS] Reconnection successful
+2025-09-22 15:28:09,446 - WARNING - [RECONNECT] Connection lost - attempting to reconnect...
+2025-09-22 15:28:09,446 - INFO - [RECONNECT] Reconnection attempt 1/3
+2025-09-22 15:28:09,446 - INFO - [CONNECT] Creating new database connection...
+2025-09-22 15:28:09,743 - INFO - [SUCCESS] Database connection established
+2025-09-22 15:28:09,743 - INFO - [SUCCESS] Reconnection successful
+2025-09-22 15:28:23,254 - WARNING - [RECONNECT] Connection lost - attempting to reconnect...
+2025-09-22 15:28:23,254 - INFO - [RECONNECT] Reconnection attempt 1/3
+2025-09-22 15:28:23,254 - INFO - [CONNECT] Creating new database connection...
+2025-09-22 15:28:23,583 - INFO - [SUCCESS] Database connection established
+2025-09-22 15:28:23,583 - INFO - [SUCCESS] Reconnection successful
+2025-09-22 15:29:46,142 - INFO - Log file: C:\Users\ajwin\Projects\Personal\thebigone\logs\nba_processor_nba_20250922_152946.log
+2025-09-22 15:29:46,142 - INFO - Loaded 136 endpoint configurations
+2025-09-22 15:29:46,142 - INFO - Loaded league config for National Basketball Association
+2025-09-22 15:29:46,142 - INFO - Loaded parameter mappings for consistent column naming
+2025-09-22 15:29:46,142 - INFO - === NBA Data Processor Initialized ===
+2025-09-22 15:29:46,142 - INFO - League: NBA
+2025-09-22 15:29:46,142 - INFO - Test Mode: True
+2025-09-22 15:29:46,142 - INFO - Current Season: 2024-25
+2025-09-22 15:29:46,142 - INFO - Max items per endpoint: 10
+2025-09-22 15:29:46,165 - INFO - STEP 1: Processing Master Endpoints
+2025-09-22 15:29:46,165 - INFO - Processing Master Endpoints
+2025-09-22 15:29:46,165 - INFO - Found 3 master endpoints
+2025-09-22 15:29:46,165 - INFO -   - LeagueGameFinder: master for game_id
+2025-09-22 15:29:46,165 - INFO -   - LeagueGameLog: master for game_id
+2025-09-22 15:29:46,165 - INFO -   - CommonAllPlayers: master for player_id
+2025-09-22 15:29:46,165 - INFO - Processing master endpoint: LeagueGameFinder
+2025-09-22 15:29:46,165 - INFO - Processing endpoint: LeagueGameFinder
+2025-09-22 15:29:46,165 - INFO - No missing data for LeagueGameFinder
+2025-09-22 15:29:46,165 - INFO - Processing master endpoint: LeagueGameLog
+2025-09-22 15:29:46,165 - INFO - Processing endpoint: LeagueGameLog
+2025-09-22 15:29:46,165 - INFO - No missing data for LeagueGameLog
+2025-09-22 15:29:46,165 - INFO - Processing master endpoint: CommonAllPlayers
+2025-09-22 15:29:46,165 - INFO - Processing endpoint: CommonAllPlayers
+2025-09-22 15:29:46,165 - INFO - No missing data for CommonAllPlayers
+2025-09-22 15:29:46,165 - INFO - Master endpoints completed: 3/3 successful
+2025-09-22 15:29:46,165 - INFO - STEP 2: Processing Regular Endpoints
+2025-09-22 15:29:46,171 - INFO - Found 18 processable endpoints
+2025-09-22 15:29:46,171 - INFO - Processing endpoint: BoxScoreAdvancedV3
+2025-09-22 15:29:46,171 - INFO - No missing data for BoxScoreAdvancedV3
+2025-09-22 15:29:46,171 - INFO - Processing endpoint: BoxScoreDefensiveV2
+2025-09-22 15:29:46,171 - INFO - No missing data for BoxScoreDefensiveV2
+2025-09-22 15:29:46,171 - INFO - Processing endpoint: BoxScoreFourFactorsV3
+2025-09-22 15:29:46,171 - INFO - No missing data for BoxScoreFourFactorsV3
+2025-09-22 15:29:46,171 - INFO - Processing endpoint: BoxScoreHustleV2
+2025-09-22 15:29:46,171 - INFO - No missing data for BoxScoreHustleV2
+2025-09-22 15:29:46,171 - INFO - Processing endpoint: BoxScoreMatchupsV3
+2025-09-22 15:29:46,171 - INFO - No missing data for BoxScoreMatchupsV3
+2025-09-22 15:29:46,173 - INFO - Processing endpoint: BoxScoreMiscV3
+2025-09-22 15:29:46,173 - INFO - No missing data for BoxScoreMiscV3
+2025-09-22 15:29:46,173 - INFO - Processing endpoint: BoxScorePlayerTrackV3
+2025-09-22 15:29:46,173 - INFO - No missing data for BoxScorePlayerTrackV3
+2025-09-22 15:29:46,173 - INFO - Processing endpoint: BoxScoreScoringV3
+2025-09-22 15:29:46,173 - INFO - No missing data for BoxScoreScoringV3
+2025-09-22 15:29:46,173 - INFO - Processing endpoint: BoxScoreSummaryV2
+2025-09-22 15:29:46,173 - INFO - No missing data for BoxScoreSummaryV2
+2025-09-22 15:29:46,177 - INFO - Processing endpoint: BoxScoreTraditionalV3
+2025-09-22 15:29:46,177 - INFO - No missing data for BoxScoreTraditionalV3
+2025-09-22 15:29:46,177 - INFO - Processing endpoint: BoxScoreUsageV3
+2025-09-22 15:29:46,177 - INFO - No missing data for BoxScoreUsageV3
+2025-09-22 15:29:46,177 - INFO - Processing endpoint: HustleStatsBoxScore
+2025-09-22 15:29:46,177 - INFO - No missing data for HustleStatsBoxScore
+2025-09-22 15:29:46,177 - INFO - Processing endpoint: PlayByPlayV3
+2025-09-22 15:29:46,177 - INFO - No missing data for PlayByPlayV3
+2025-09-22 15:29:46,177 - INFO - Processing endpoint: TeamGameLogs
+2025-09-22 15:29:46,177 - INFO - No missing data for TeamGameLogs
+2025-09-22 15:29:46,177 - INFO - Processing endpoint: PlayerDashPtReb
+2025-09-22 15:29:46,177 - INFO - No missing data for PlayerDashPtReb
+2025-09-22 15:29:46,177 - INFO - Processing endpoint: PlayerDashPtShots
+2025-09-22 15:29:46,177 - INFO - No missing data for PlayerDashPtShots
+2025-09-22 15:29:46,177 - INFO - Processing endpoint: CommonTeamRoster
+2025-09-22 15:29:46,177 - INFO - No missing data for CommonTeamRoster
+2025-09-22 15:29:46,177 - INFO - Processing endpoint: LeagueSeasonMatchups
+2025-09-22 15:29:46,177 - INFO - No missing data for LeagueSeasonMatchups
+2025-09-22 15:29:46,177 - INFO - Regular endpoints completed: 18/18 successful
+2025-09-22 15:29:46,179 - INFO - Duration: 0:00:00.013851
+2025-09-22 15:29:46,179 - INFO - League: NBA
+2025-09-22 15:29:46,179 - INFO - Test Mode: True
+2025-09-22 15:38:55,893 - INFO - Log file: C:\Users\ajwin\Projects\Personal\thebigone\logs\nba_processor_nba_20250922_153855.log
+2025-09-22 15:38:55,893 - INFO - Loaded 136 endpoint configurations
+2025-09-22 15:38:55,893 - INFO - Loaded league config for National Basketball Association
+2025-09-22 15:38:55,893 - INFO - Loaded parameter mappings for consistent column naming
+2025-09-22 15:38:55,893 - INFO - === NBA Data Processor Initialized ===
+2025-09-22 15:38:55,893 - INFO - League: NBA
+2025-09-22 15:38:55,893 - INFO - Test Mode: True
+2025-09-22 15:38:55,898 - INFO - Current Season: 2024-25
+2025-09-22 15:38:55,898 - INFO - Max items per endpoint: 5
+2025-09-22 15:38:55,898 - INFO - Processing Master Endpoints
+2025-09-22 15:38:55,898 - INFO - Found 3 master endpoints
+2025-09-22 15:38:55,898 - INFO -   - LeagueGameFinder: master for game_id
+2025-09-22 15:38:55,900 - INFO -   - LeagueGameLog: master for game_id
+2025-09-22 15:38:55,900 - INFO -   - CommonAllPlayers: master for player_id
+2025-09-22 15:38:55,900 - INFO - Processing master endpoint: LeagueGameFinder
+2025-09-22 15:38:55,900 - INFO - Processing endpoint: LeagueGameFinder
+2025-09-22 15:38:55,900 - INFO - Processing 1 items for LeagueGameFinder
+2025-09-22 15:38:56,630 - INFO - Matched 1 datasets for LeagueGameFinder
+2025-09-22 15:38:56,630 - WARNING - [RECONNECT] Connection lost - attempting to reconnect...
+2025-09-22 15:38:56,640 - INFO - [RECONNECT] Reconnection attempt 1/3
+2025-09-22 15:38:56,640 - INFO - [CONNECT] Creating new database connection...
+2025-09-22 15:38:56,936 - INFO - [SUCCESS] Database connection established
+2025-09-22 15:38:56,936 - INFO - [SUCCESS] Reconnection successful
+2025-09-22 15:38:57,146 - INFO - Table nba_leaguegamefinder_leaguegamefinderresults created successfully or already exists.
+2025-09-22 15:38:57,186 - INFO - Created table: nba_leaguegamefinder_leaguegamefinderresults
+2025-09-22 15:38:59,530 - INFO - Data inserted successfully into nba_leaguegamefinder_leaguegamefinderresults table (2802 rows).
+2025-09-22 15:38:59,563 - INFO - Inserted 2802 rows into nba_leaguegamefinder_leaguegamefinderresults
+2025-09-22 15:39:00,165 - INFO - Completed processing LeagueGameFinder
+2025-09-22 15:39:00,165 - INFO - Processing master endpoint: LeagueGameLog
+2025-09-22 15:39:00,165 - INFO - Processing endpoint: LeagueGameLog
+2025-09-22 15:39:00,165 - INFO - Processing 1 items for LeagueGameLog
+2025-09-22 15:39:00,490 - INFO - Matched 1 datasets for LeagueGameLog
+2025-09-22 15:39:00,722 - INFO - Table nba_leaguegamelog_leaguegamelog created successfully or already exists.
+2025-09-22 15:39:00,763 - INFO - Created table: nba_leaguegamelog_leaguegamelog
+2025-09-22 15:39:03,246 - INFO - Data inserted successfully into nba_leaguegamelog_leaguegamelog table (2460 rows).
+2025-09-22 15:39:03,280 - INFO - Inserted 2460 rows into nba_leaguegamelog_leaguegamelog
+2025-09-22 15:39:03,883 - INFO - Completed processing LeagueGameLog
+2025-09-22 15:39:03,883 - INFO - Processing master endpoint: CommonAllPlayers
+2025-09-22 15:39:03,883 - INFO - Processing endpoint: CommonAllPlayers
+2025-09-22 15:39:03,883 - INFO - Processing 1 items for CommonAllPlayers
+2025-09-22 15:39:04,600 - INFO - Matched 1 datasets for CommonAllPlayers
+2025-09-22 15:39:05,040 - INFO - Table nba_commonallplayers_commonallplayers created successfully or already exists.
+2025-09-22 15:39:05,191 - INFO - Created table: nba_commonallplayers_commonallplayers
+2025-09-22 15:39:09,952 - INFO - Data inserted successfully into nba_commonallplayers_commonallplayers table (5123 rows).
+2025-09-22 15:39:10,036 - INFO - Inserted 5123 rows into nba_commonallplayers_commonallplayers
+2025-09-22 15:39:10,639 - INFO - Completed processing CommonAllPlayers
+2025-09-22 15:39:10,640 - INFO - Master endpoints completed: 3/3 successful
+2025-09-22 15:42:46,152 - WARNING - [RECONNECT] Connection lost - attempting to reconnect...
+2025-09-22 15:42:46,152 - INFO - [RECONNECT] Reconnection attempt 1/3
+2025-09-22 15:42:46,152 - INFO - [CONNECT] Creating new database connection...
+2025-09-22 15:42:46,589 - INFO - [SUCCESS] Database connection established
+2025-09-22 15:42:46,589 - INFO - [SUCCESS] Reconnection successful
+2025-09-22 15:42:46,769 - ERROR - [ERROR] Database operation failed: function pg_total_relation_size(name) does not exist
+LINE 3:                    pg_size_pretty(pg_total_relation_size(tab...
+                                          ^
+HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
 
-2025-09-21 20:38:22,497 - WARNING - Could not load game_id from nba_leaguegamefinder_leaguegamefinderresults: column "game_id" does not exist
-LINE 2:                         SELECT DISTINCT game_id
-                                                ^
-HINT:  Perhaps you meant to reference the column "nba_leaguegamefinder_leaguegamefinderresults.gameid".
+2025-09-22 15:43:00,279 - WARNING - [RECONNECT] Connection lost - attempting to reconnect...
+2025-09-22 15:43:00,279 - INFO - [RECONNECT] Reconnection attempt 1/3
+2025-09-22 15:43:00,279 - INFO - [CONNECT] Creating new database connection...
+2025-09-22 15:43:00,575 - INFO - [SUCCESS] Database connection established
+2025-09-22 15:43:00,576 - INFO - [SUCCESS] Reconnection successful
+2025-09-22 15:43:11,371 - INFO - Log file: C:\Users\ajwin\Projects\Personal\thebigone\logs\nba_processor_nba_20250922_154311.log
+2025-09-22 15:43:11,375 - INFO - Loaded 136 endpoint configurations
+2025-09-22 15:43:11,375 - INFO - Loaded league config for National Basketball Association
+2025-09-22 15:43:11,375 - INFO - Loaded parameter mappings for consistent column naming
+2025-09-22 15:43:11,375 - INFO - === NBA Data Processor Initialized ===
+2025-09-22 15:43:11,375 - INFO - League: NBA
+2025-09-22 15:43:11,375 - INFO - Test Mode: True
+2025-09-22 15:43:11,375 - INFO - Current Season: 2024-25
+2025-09-22 15:43:11,375 - INFO - Max items per endpoint: 3
+2025-09-22 15:43:11,375 - INFO - STARTING: Full NBA Data Collection
+2025-09-22 15:43:11,375 - INFO - STEP 1: Processing Master Endpoints
+2025-09-22 15:43:11,375 - INFO - Processing Master Endpoints
+2025-09-22 15:43:11,375 - INFO - Found 3 master endpoints
+2025-09-22 15:43:11,378 - INFO -   - LeagueGameFinder: master for game_id
+2025-09-22 15:43:11,378 - INFO -   - LeagueGameLog: master for game_id
+2025-09-22 15:43:11,378 - INFO -   - CommonAllPlayers: master for player_id
+2025-09-22 15:43:11,378 - INFO - Processing master endpoint: LeagueGameFinder
+2025-09-22 15:43:11,378 - INFO - Processing endpoint: LeagueGameFinder
+2025-09-22 15:43:11,378 - INFO - Processing 1 items for LeagueGameFinder
+2025-09-22 15:43:11,893 - INFO - Matched 1 datasets for LeagueGameFinder
+2025-09-22 15:43:11,893 - WARNING - [RECONNECT] Connection lost - attempting to reconnect...
+2025-09-22 15:43:11,893 - INFO - [RECONNECT] Reconnection attempt 1/3
+2025-09-22 15:43:11,893 - INFO - [CONNECT] Creating new database connection...
+2025-09-22 15:43:12,199 - INFO - [SUCCESS] Database connection established
+2025-09-22 15:43:12,199 - INFO - [SUCCESS] Reconnection successful
+2025-09-22 15:43:14,229 - INFO - Data inserted successfully into nba_leaguegamefinder_leaguegamefinderresults table (2802 rows).
+2025-09-22 15:43:14,264 - INFO - Inserted 2802 rows into nba_leaguegamefinder_leaguegamefinderresults
+2025-09-22 15:43:14,868 - INFO - Completed processing LeagueGameFinder
+2025-09-22 15:43:14,869 - INFO - Processing master endpoint: LeagueGameLog
+2025-09-22 15:43:14,869 - INFO - Processing endpoint: LeagueGameLog
+2025-09-22 15:43:14,869 - INFO - Processing 1 items for LeagueGameLog
+2025-09-22 15:43:15,275 - INFO - Matched 1 datasets for LeagueGameLog
+2025-09-22 15:43:17,259 - INFO - Data inserted successfully into nba_leaguegamelog_leaguegamelog table (2460 rows).
+2025-09-22 15:43:17,324 - INFO - Inserted 2460 rows into nba_leaguegamelog_leaguegamelog
+2025-09-22 15:43:17,927 - INFO - Completed processing LeagueGameLog
+2025-09-22 15:43:17,930 - INFO - Processing master endpoint: CommonAllPlayers
+2025-09-22 15:43:17,930 - INFO - Processing endpoint: CommonAllPlayers
+2025-09-22 15:43:17,930 - INFO - Processing 1 items for CommonAllPlayers
+2025-09-22 15:43:18,558 - INFO - Matched 1 datasets for CommonAllPlayers
+2025-09-22 15:43:21,949 - INFO - Data inserted successfully into nba_commonallplayers_commonallplayers table (5123 rows).
+2025-09-22 15:43:21,981 - INFO - Inserted 5123 rows into nba_commonallplayers_commonallplayers
+2025-09-22 15:43:22,584 - INFO - Completed processing CommonAllPlayers
+2025-09-22 15:43:22,585 - INFO - Master endpoints completed: 3/3 successful
+2025-09-22 15:43:22,588 - INFO - STEP 2: Processing Regular Endpoints
+2025-09-22 15:43:22,588 - INFO - STARTING: Processing Regular Endpoints
+2025-09-22 15:43:22,588 - INFO - Found 18 processable endpoints
+2025-09-22 15:43:22,588 - INFO - Processing endpoint: BoxScoreAdvancedV3
+2025-09-22 15:43:22,596 - INFO - No missing data for BoxScoreAdvancedV3
+2025-09-22 15:43:22,596 - INFO - Processing endpoint: BoxScoreDefensiveV2
+2025-09-22 15:43:22,596 - INFO - No missing data for BoxScoreDefensiveV2
+2025-09-22 15:43:22,596 - INFO - Processing endpoint: BoxScoreFourFactorsV3
+2025-09-22 15:43:22,596 - INFO - No missing data for BoxScoreFourFactorsV3
+2025-09-22 15:43:22,596 - INFO - Processing endpoint: BoxScoreHustleV2
+2025-09-22 15:43:22,599 - INFO - No missing data for BoxScoreHustleV2
+2025-09-22 15:43:22,599 - INFO - Processing endpoint: BoxScoreMatchupsV3
+2025-09-22 15:43:22,599 - INFO - No missing data for BoxScoreMatchupsV3
+2025-09-22 15:43:22,599 - INFO - Processing endpoint: BoxScoreMiscV3
+2025-09-22 15:43:22,599 - INFO - No missing data for BoxScoreMiscV3
+2025-09-22 15:43:22,599 - INFO - Processing endpoint: BoxScorePlayerTrackV3
+2025-09-22 15:43:22,599 - INFO - No missing data for BoxScorePlayerTrackV3
+2025-09-22 15:43:22,599 - INFO - Processing endpoint: BoxScoreScoringV3
+2025-09-22 15:43:22,599 - INFO - No missing data for BoxScoreScoringV3
+2025-09-22 15:43:22,599 - INFO - Processing endpoint: BoxScoreSummaryV2
+2025-09-22 15:43:22,599 - INFO - No missing data for BoxScoreSummaryV2
+2025-09-22 15:43:22,599 - INFO - Processing endpoint: BoxScoreTraditionalV3
+2025-09-22 15:43:22,599 - INFO - No missing data for BoxScoreTraditionalV3
+2025-09-22 15:43:22,599 - INFO - Processing endpoint: BoxScoreUsageV3
+2025-09-22 15:43:22,599 - INFO - No missing data for BoxScoreUsageV3
+2025-09-22 15:43:22,599 - INFO - Processing endpoint: HustleStatsBoxScore
+2025-09-22 15:43:22,599 - INFO - No missing data for HustleStatsBoxScore
+2025-09-22 15:43:22,599 - INFO - Processing endpoint: PlayByPlayV3
+2025-09-22 15:43:22,602 - INFO - No missing data for PlayByPlayV3
+2025-09-22 15:43:22,603 - INFO - Processing endpoint: TeamGameLogs
+2025-09-22 15:43:22,603 - INFO - No missing data for TeamGameLogs
+2025-09-22 15:43:22,603 - INFO - Processing endpoint: PlayerDashPtReb
+2025-09-22 15:43:22,603 - INFO - No missing data for PlayerDashPtReb
+2025-09-22 15:43:22,603 - INFO - Processing endpoint: PlayerDashPtShots
+2025-09-22 15:43:22,603 - INFO - No missing data for PlayerDashPtShots
+2025-09-22 15:43:22,603 - INFO - Processing endpoint: CommonTeamRoster
+2025-09-22 15:43:22,603 - INFO - No missing data for CommonTeamRoster
+2025-09-22 15:43:22,603 - INFO - Processing endpoint: LeagueSeasonMatchups
+2025-09-22 15:43:22,603 - INFO - No missing data for LeagueSeasonMatchups
+2025-09-22 15:43:22,603 - INFO - Regular endpoints completed: 18/18 successful
+2025-09-22 15:43:22,603 - INFO - COMPLETE: NBA Data Collection Complete
+2025-09-22 15:43:22,603 - INFO - Duration: 0:00:11.228019
+2025-09-22 15:43:22,603 - INFO - League: NBA
+2025-09-22 15:43:22,603 - INFO - Test Mode: True
+2025-09-22 15:47:48,667 - WARNING - [RECONNECT] Connection lost - attempting to reconnect...
+2025-09-22 15:47:48,667 - INFO - [RECONNECT] Reconnection attempt 1/3
+2025-09-22 15:47:48,667 - INFO - [CONNECT] Creating new database connection...
+2025-09-22 15:47:49,007 - INFO - [SUCCESS] Database connection established
+2025-09-22 15:47:49,011 - INFO - [SUCCESS] Reconnection successful
+2025-09-23 05:37:49,761 - INFO - Log file: C:\Users\ajwin\Projects\Personal\thebigone\logs\nba_processor_nba_20250923_053749.log
+2025-09-23 05:37:49,763 - INFO - Loaded 136 endpoint configurations
+2025-09-23 05:37:49,763 - INFO - Loaded league config for National Basketball Association
+2025-09-23 05:37:49,763 - INFO - Loaded parameter mappings for consistent column naming
+2025-09-23 05:37:49,764 - INFO - === NBA Data Processor Initialized ===
+2025-09-23 05:37:49,764 - INFO - League: NBA
+2025-09-23 05:37:49,764 - INFO - Test Mode: True
+2025-09-23 05:37:49,764 - INFO - Current Season: 2024-25
+2025-09-23 05:37:49,765 - INFO - Max items per endpoint: 2
+2025-09-23 05:37:49,765 - INFO - Processing endpoint: BoxScoreAdvancedV3
+2025-09-23 05:37:49,765 - ERROR - Error getting missing game IDs: 'NBADataProcessor' object has no attribute 'rds_connection_manager'
+2025-09-23 05:37:49,765 - INFO - No missing data for BoxScoreAdvancedV3
+2025-09-23 12:50:45,183 - INFO - Log file: C:\Users\ajwin\Projects\Personal\thebigone\logs\nba_processor_nba_20250923_125045.log
+2025-09-23 12:50:45,203 - INFO - Loaded 136 endpoint configurations
+2025-09-23 12:50:45,226 - INFO - Loaded league config for National Basketball Association
+2025-09-23 12:50:45,267 - INFO - Loaded parameter mappings for consistent column naming
+2025-09-23 12:50:45,267 - INFO - === NBA Data Processor Initialized ===
+2025-09-23 12:50:45,267 - INFO - League: NBA
+2025-09-23 12:50:45,267 - INFO - Test Mode: True
+2025-09-23 12:50:45,267 - INFO - Current Season: 2024-25
+2025-09-23 12:50:45,269 - INFO - Max items per endpoint: 2
+2025-09-23 12:50:45,269 - INFO - Processing endpoint: BoxScoreAdvancedV3
+2025-09-23 12:50:45,269 - INFO - Test mode: Using 2 sample game IDs for BoxScoreAdvancedV3
+2025-09-23 12:50:45,269 - INFO - Test mode: Limited BoxScoreAdvancedV3 from 2 to 2 items
+2025-09-23 12:50:45,269 - INFO - Processing 2 items for BoxScoreAdvancedV3
+2025-09-23 12:50:47,228 - INFO - Matched 2 datasets for BoxScoreAdvancedV3
+2025-09-23 12:50:47,238 - WARNING - [RECONNECT] Connection lost - attempting to reconnect...
+2025-09-23 12:50:47,238 - INFO - [RECONNECT] Reconnection attempt 1/3
+2025-09-23 12:50:47,238 - INFO - [CONNECT] Creating new database connection...
+2025-09-23 12:50:47,648 - INFO - [SUCCESS] Database connection established
+2025-09-23 12:50:47,650 - INFO - [SUCCESS] Reconnection successful
+2025-09-23 12:50:47,882 - INFO - Table nba_boxscoreadvancedv3_playerstats created successfully or already exists.
+2025-09-23 12:50:47,919 - INFO - Created table: nba_boxscoreadvancedv3_playerstats
+2025-09-23 12:50:48,086 - INFO - Data inserted successfully into nba_boxscoreadvancedv3_playerstats table (28 rows).
+2025-09-23 12:50:48,127 - INFO - Inserted 28 rows into nba_boxscoreadvancedv3_playerstats
+2025-09-23 12:50:48,368 - INFO - Table nba_boxscoreadvancedv3_teamstats created successfully or already exists.
+2025-09-23 12:50:48,396 - INFO - Created table: nba_boxscoreadvancedv3_teamstats
+2025-09-23 12:50:48,497 - INFO - Data inserted successfully into nba_boxscoreadvancedv3_teamstats table (2 rows).
+2025-09-23 12:50:48,534 - INFO - Inserted 2 rows into nba_boxscoreadvancedv3_teamstats
+2025-09-23 12:50:50,749 - INFO - Matched 2 datasets for BoxScoreAdvancedV3
+2025-09-23 12:50:51,008 - INFO - Data inserted successfully into nba_boxscoreadvancedv3_playerstats table (29 rows).
+2025-09-23 12:50:51,039 - INFO - Inserted 29 rows into nba_boxscoreadvancedv3_playerstats
+2025-09-23 12:50:51,261 - INFO - Data inserted successfully into nba_boxscoreadvancedv3_teamstats table (2 rows).
+2025-09-23 12:50:51,299 - INFO - Inserted 2 rows into nba_boxscoreadvancedv3_teamstats
+2025-09-23 12:50:51,909 - INFO - Completed processing BoxScoreAdvancedV3
+2025-09-24 20:18:49,652 - WARNING - [RECONNECT] Connection lost - attempting to reconnect...
+2025-09-24 20:18:49,652 - INFO - [RECONNECT] Reconnection attempt 1/3
+2025-09-24 20:18:49,652 - INFO - [CONNECT] Creating new database connection...
+2025-09-24 20:18:50,194 - INFO - [SUCCESS] Database connection established
+2025-09-24 20:18:50,194 - INFO - [SUCCESS] Reconnection successful
+2025-09-24 20:18:50,668 - ERROR - [ERROR] Database operation failed: column "failed_reason" does not exist
+LINE 1: ...(*) FROM nba_boxscoreadvancedv3_playerstats WHERE failed_rea...
+                                                             ^
+HINT:  Perhaps you meant to reference the column "nba_boxscoreadvancedv3_playerstats.failedreason".
 
-2025-09-21 20:38:22,628 - ERROR - [ERROR] Database operation failed: column "player_id" does not exist
-LINE 2:                         SELECT DISTINCT player_id
-                                                ^
-HINT:  Perhaps you meant to reference the column "nba_commonallplayers_commonallplayers.playercode".
-
-2025-09-21 20:38:22,629 - WARNING - Could not load player_id from nba_commonallplayers_commonallplayers: column "player_id" does not exist
-LINE 2:                         SELECT DISTINCT player_id
-                                                ^
-HINT:  Perhaps you meant to reference the column "nba_commonallplayers_commonallplayers.playercode".
-
-2025-09-21 20:38:22,637 - INFO - Testing 15 endpoints...
-2025-09-21 20:38:22,637 - INFO - [1/15] Testing BoxScoreAdvancedV2...
-2025-09-21 20:38:22,637 - INFO -   Testing BoxScoreAdvancedV2 with params: {'game_id': '0022400001'}
-2025-09-21 20:38:24,721 - INFO - [2/15] Testing BoxScoreAdvancedV3...
-2025-09-21 20:38:24,722 - INFO -   Testing BoxScoreAdvancedV3 with params: {'game_id': '0022400001'}
-2025-09-21 20:38:26,744 - INFO - [3/15] Testing BoxScoreDefensiveV2...
-2025-09-21 20:38:26,745 - INFO -   Testing BoxScoreDefensiveV2 with params: {'game_id': '0022400001'}
-2025-09-21 20:38:29,659 - INFO - [4/15] Testing BoxScoreFourFactorsV2...
-2025-09-21 20:38:29,659 - INFO -   Testing BoxScoreFourFactorsV2 with params: {'game_id': '0022400001'}
-2025-09-21 20:38:31,304 - INFO - [5/15] Testing BoxScoreFourFactorsV3...
-2025-09-21 20:38:31,304 - INFO -   Testing BoxScoreFourFactorsV3 with params: {'game_id': '0022400001'}
-2025-09-21 20:38:33,449 - INFO - [6/15] Testing BoxScoreHustleV2...
-2025-09-21 20:38:33,450 - INFO -   Testing BoxScoreHustleV2 with params: {'game_id': '0022400001'}
-2025-09-21 20:38:37,034 - INFO - [7/15] Testing BoxScoreMatchupsV3...
-2025-09-21 20:38:37,035 - INFO -   Testing BoxScoreMatchupsV3 with params: {'game_id': '0022400001'}
-2025-09-21 20:38:38,991 - INFO - [8/15] Testing BoxScoreMiscV2...
-2025-09-21 20:38:38,991 - INFO -   Testing BoxScoreMiscV2 with params: {'game_id': '0022400001'}
-2025-09-21 20:38:40,516 - INFO - [9/15] Testing BoxScoreMiscV3...
-2025-09-21 20:38:40,517 - INFO -   Testing BoxScoreMiscV3 with params: {'game_id': '0022400001'}
-2025-09-21 20:38:42,362 - INFO - [10/15] Testing BoxScorePlayerTrackV3...
-2025-09-21 20:38:42,364 - INFO -   Testing BoxScorePlayerTrackV3 with params: {'game_id': '0022400001'}
-2025-09-21 20:38:43,986 - INFO - [11/15] Testing BoxScoreScoringV2...
-2025-09-21 20:38:43,988 - INFO -   Testing BoxScoreScoringV2 with params: {'game_id': '0022400001'}
-2025-09-21 20:38:46,199 - INFO - [12/15] Testing BoxScoreScoringV3...
-2025-09-21 20:38:46,199 - INFO -   Testing BoxScoreScoringV3 with params: {'game_id': '0022400001'}
-2025-09-21 20:38:49,713 - INFO - [13/15] Testing BoxScoreSummaryV2...
-2025-09-21 20:38:49,713 - INFO -   Testing BoxScoreSummaryV2 with params: {'game_id': '0022400001'}
-2025-09-21 20:38:50,415 - INFO - [14/15] Testing BoxScoreTraditionalV2...
-2025-09-21 20:38:50,416 - INFO -   Testing BoxScoreTraditionalV2 with params: {'game_id': '0022400001'}
-2025-09-21 20:38:51,076 - INFO - [15/15] Testing BoxScoreTraditionalV3...
-2025-09-21 20:38:51,076 - INFO -   Testing BoxScoreTraditionalV3 with params: {'game_id': '0022400001'}
-2025-09-21 20:38:51,780 - INFO - Testing 7 endpoints...
-2025-09-21 20:38:51,780 - INFO - [1/7] Testing PlayerDashboardByGameSplits...
-2025-09-21 20:38:51,781 - INFO -   Testing PlayerDashboardByGameSplits with params: {'league_id_nullable': '00', 'player_id': '2544', 'season': '2024-25'}
-2025-09-21 20:38:54,780 - INFO - [2/7] Testing LeagueDashPlayerBioStats...
-2025-09-21 20:38:54,780 - INFO -   Testing LeagueDashPlayerBioStats with params: {'league_id': '00', 'season': '2024-25'}
-2025-09-21 20:38:55,498 - INFO - [3/7] Testing LeagueDashPlayerShotLocations...
-2025-09-21 20:38:55,498 - INFO -   Testing LeagueDashPlayerShotLocations with params: {'league_id_nullable': '00', 'season': '2024-25'}
-2025-09-21 20:38:58,099 - INFO - [4/7] Testing TeamPlayerOnOffDetails...
-2025-09-21 20:38:58,099 - INFO -   Testing TeamPlayerOnOffDetails with params: {'league_id_nullable': '00', 'season': '2024-25', 'team_id': '1610612747'}
-2025-09-21 20:39:01,574 - INFO - [5/7] Testing TeamPlayerOnOffSummary...
-2025-09-21 20:39:01,574 - INFO -   Testing TeamPlayerOnOffSummary with params: {'league_id_nullable': '00', 'season': '2024-25', 'team_id': '1610612747'}
-2025-09-21 20:39:06,007 - INFO - [6/7] Testing LeagueDashTeamShotLocations...
-2025-09-21 20:39:06,007 - INFO -   Testing LeagueDashTeamShotLocations with params: {'league_id_nullable': '00', 'season': '2024-25'}
-2025-09-21 20:39:08,232 - INFO - [7/7] Testing TeamDashLineups...
-2025-09-21 20:39:08,232 - INFO -   Testing TeamDashLineups with params: {'league_id_nullable': '00', 'season': '2024-25', 'team_id': '1610612747'}
-2025-09-21 20:39:11,518 - INFO - Testing 7 endpoints...
-2025-09-21 20:39:11,518 - INFO - [1/7] Testing GameRotation...
-2025-09-21 20:39:11,518 - INFO -   Testing GameRotation with params: {'game_id': '0022400001', 'league_id': '00'}
-2025-09-21 20:39:17,900 - INFO - [2/7] Testing PlayerGameLogs...
-2025-09-21 20:39:17,900 - INFO -   Testing PlayerGameLogs with params: {'league_id_nullable': '00', 'season_nullable': '2024-25', 'season_type_nullable': 'Regular Season'}
-2025-09-21 20:39:32,030 - INFO - [3/7] Testing PlayerNextNGames...
-2025-09-21 20:39:32,030 - INFO -   Testing PlayerNextNGames with params: {'league_id_nullable': '00', 'player_id': '2544'}
-2025-09-21 20:39:34,624 - INFO - [4/7] Testing CommonPlayerInfo...
-2025-09-21 20:39:34,624 - INFO -   Testing CommonPlayerInfo with params: {'league_id_nullable': '00', 'player_id': '2544'}
-2025-09-21 20:39:35,302 - INFO - [5/7] Testing DraftCombinePlayerAnthro...
-2025-09-21 20:39:35,302 - INFO -   Testing DraftCombinePlayerAnthro with params: {'league_id': '00'}
-2025-09-21 20:39:36,513 - INFO - [6/7] Testing LeagueHustleStatsPlayer...
-2025-09-21 20:39:36,514 - INFO -   Testing LeagueHustleStatsPlayer with params: {'league_id_nullable': '00', 'season': '2024-25'}
-2025-09-21 20:39:46,209 - INFO - [7/7] Testing PlayerDashPtPass...
-2025-09-21 20:39:46,212 - INFO -   Testing PlayerDashPtPass with params: {'league_id': '00', 'player_id': '2544', 'season': '2024-25', 'team_id': '1610612747'}
-2025-09-21 20:39:47,185 - INFO - Detailed results saved to C:\Users\ajwin\Projects\Personal\thebigone\endpoint_validation_results_20250921_203947.json
