@@ -413,3 +413,124 @@ LINE 2:             SELECT DISTINCT seasonnullable, COUNT(*) as coun...
 2025-10-01 16:38:05,671 - INFO - Test Mode: True
 2025-10-01 16:38:05,671 - INFO - Current Season: 2025-26
 2025-10-01 16:38:05,671 - INFO - Max items per endpoint: 3
+2025-10-01 17:18:23,723 - INFO - Log file: C:\Users\ajwin\Projects\Personal\thebigone\logs\nba_processor_nba_20251001_171823.log
+2025-10-01 17:18:23,759 - INFO - Loaded 136 endpoint configurations
+2025-10-01 17:18:23,761 - INFO - Loaded league config for National Basketball Association
+2025-10-01 17:18:23,766 - INFO - Loaded parameter mappings for consistent column naming
+2025-10-01 17:18:23,779 - INFO - === NBA Data Processor Initialized ===
+2025-10-01 17:18:23,780 - INFO - League: NBA
+2025-10-01 17:18:23,782 - INFO - Test Mode: True
+2025-10-01 17:18:23,784 - INFO - Current Season: 2025-26
+2025-10-01 17:18:23,790 - INFO - Max items per endpoint: 3
+2025-10-01 18:37:39,612 - INFO - Log file: C:\Users\ajwin\Projects\Personal\thebigone\logs\nba_processor_nba_20251001_183739.log
+2025-10-01 18:37:39,612 - INFO - Loaded 136 endpoint configurations
+2025-10-01 18:37:39,612 - INFO - Loaded league config for National Basketball Association
+2025-10-01 18:37:39,625 - INFO - Loaded parameter mappings for consistent column naming
+2025-10-01 18:37:39,625 - INFO - === NBA Data Processor Initialized ===
+2025-10-01 18:37:39,625 - INFO - League: NBA
+2025-10-01 18:37:39,625 - INFO - Test Mode: True
+2025-10-01 18:37:39,625 - INFO - Current Season: 2025-26
+2025-10-01 18:37:39,625 - INFO - Max items per endpoint: 2
+2025-10-01 18:37:54,296 - INFO - Log file: C:\Users\ajwin\Projects\Personal\thebigone\logs\nba_processor_nba_20251001_183754.log
+2025-10-01 18:37:54,299 - INFO - Loaded 136 endpoint configurations
+2025-10-01 18:37:54,299 - INFO - Loaded league config for National Basketball Association
+2025-10-01 18:37:54,301 - INFO - Loaded parameter mappings for consistent column naming
+2025-10-01 18:37:54,301 - INFO - === NBA Data Processor Initialized ===
+2025-10-01 18:37:54,303 - INFO - League: NBA
+2025-10-01 18:37:54,304 - INFO - Test Mode: True
+2025-10-01 18:37:54,305 - INFO - Current Season: 2025-26
+2025-10-01 18:37:54,305 - INFO - Max items per endpoint: 2
+2025-10-01 18:37:54,307 - ERROR - Error getting missing IDs for TeamGameLogs: 'list' object has no attribute 'get'
+2025-10-01 18:39:18,287 - INFO - Log file: C:\Users\ajwin\Projects\Personal\thebigone\logs\nba_processor_nba_20251001_183918.log
+2025-10-01 18:39:18,287 - INFO - Loaded 136 endpoint configurations
+2025-10-01 18:39:18,287 - INFO - Loaded league config for National Basketball Association
+2025-10-01 18:39:18,287 - INFO - Loaded parameter mappings for consistent column naming
+2025-10-01 18:39:18,287 - INFO - === NBA Data Processor Initialized ===
+2025-10-01 18:39:18,287 - INFO - League: NBA
+2025-10-01 18:39:18,287 - INFO - Test Mode: True
+2025-10-01 18:39:18,296 - INFO - Current Season: 2025-26
+2025-10-01 18:39:18,296 - INFO - Max items per endpoint: 2
+2025-10-01 18:39:18,296 - INFO - Test mode: Using 2 seasons for TeamGameLogs
+2025-10-01 18:39:18,296 - INFO - Test mode: Limited TeamGameLogs from 2 to 2 items
+2025-10-01 19:00:41,690 - INFO - Log file: C:\Users\ajwin\Projects\Personal\thebigone\logs\nba_processor_nba_20251001_190041.log
+2025-10-01 19:00:41,690 - INFO - Loaded 136 endpoint configurations
+2025-10-01 19:00:41,690 - INFO - Loaded league config for National Basketball Association
+2025-10-01 19:00:41,697 - INFO - Loaded parameter mappings for consistent column naming
+2025-10-01 19:00:41,697 - INFO - === NBA Data Processor Initialized ===
+2025-10-01 19:00:41,697 - INFO - League: NBA
+2025-10-01 19:00:41,697 - INFO - Test Mode: True
+2025-10-01 19:00:41,697 - INFO - Current Season: 2025-26
+2025-10-01 19:00:41,697 - INFO - Max items per endpoint: 2
+2025-10-01 19:00:41,697 - INFO - Test mode: Using 2 seasons and 1 season types for LeagueSeasonMatchups
+2025-10-01 19:00:41,697 - INFO - Test mode: Generated 2 parameter combinations for LeagueSeasonMatchups
+2025-10-01 19:00:41,697 - INFO - Test mode: Limited LeagueSeasonMatchups from 2 to 2 items
+2025-10-01 19:01:37,004 - INFO - Log file: C:\Users\ajwin\Projects\Personal\thebigone\logs\nba_processor_nba_20251001_190137.log
+2025-10-01 19:01:37,004 - INFO - Loaded 136 endpoint configurations
+2025-10-01 19:01:37,009 - INFO - Loaded league config for National Basketball Association
+2025-10-01 19:01:37,009 - INFO - Loaded parameter mappings for consistent column naming
+2025-10-01 19:01:37,009 - INFO - === NBA Data Processor Initialized ===
+2025-10-01 19:01:37,009 - INFO - League: NBA
+2025-10-01 19:01:37,009 - INFO - Test Mode: True
+2025-10-01 19:01:37,009 - INFO - Current Season: 2025-26
+2025-10-01 19:01:37,009 - INFO - Max items per endpoint: 2
+2025-10-01 19:01:37,009 - INFO - Test mode: Using 2 seasons and 1 season types for LeagueSeasonMatchups
+2025-10-01 19:01:37,012 - INFO - Test mode: Generated 2 parameter combinations for LeagueSeasonMatchups
+2025-10-01 19:01:37,012 - INFO - Test mode: Limited LeagueSeasonMatchups from 2 to 2 items
+2025-10-01 19:01:37,012 - INFO - Test mode: Using 2 seasons and 2 season types for LeagueStandingsV3
+2025-10-01 19:01:37,012 - INFO - Test mode: Generated 4 parameter combinations for LeagueStandingsV3
+2025-10-01 19:01:37,012 - INFO - Test mode: Limited LeagueStandingsV3 from 4 to 2 items
+2025-10-01 19:01:37,012 - WARNING - [RECONNECT] Connection lost - attempting to reconnect...
+2025-10-01 19:01:37,012 - INFO - [RECONNECT] Reconnection attempt 1/3
+2025-10-01 19:01:37,012 - INFO - [CONNECT] Creating new database connection...
+2025-10-01 19:01:37,548 - INFO - [SUCCESS] Database connection established
+2025-10-01 19:01:37,548 - INFO - [SUCCESS] Reconnection successful
+2025-10-01 19:01:37,959 - ERROR - [ERROR] Database operation failed: relation "master_nba_teams" does not exist
+LINE 1: SELECT DISTINCT teamid FROM master_nba_teams LIMIT 3
+                                    ^
+
+2025-10-01 19:01:37,965 - ERROR - Error getting missing team-season combinations for TeamDashPtShots: relation "master_nba_teams" does not exist
+LINE 1: SELECT DISTINCT teamid FROM master_nba_teams LIMIT 3
+                                    ^
+
+2025-10-01 19:01:38,154 - INFO - Found player ID column: personid in master_nba_players
+2025-10-01 19:01:38,334 - INFO - Test mode: Generated 15 player-season combinations for PlayerDashboardByGameSplits
+2025-10-01 19:01:38,366 - INFO - Test mode: Limited PlayerDashboardByGameSplits from 15 to 2 items
+2025-10-01 19:03:43,109 - INFO - Log file: C:\Users\ajwin\Projects\Personal\thebigone\logs\nba_processor_nba_20251001_190343.log
+2025-10-01 19:03:43,109 - INFO - Loaded 136 endpoint configurations
+2025-10-01 19:03:43,109 - INFO - Loaded league config for National Basketball Association
+2025-10-01 19:03:43,109 - INFO - Loaded parameter mappings for consistent column naming
+2025-10-01 19:03:43,114 - INFO - === NBA Data Processor Initialized ===
+2025-10-01 19:03:43,114 - INFO - League: NBA
+2025-10-01 19:03:43,114 - INFO - Test Mode: True
+2025-10-01 19:03:43,114 - INFO - Current Season: 2025-26
+2025-10-01 19:03:43,114 - INFO - Max items per endpoint: 2
+2025-10-01 19:03:43,114 - INFO - Test mode: Using 2 seasons and 1 season types for LeagueSeasonMatchups
+2025-10-01 19:03:43,114 - INFO - Test mode: Generated 2 parameter combinations for LeagueSeasonMatchups
+2025-10-01 19:03:43,114 - INFO - Test mode: Limited LeagueSeasonMatchups from 2 to 2 items
+2025-10-01 19:03:43,116 - INFO - Test mode: Using 2 seasons and 2 season types for LeagueStandingsV3
+2025-10-01 19:03:43,116 - INFO - Test mode: Generated 4 parameter combinations for LeagueStandingsV3
+2025-10-01 19:03:43,116 - INFO - Test mode: Limited LeagueStandingsV3 from 4 to 2 items
+2025-10-01 19:03:43,116 - WARNING - [RECONNECT] Connection lost - attempting to reconnect...
+2025-10-01 19:03:43,116 - INFO - [RECONNECT] Reconnection attempt 1/3
+2025-10-01 19:03:43,116 - INFO - [CONNECT] Creating new database connection...
+2025-10-01 19:03:43,504 - INFO - [SUCCESS] Database connection established
+2025-10-01 19:03:43,504 - INFO - [SUCCESS] Reconnection successful
+2025-10-01 19:03:43,849 - ERROR - [ERROR] Database operation failed: relation "master_nba_teams" does not exist
+LINE 1: SELECT DISTINCT teamid FROM master_nba_teams LIMIT 3
+                                    ^
+
+2025-10-01 19:03:43,849 - ERROR - Error getting missing team-season combinations for TeamDashPtShots: relation "master_nba_teams" does not exist
+LINE 1: SELECT DISTINCT teamid FROM master_nba_teams LIMIT 3
+                                    ^
+
+2025-10-01 19:03:43,993 - INFO - Found player ID column: personid in master_nba_players
+2025-10-01 19:03:44,101 - INFO - Test mode: Generated 15 player-season combinations for PlayerDashboardByGameSplits
+2025-10-01 19:03:44,135 - INFO - Test mode: Limited PlayerDashboardByGameSplits from 15 to 2 items
+2025-10-01 19:04:17,519 - INFO - Log file: C:\Users\ajwin\Projects\Personal\thebigone\logs\nba_processor_nba_20251001_190417.log
+2025-10-01 19:04:17,528 - INFO - Loaded 136 endpoint configurations
+2025-10-01 19:04:17,530 - INFO - Loaded league config for National Basketball Association
+2025-10-01 19:04:17,536 - INFO - Loaded parameter mappings for consistent column naming
+2025-10-01 19:04:17,536 - INFO - === NBA Data Processor Initialized ===
+2025-10-01 19:04:17,536 - INFO - League: NBA
+2025-10-01 19:04:17,536 - INFO - Test Mode: False
+2025-10-01 19:04:17,536 - INFO - Current Season: 2025-26

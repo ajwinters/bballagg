@@ -23,7 +23,7 @@ def test_column_mapping():
         print("✓ NBADataProcessor initialized successfully")
         
         # Test master table detection  
-        master_endpoints = ['LeagueGameFinder', 'CommonAllPlayers']
+        master_endpoints = ['LeagueGameFinder', 'CommonAllPlayers', 'CommonTeamYears']
         
         for endpoint in master_endpoints:
             if processor.is_master_endpoint(endpoint):
@@ -42,6 +42,9 @@ def test_column_mapping():
                 elif 'player' in endpoint.lower():
                     expected_column = 'personid'  # NBA API uses 'personid' not 'player_id'
                     print(f"  → Expected player column: {expected_column}")
+                elif 'team' in endpoint.lower():
+                    expected_column = 'teamid'  # NBA API uses 'teamid' not 'team_id'
+                    print(f"  → Expected team column: {expected_column}")
                     
             else:
                 print(f"✗ {endpoint} not identified as master endpoint")

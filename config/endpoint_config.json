@@ -879,14 +879,15 @@
       "frequency": "biweekly"
     },
     "CommonTeamYears": {
-      "priority": "None",
+      "priority": "high",
+      "master": "team_id",
       "required_params": [
         "league_id"
       ],
-      "notes": "",
+      "notes": "Master table for all NBA teams",
       "latest_version": true,
-      "policy": "",
-      "frequency": ""
+      "policy": "replacing",
+      "frequency": "weekly"
     },
     "CumeStatsTeam": {
       "priority": "None",

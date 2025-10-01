@@ -194,6 +194,47 @@ class NBADataProcessor:
         
         return season
     
+    def _get_all_season_types(self) -> List[str]:
+        """Get all possible season types for comprehensive coverage"""
+        return [
+            'Regular Season',
+            'Playoffs',
+            'Pre Season',  # Some endpoints use 'Pre Season'
+            'Preseason',   # Some endpoints use 'Preseason' 
+            'All Star',    # All-Star related data
+            'IST'          # In-Season Tournament (introduced 2023-24)
+        ]
+    
+    def _get_all_seasons(self) -> List[str]:
+        """Get all historical seasons for comprehensive coverage"""
+        seasons = []
+        for year in range(1996, 2025):  # 1996-97 through 2024-25
+            if self.league_config['season_format'] == 'two_year':
+                seasons.append(f"{year}-{str(year+1)[2:]}")  # NBA/G-League: 1996-97 format
+            else:
+                seasons.append(str(year))  # WNBA: single year format
+        return seasons
+    
+    def _build_complete_param_set(self, season: str, season_type: str, season_param: str, season_type_param: str, required_params: List[str]) -> dict:
+        """Build a complete parameter set with all required parameters and proper defaults"""
+        param_set = {}
+        
+        # Add season parameter
+        if season_param:
+            param_set[season_param] = season
+        
+        # Add season type parameter
+        if season_type_param:
+            param_set[season_type_param] = season_type
+        
+        # Add league ID parameters with proper defaults
+        if 'league_id' in required_params:
+            param_set['league_id'] = self.league_config['id']  # Uses config value ('00' for NBA)
+        if 'league_id_nullable' in required_params:
+            param_set['league_id_nullable'] = self.league_config['id']
+        
+        return param_set
+    
     def get_master_endpoints(self) -> List[Tuple[str, dict]]:
         """
         Get endpoints that have a 'master' field - these must be processed first
@@ -811,15 +852,17 @@ class NBADataProcessor:
                     missing_ids = []
                 
             elif 'team_id' in required_params and 'season' in required_params:
-                # Team + Season combination endpoints
-                missing_ids = self._get_missing_team_season_combinations(endpoint_name, required_params)
+                # Team + Season combination endpoints - need team master table
+                master_table = self.get_master_table_name('team_id')  # master_nba_teams
+                missing_ids = self._get_missing_team_season_combinations(endpoint_name, master_table, required_params)
                 
             elif 'team_id' in required_params:
-                # Team-only endpoints
-                missing_ids = self._get_missing_team_ids(endpoint_name, "")
+                # Team-only endpoints - need team master table
+                master_table = self.get_master_table_name('team_id')  # master_nba_teams
+                missing_ids = self._get_missing_team_ids(endpoint_name, master_table)
                 
-            elif 'season' in required_params:
-                # Season-based endpoints (like LeagueGameLog, PlayerGameLogs)
+            elif any(param in required_params for param in ['season', 'season_nullable']):
+                # Season-based endpoints (like LeagueGameLog, PlayerGameLogs, TeamGameLogs)
                 missing_ids = self._get_missing_season_data(endpoint_name, required_params)
                 
             else:
@@ -966,23 +1009,24 @@ class NBADataProcessor:
         """Get missing team IDs for team-based endpoints by comparing master table vs endpoint table"""
         try:
             with self.db_manager.get_cursor() as cursor:
-                # For now, use a standard set of NBA team IDs (30 teams)
-                # This could be enhanced to use actual team master table
-                nba_team_ids = [
-                    1610612737, 1610612738, 1610612751, 1610612766, 1610612741, 1610612739,
-                    1610612742, 1610612743, 1610612765, 1610612744, 1610612745, 1610612754,
-                    1610612746, 1610612747, 1610612763, 1610612748, 1610612749, 1610612750,
-                    1610612740, 1610612752, 1610612760, 1610612753, 1610612755, 1610612756,
-                    1610612757, 1610612758, 1610612759, 1610612761, 1610612762, 1610612764
-                ]
+                # Get the correct column name for team ID in master table
+                team_id_column = self.get_master_table_column_name('team_id', master_table)
                 
-                # For test mode, just return a few team IDs
+                # For test mode, return some sample team IDs to test the system
                 if self.test_mode:
-                    test_teams = nba_team_ids[:self.max_items_per_endpoint or 5]
-                    self.logger.info(f"Test mode: Using {len(test_teams)} team IDs for {endpoint_name}")
-                    return [{'team_id': team_id} for team_id in test_teams]
+                    # Get some real team IDs from master table for testing
+                    cursor.execute(f"SELECT DISTINCT {team_id_column} FROM {master_table} LIMIT %s", (self.max_items_per_endpoint,))
+                    team_rows = cursor.fetchall()
+                    
+                    if team_rows:
+                        sample_team_ids = [row[0] for row in team_rows]
+                        self.logger.info(f"Test mode: Using {len(sample_team_ids)} team IDs from master table for {endpoint_name}")
+                        return [{'team_id': team_id} for team_id in sample_team_ids]
+                    else:
+                        self.logger.warning(f"No team IDs found in master table {master_table}")
+                        return []
                 
-                # Production mode: Find teams that are NOT in endpoint table
+                # Production mode: Find teams in master table that are NOT in endpoint table
                 endpoint_table_name = f"{self.get_table_prefix()}_{endpoint_name.lower()}"
                 
                 # Check if endpoint table exists
@@ -998,18 +1042,20 @@ class NBADataProcessor:
                 
                 if not table_exists:
                     # Table doesn't exist - all teams are missing (first run)
-                    self.logger.info(f"Endpoint table {endpoint_table_name} doesn't exist - processing ALL teams")
-                    missing_teams = [{'team_id': team_id} for team_id in nba_team_ids]
+                    self.logger.info(f"Endpoint table {endpoint_table_name} doesn't exist - processing ALL teams from master table")
+                    cursor.execute(f"SELECT DISTINCT {team_id_column} FROM {master_table} ORDER BY {team_id_column}")
+                    all_teams = cursor.fetchall()
+                    missing_teams = [{'team_id': row[0]} for row in all_teams]
                     
                 else:
                     # Table exists - find missing teams
-                    placeholders = ','.join(['%s'] * len(nba_team_ids))
+                    # Note: endpoint tables use 'team_id' as standard, master uses actual column name
                     cursor.execute(f"""
-                        SELECT t.team_id
-                        FROM (VALUES {','.join([f'({team_id})' for team_id in nba_team_ids])}) AS t(team_id)
-                        LEFT JOIN {endpoint_table_name} e ON t.team_id = e.team_id
+                        SELECT DISTINCT m.{team_id_column} 
+                        FROM {master_table} m
+                        LEFT JOIN {endpoint_table_name} e ON m.{team_id_column} = e.team_id
                         WHERE e.team_id IS NULL
-                        ORDER BY t.team_id
+                        ORDER BY m.{team_id_column}
                     """)
                     
                     missing_rows = cursor.fetchall()
@@ -1129,41 +1175,42 @@ class NBADataProcessor:
             self.logger.error(f"Error getting missing player-season combinations for {endpoint_name}: {e}")
             return []
     
-    def _get_missing_team_season_combinations(self, endpoint_name: str, required_params: List[str]) -> List[dict]:
+    def _get_missing_team_season_combinations(self, endpoint_name: str, master_table: str, required_params: List[str]) -> List[dict]:
         """Get missing team + season combinations for comprehensive historical backfill"""
         try:
-            # NBA team IDs
-            nba_team_ids = [
-                1610612737, 1610612738, 1610612751, 1610612766, 1610612741, 1610612739,
-                1610612742, 1610612743, 1610612765, 1610612744, 1610612745, 1610612754,
-                1610612746, 1610612747, 1610612763, 1610612748, 1610612749, 1610612750,
-                1610612740, 1610612752, 1610612760, 1610612753, 1610612755, 1610612756,
-                1610612757, 1610612758, 1610612759, 1610612761, 1610612762, 1610612764
-            ]
+            with self.db_manager.get_cursor() as cursor:
+                # Get the correct column name for team ID in master table
+                team_id_column = self.get_master_table_column_name('team_id', master_table)
             
-            # Get all seasons
-            seasons = []
-            for year in range(1996, 2025):
-                if self.league == 'WNBA':
-                    seasons.append(str(year))
-                else:
-                    seasons.append(f"{year}-{str(year+1)[2:]}")
-            
-            # For test mode, limit teams and seasons
-            if self.test_mode:
-                seasons = seasons[-2:]  # Last 2 seasons
-                test_teams = nba_team_ids[:3]  # 3 teams
+                # Get all seasons (comprehensive historical range)
+                seasons = []
+                for year in range(1996, 2025):  # 1996-97 through 2024-25
+                    if self.league == 'WNBA':
+                        seasons.append(str(year))  # WNBA uses single year format
+                    else:
+                        seasons.append(f"{year}-{str(year+1)[2:]}")  # NBA uses 1996-97 format
                 
-                combinations = []
-                for team_id in test_teams:
-                    for season in seasons:
-                        combinations.append({
-                            'team_id': team_id,
-                            'season': season
-                        })
-                
-                self.logger.info(f"Test mode: Generated {len(combinations)} team-season combinations for {endpoint_name}")
-                return combinations
+                # For test mode, limit seasons and teams
+                if self.test_mode:
+                    seasons = seasons[-3:]  # Last 3 seasons only
+                    cursor.execute(f"SELECT DISTINCT {team_id_column} FROM {master_table} LIMIT %s", (3,))
+                    team_rows = cursor.fetchall()
+                    
+                    if not team_rows:
+                        return []
+                    
+                    # Create combinations
+                    combinations = []
+                    for team_row in team_rows:
+                        team_id = team_row[0]
+                        for season in seasons:
+                            combinations.append({
+                                'team_id': team_id,
+                                'season': season
+                            })
+                    
+                    self.logger.info(f"Test mode: Generated {len(combinations)} team-season combinations for {endpoint_name}")
+                    return combinations
             
             # Production mode: Generate all combinations and check what's missing
             with self.db_manager.get_cursor() as cursor:
@@ -1179,38 +1226,48 @@ class NBADataProcessor:
                 
                 table_exists = cursor.fetchone()[0]
                 
+                # Production mode: Get all teams from master table
+                cursor.execute(f"SELECT DISTINCT {team_id_column} FROM {master_table} ORDER BY {team_id_column}")
+                all_teams = cursor.fetchall()
+                
+                if not all_teams:
+                    self.logger.warning(f"No teams found in master table {master_table}")
+                    return []
+                
                 if not table_exists:
-                    # Generate all combinations
+                    # Table doesn't exist - all combinations are missing (first run)
                     combinations = []
-                    for team_id in nba_team_ids:
+                    for team_row in all_teams:
+                        team_id = team_row[0]
                         for season in seasons:
                             combinations.append({
                                 'team_id': team_id,
                                 'season': season
                             })
                     
-                    self.logger.info(f"Generated {len(combinations)} total team-season combinations ({len(nba_team_ids)} teams × {len(seasons)} seasons)")
+                    self.logger.info(f"Generated {len(combinations)} total team-season combinations ({len(all_teams)} teams × {len(seasons)} seasons)")
                     return combinations
                 
                 else:
-                    # Find missing combinations
-                    cursor.execute("""
-                        CREATE TEMP TABLE temp_team_seasons AS
-                        SELECT t.team_id, s.season
-                        FROM (SELECT UNNEST(%s::bigint[]) AS team_id) t
-                        CROSS JOIN (SELECT UNNEST(%s::text[]) AS season) s
-                    """, (nba_team_ids, seasons))
-                    
-                    cursor.execute(f"""
-                        SELECT t.team_id, t.season
-                        FROM temp_team_seasons t
-                        LEFT JOIN {endpoint_table_name} e ON t.team_id = e.team_id AND t.season = e.season
-                        WHERE e.team_id IS NULL
-                        ORDER BY t.team_id, t.season
-                    """)
-                    
-                    missing_rows = cursor.fetchall()
-                    combinations = [{'team_id': row[0], 'season': row[1]} for row in missing_rows]
+                    # Table exists - find missing combinations by checking each team-season pair
+                    combinations = []
+                    for team_row in all_teams:
+                        team_id = team_row[0]
+                        for season in seasons:
+                            # Check if this specific combination exists
+                            cursor.execute(f"""
+                                SELECT EXISTS (
+                                    SELECT 1 FROM {endpoint_table_name} 
+                                    WHERE team_id = %s AND season = %s
+                                )
+                            """, (team_id, season))
+                            
+                            exists = cursor.fetchone()[0]
+                            if not exists:
+                                combinations.append({
+                                    'team_id': team_id,
+                                    'season': season
+                                })
                     
                     cursor.execute("DROP TABLE temp_team_seasons")
                     
@@ -1222,21 +1279,44 @@ class NBADataProcessor:
             return []
     
     def _get_missing_season_data(self, endpoint_name: str, required_params: List[str]) -> List[dict]:
-        """Get missing season data for season-based endpoints like LeagueGameLog, PlayerGameLogs"""
+        """Get missing season data for season-based endpoints with comprehensive parameter combinations"""
         try:
-            # Get all seasons
-            seasons = []
-            for year in range(1996, 2025):
-                if self.league == 'WNBA':
-                    seasons.append(str(year))
-                else:
-                    seasons.append(f"{year}-{str(year+1)[2:]}")
+            # Determine parameter names from required_params
+            season_param = None
+            if 'season' in required_params:
+                season_param = 'season'
+            elif 'season_nullable' in required_params:
+                season_param = 'season_nullable'
+            else:
+                self.logger.error(f"No season parameter found in {required_params} for {endpoint_name}")
+                return []
             
-            # For test mode, limit to recent seasons
+            # Check if season_type parameter is required
+            season_type_param = None
+            if 'season_type' in required_params:
+                season_type_param = 'season_type'
+            elif 'season_type_nullable' in required_params:
+                season_type_param = 'season_type_nullable'
+            
+            # Get all seasons and season types
+            seasons = self._get_all_seasons()
+            season_types = self._get_all_season_types() if season_type_param else ['Regular Season']
+            
+            # For test mode, limit seasons and season types
             if self.test_mode:
                 seasons = seasons[-2:]  # Last 2 seasons
-                self.logger.info(f"Test mode: Using {len(seasons)} seasons for {endpoint_name}")
-                return [{'season': season} for season in seasons]
+                season_types = season_types[:2] if season_type_param else ['Regular Season']  # Limit to 2 types
+                self.logger.info(f"Test mode: Using {len(seasons)} seasons and {len(season_types)} season types for {endpoint_name}")
+                
+                # Generate comprehensive parameter combinations
+                combinations = []
+                for season in seasons:
+                    for season_type in season_types:
+                        param_set = self._build_complete_param_set(season, season_type, season_param, season_type_param, required_params)
+                        combinations.append(param_set)
+                
+                self.logger.info(f"Test mode: Generated {len(combinations)} parameter combinations for {endpoint_name}")
+                return combinations
             
             # Production mode: Check what seasons are missing
             with self.db_manager.get_cursor() as cursor:
@@ -1253,25 +1333,48 @@ class NBADataProcessor:
                 table_exists = cursor.fetchone()[0]
                 
                 if not table_exists:
-                    # All seasons are missing
-                    self.logger.info(f"Processing all {len(seasons)} seasons for {endpoint_name}")
-                    return [{'season': season} for season in seasons]
+                    # All combinations are missing - generate comprehensive parameter combinations
+                    total_combinations = len(seasons) * len(season_types)
+                    self.logger.info(f"Processing all {len(seasons)} seasons × {len(season_types)} season types = {total_combinations} combinations for {endpoint_name}")
+                    
+                    combinations = []
+                    for season in seasons:
+                        for season_type in season_types:
+                            param_set = self._build_complete_param_set(season, season_type, season_param, season_type_param, required_params)
+                            combinations.append(param_set)
+                    
+                    return combinations
                 
                 else:
-                    # Find missing seasons
-                    cursor.execute(f"""
-                        SELECT s.season
-                        FROM (SELECT UNNEST(%s::text[]) AS season) s
-                        LEFT JOIN {endpoint_table_name} e ON s.season = e.season
-                        WHERE e.season IS NULL
-                        ORDER BY s.season
-                    """, (seasons,))
+                    # Find missing parameter combinations by checking each season × season_type pair
+                    combinations = []
+                    for season in seasons:
+                        for season_type in season_types:
+                            # Check if this specific combination exists in the table
+                            if season_type_param:
+                                # Both season and season_type are required
+                                cursor.execute(f"""
+                                    SELECT EXISTS (
+                                        SELECT 1 FROM {endpoint_table_name} 
+                                        WHERE season = %s AND {season_type_param} = %s
+                                    )
+                                """, (season, season_type))
+                            else:
+                                # Only season is required (season_type will be default)
+                                cursor.execute(f"""
+                                    SELECT EXISTS (
+                                        SELECT 1 FROM {endpoint_table_name} 
+                                        WHERE season = %s
+                                    )
+                                """, (season,))
+                            
+                            exists = cursor.fetchone()[0]
+                            if not exists:
+                                param_set = self._build_complete_param_set(season, season_type, season_param, season_type_param, required_params)
+                                combinations.append(param_set)
                     
-                    missing_rows = cursor.fetchall()
-                    missing_seasons = [{'season': row[0]} for row in missing_rows]
-                    
-                    self.logger.info(f"Found {len(missing_seasons)} missing seasons for {endpoint_name}")
-                    return missing_seasons
+                    self.logger.info(f"Found {len(combinations)} missing parameter combinations for {endpoint_name}")
+                    return combinations
                         
         except Exception as e:
             self.logger.error(f"Error getting missing season data for {endpoint_name}: {e}")
