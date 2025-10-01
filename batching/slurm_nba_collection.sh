@@ -4,8 +4,8 @@
 # Profiles: test, high_priority, full
 
 #SBATCH --job-name=nba_collection
-#SBATCH --output=logs/nba_%x_%A_%a.out
-#SBATCH --error=logs/nba_%x_%A_%a.err
+#SBATCH --output=logs/nba_array_%x_%A_%a.out
+#SBATCH --error=logs/nba_array_%x_%A_%a.err
 ##SBATCH --mail-type=FAIL
 ##SBATCH --mail-user=ajw5296@psu.edu
 
@@ -79,6 +79,11 @@ if [ -z "$ENDPOINT" ]; then
 fi
 
 echo "Processing endpoint: $ENDPOINT"
+
+# Update job name to include endpoint (if scontrol is available)
+if command -v scontrol &> /dev/null; then
+    scontrol update JobId=$SLURM_JOB_ID JobName="nba_${PROFILE}_${ENDPOINT}" 2>/dev/null || true
+fi
 
 # Navigate to project root and activate virtual environment
 PROJECT_ROOT="$(cd .. && pwd)"

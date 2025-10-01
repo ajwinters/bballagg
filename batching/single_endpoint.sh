@@ -4,8 +4,8 @@
 # Usage: sbatch --dependency=afterok:$MASTERS_JOB_ID single_endpoint.sh <profile> <endpoint_name>
 
 #SBATCH --job-name=nba_endpoint
-#SBATCH --output=logs/nba_endpoint_%j_%a.out
-#SBATCH --error=logs/nba_endpoint_%j_%a.err
+#SBATCH --output=logs/nba_%x_%j.out
+#SBATCH --error=logs/nba_%x_%j.err
 #SBATCH --time=02:00:00
 #SBATCH --mem=4GB
 #SBATCH --cpus-per-task=1
@@ -26,6 +26,12 @@ echo "Profile: $PROFILE"
 echo "Endpoint: $ENDPOINT_NAME"
 echo "Job ID: $SLURM_JOB_ID" 
 echo "Date: $(date)"
+
+# Update job name to include endpoint name (if scontrol is available)
+if command -v scontrol &> /dev/null && [ -n "$SLURM_JOB_ID" ]; then
+    scontrol update JobId=$SLURM_JOB_ID JobName="nba_${PROFILE}_${ENDPOINT_NAME}" 2>/dev/null || true
+    echo "📝 Updated job name to: nba_${PROFILE}_${ENDPOINT_NAME}"
+fi
 
 # Navigate to project root (handle both batch/ subdir and direct execution)
 if [ -d "../src" ]; then

@@ -130,15 +130,16 @@ FAILED_SUBMISSIONS=0
 
 for endpoint in "${ENDPOINTS_ARRAY[@]}"; do
     # Submit job with dependency on masters completion
+    # Job name format: nba_<profile>_<endpoint> (e.g., nba_high_priority_PlayerGameLog)
     JOB_OUTPUT=$(sbatch --dependency=afterok:$MASTERS_JOB_ID \
-                        --job-name="nba_${endpoint}" \
+                        --job-name="nba_${PROFILE}_${endpoint}" \
                         batching/single_endpoint.sh "$PROFILE" "$endpoint")
     
     JOB_ID=$(echo $JOB_OUTPUT | grep -o '[0-9]\+$')
     
     if [ -n "$JOB_ID" ]; then
         ENDPOINT_JOB_IDS+=($JOB_ID)
-        echo "✅ $endpoint → Job $JOB_ID"
+        echo "✅ $endpoint → Job $JOB_ID (nba_${PROFILE}_${endpoint})"
     else
         echo "❌ Failed to submit $endpoint"
         ((FAILED_SUBMISSIONS++))

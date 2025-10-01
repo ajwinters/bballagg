@@ -21,6 +21,12 @@ echo "Starting NBA MASTER TABLES collection with profile: $PROFILE"
 echo "Job ID: $SLURM_JOB_ID"
 echo "Date: $(date)"
 
+# Update job name to include profile (if scontrol is available)
+if command -v scontrol &> /dev/null && [ -n "$SLURM_JOB_ID" ]; then
+    scontrol update JobId=$SLURM_JOB_ID JobName="nba_masters_${PROFILE}" 2>/dev/null || true
+    echo "📝 Updated job name to: nba_masters_${PROFILE}"
+fi
+
 # Navigate to project root (handle both batch/ subdir and direct execution)
 if [ -d "../src" ]; then
     # Running from batching/ subdirectory
