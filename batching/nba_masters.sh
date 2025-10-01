@@ -21,16 +21,38 @@ echo "Starting NBA MASTER TABLES collection with profile: $PROFILE"
 echo "Job ID: $SLURM_JOB_ID"
 echo "Date: $(date)"
 
-# Navigate to project root
-PROJECT_ROOT="$(cd .. && pwd)"
-cd "$PROJECT_ROOT"
+# Navigate to project root (handle both batch/ subdir and direct execution)
+if [ -d "../src" ]; then
+    # Running from batching/ subdirectory
+    PROJECT_ROOT="$(cd .. && pwd)"
+    cd "$PROJECT_ROOT"
+else
+    # Running from project root
+    PROJECT_ROOT="$(pwd)"
+fi
+
+echo "🗂️  Project root: $PROJECT_ROOT"
+echo "🗂️  Current directory: $(pwd)"
 
 # Activate virtual environment
+VENV_ACTIVATE=""
 if [ -f ".venv/bin/activate" ]; then
-    source .venv/bin/activate
-    echo "✅ Virtual environment activated"
+    VENV_ACTIVATE=".venv/bin/activate"
+elif [ -f "venv/bin/activate" ]; then
+    VENV_ACTIVATE="venv/bin/activate"
+elif [ -f ".env/bin/activate" ]; then
+    VENV_ACTIVATE=".env/bin/activate"
+fi
+
+if [ -n "$VENV_ACTIVATE" ]; then
+    source "$VENV_ACTIVATE"
+    echo "✅ Virtual environment activated: $VENV_ACTIVATE"
 else
-    echo "❌ Error: Virtual environment not found"
+    echo "❌ Error: Virtual environment not found in $PROJECT_ROOT"
+    echo "Directory contents:"
+    ls -la
+    echo "Looking for virtual environment..."
+    find . -maxdepth 2 -name "activate" -type f 2>/dev/null || echo "No activate scripts found"
     exit 1
 fi
 
