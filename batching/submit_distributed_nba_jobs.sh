@@ -1,12 +1,52 @@
 #!/bin/bash
 # NBA Distributed Job Submission - One Job Per Endpoint
-# Usage: ./submit_distributed_nba_jobs.sh <profile>
+# Usage: ./submit_distributed_nba_jobs.sh [profile]
+#
+# Available profiles:
+#   high_priority  - High priority endpoints only (DEFAULT)
+#   test          - Limited endpoints with small data samples  
+#   full          - All available endpoints (comprehensive)
+#
+# Examples:
+#   ./submit_distributed_nba_jobs.sh                    # Uses high_priority
+#   ./submit_distributed_nba_jobs.sh high_priority      # High priority endpoints
+#   ./submit_distributed_nba_jobs.sh test               # Test mode
+#   ./submit_distributed_nba_jobs.sh full               # All endpoints
 
-PROFILE=${1:-test}
+# Show help if requested
+if [ "$1" = "--help" ] || [ "$1" = "-h" ]; then
+    echo "NBA Distributed Job Submission"
+    echo "=============================="
+    echo "Usage: $0 [profile]"
+    echo ""
+    echo "Available profiles:"
+    echo "  high_priority  - High priority endpoints only (DEFAULT)"
+    echo "  test          - Limited endpoints with small data samples"
+    echo "  full          - All available endpoints (comprehensive)"
+    echo ""
+    echo "Examples:"
+    echo "  $0                    # Uses high_priority (default)"
+    echo "  $0 high_priority      # High priority endpoints"
+    echo "  $0 test               # Test mode"
+    echo "  $0 full               # All endpoints"
+    echo ""
+    exit 0
+fi
+
+PROFILE=${1:-high_priority}
 
 echo "🚀 NBA DISTRIBUTED JOB SUBMISSION"
 echo "=================================="
 echo "Profile: $PROFILE"
+if [ "$PROFILE" = "high_priority" ]; then
+    echo "Mode: HIGH PRIORITY ENDPOINTS (default - most important data)"
+elif [ "$PROFILE" = "test" ]; then
+    echo "Mode: TEST MODE (limited data for testing)"
+elif [ "$PROFILE" = "full" ]; then
+    echo "Mode: FULL MODE (all endpoints - comprehensive collection)"
+else
+    echo "Mode: CUSTOM PROFILE"
+fi
 echo "Date: $(date)"
 echo ""
 
