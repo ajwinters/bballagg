@@ -262,13 +262,12 @@
       "frequency": "daily"
     },
     "LeagueGameLog": {
-      "priority": "high",
-      "master": "game_id",
+      "priority": "low",
       "required_params": [
         "league_id",
         "season"
       ],
-      "notes": "defaults to current regular season, season, season_type, league will need to be specified",
+      "notes": "removing from master selection, gamefinder handles games master table, defaults to current regular season, season, season_type, league will need to be specified",
       "latest_version": true,
       "policy": "stacking",
       "frequency": "daily"

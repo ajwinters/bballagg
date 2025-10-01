@@ -85,21 +85,55 @@ db_manager = RDSConnectionManager(db_config_dict)
 
 try:
     with db_manager.get_cursor() as cursor:
+        # Get all tables for debugging
+        cursor.execute('SELECT tablename FROM pg_tables WHERE schemaname = %s ORDER BY tablename', ('public',))
+        all_tables = [row[0] for row in cursor.fetchall()]
+        print(f'📋 Total tables in database: {len(all_tables)}')
+        
+        # Check for standardized master tables
         cursor.execute('''
             SELECT tablename FROM pg_tables 
             WHERE schemaname = 'public' 
-            AND (tablename LIKE '%commonallplayers%' 
+            AND (tablename LIKE 'master_%_players'
+                 OR tablename LIKE 'master_%_games'
+                 OR tablename LIKE 'master_%_teams'
+                 OR tablename LIKE '%commonallplayers%' 
                  OR tablename LIKE '%leaguegamefinder%' 
                  OR tablename LIKE '%leaguegamelog%')
+            ORDER BY tablename
         ''')
         
         master_tables = cursor.fetchall()
         
-        if len(master_tables) >= 2:
-            print(f'✅ Found {len(master_tables)} master tables - ready to proceed')
-            sys.exit(0)
+        if len(master_tables) >= 1:
+            print(f'✅ Found {len(master_tables)} potential master tables:')
+            for table in master_tables:
+                cursor.execute(f'SELECT COUNT(*) FROM {table[0]}')
+                count = cursor.fetchone()[0]
+                print(f'   • {table[0]}: {count:,} records')
+            
+            # Check if we have data in master tables
+            has_data = False
+            for table in master_tables:
+                cursor.execute(f'SELECT COUNT(*) FROM {table[0]}')
+                if cursor.fetchone()[0] > 0:
+                    has_data = True
+                    break
+            
+            if has_data:
+                print('✅ Master tables have data - ready to proceed')
+                sys.exit(0)
+            else:
+                print('⚠️  Master tables exist but are empty - may still be populating')
+                sys.exit(0)
         else:
-            print(f'❌ Only found {len(master_tables)} master tables - need at least 2')
+            print(f'❌ No master tables found!')
+            print('Available tables (first 10):')
+            for i, table in enumerate(all_tables[:10]):
+                print(f'   {i+1:2d}. {table}')
+            if len(all_tables) > 10:
+                print(f'   ... and {len(all_tables) - 10} more')
+            print('Master tables job may have failed!')
             sys.exit(1)
             
 except Exception as e:

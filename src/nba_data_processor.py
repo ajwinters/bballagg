@@ -236,79 +236,29 @@ class NBADataProcessor:
         """Get table prefix for current league"""
         return self.league.lower()
     
+    def is_master_endpoint(self, endpoint_name: str) -> bool:
+        """Check if this endpoint is designated as a master endpoint"""
+        config = self.endpoint_config.get('endpoints', {}).get(endpoint_name, {})
+        return 'master' in config
+    
+    def get_master_designation(self, endpoint_name: str) -> str:
+        """Get the master designation (game_id, player_id, etc.) for a master endpoint"""
+        config = self.endpoint_config.get('endpoints', {}).get(endpoint_name, {})
+        return config.get('master', '')
+    
     def get_master_table_name(self, master_type: str) -> str:
-        """Get the actual master table name based on master type by searching existing tables"""
+        """Get the standardized master table name"""
         prefix = self.get_table_prefix()
         
-        try:
-            with self.db_manager.get_cursor() as cursor:
-                # Get all tables that match our prefix and might be master tables
-                cursor.execute("""
-                    SELECT tablename FROM pg_tables 
-                    WHERE schemaname = 'public' 
-                    AND tablename LIKE %s
-                    ORDER BY tablename
-                """, (f"{prefix}_%",))
-                
-                all_tables = [row[0] for row in cursor.fetchall()]
-                self.logger.info(f"Available tables for {master_type}: {all_tables}")
-                
-                # Search for master tables based on known master endpoint patterns
-                if master_type == 'game_id':
-                    # Look for game master tables
-                    for table in all_tables:
-                        if any(keyword in table.lower() for keyword in ['leaguegamefinder', 'leaguegamelog', 'games']):
-                            # Verify it has game_id column
-                            cursor.execute("""
-                                SELECT EXISTS (
-                                    SELECT FROM information_schema.columns 
-                                    WHERE table_name = %s AND column_name = 'game_id'
-                                )
-                            """, (table,))
-                            
-                            if cursor.fetchone()[0]:
-                                self.logger.info(f"Found game master table: {table}")
-                                return table
-                
-                elif master_type == 'player_id':
-                    # Look for player master tables
-                    for table in all_tables:
-                        if any(keyword in table.lower() for keyword in ['commonallplayers', 'players']):
-                            # Verify it has player_id column (try different column names)
-                            possible_columns = ['player_id', 'playerid', 'person_id', 'personid']
-                            for col in possible_columns:
-                                cursor.execute("""
-                                    SELECT EXISTS (
-                                        SELECT FROM information_schema.columns 
-                                        WHERE table_name = %s AND column_name = %s
-                                    )
-                                """, (table, col))
-                                
-                                if cursor.fetchone()[0]:
-                                    self.logger.info(f"Found player master table: {table} with column {col}")
-                                    return table
-                
-                elif master_type == 'team_id':
-                    # Look for team master tables
-                    for table in all_tables:
-                        if any(keyword in table.lower() for keyword in ['teams', 'teaminfo']):
-                            cursor.execute("""
-                                SELECT EXISTS (
-                                    SELECT FROM information_schema.columns 
-                                    WHERE table_name = %s AND column_name = 'team_id'
-                                )
-                            """, (table,))
-                            
-                            if cursor.fetchone()[0]:
-                                self.logger.info(f"Found team master table: {table}")
-                                return table
-                
-        except Exception as e:
-            self.logger.error(f"Error searching for master table for {master_type}: {e}")
-        
-        # If no master table found, return None so we can handle it gracefully
-        self.logger.warning(f"No master table found for {master_type}. Available tables might not include master data yet.")
-        return None
+        # Create standardized master table names
+        if master_type == 'game_id':
+            return f"master_{prefix}_games"
+        elif master_type == 'player_id':
+            return f"master_{prefix}_players"
+        elif master_type == 'team_id':
+            return f"master_{prefix}_teams"
+        else:
+            return f"master_{prefix}_{master_type}"
     
     def clean_column_names(self, df: pd.DataFrame) -> pd.DataFrame:
         """
@@ -576,7 +526,18 @@ class NBADataProcessor:
             
             # Create failed records for each expected dataset
             for dataset_name, dataset_info in expected_data.items():
-                table_name = f"{self.get_table_prefix()}_{endpoint_name.lower()}_{dataset_name.lower()}"
+                # Special handling for master endpoints
+                if self.is_master_endpoint(endpoint_name):
+                    # For master endpoints, only handle the first dataset
+                    if dataset_name == list(expected_data.keys())[0]:  # First dataset only
+                        master_type = self.get_master_designation(endpoint_name)
+                        table_name = self.get_master_table_name(master_type)
+                    else:
+                        # Skip additional datasets for master endpoints
+                        continue
+                else:
+                    # Regular endpoint - use standard naming
+                    table_name = f"{self.get_table_prefix()}_{endpoint_name.lower()}_{dataset_name.lower()}"
                 
                 # Create a DataFrame with ID columns from parameters and failed_reason
                 failed_record = {}
@@ -1342,7 +1303,20 @@ class NBADataProcessor:
                     # Insert each DataFrame into its respective table
                     for dataset_name, df in matched_data.items():
                         if df is not None and not df.empty:
-                            table_name = f"{self.get_table_prefix()}_{endpoint_name.lower()}_{dataset_name.lower()}"
+                            # Special handling for master endpoints
+                            if self.is_master_endpoint(endpoint_name):
+                                # For master endpoints, only use the first dataset and give it a standardized name
+                                if dataset_name == list(matched_data.keys())[0]:  # First dataset only
+                                    master_type = self.get_master_designation(endpoint_name)
+                                    table_name = self.get_master_table_name(master_type)
+                                    self.logger.info(f"Creating master table: {table_name} for {endpoint_name}")
+                                else:
+                                    # Skip additional datasets for master endpoints
+                                    self.logger.debug(f"Skipping additional dataset {dataset_name} for master endpoint {endpoint_name}")
+                                    continue
+                            else:
+                                # Regular endpoint - use standard naming
+                                table_name = f"{self.get_table_prefix()}_{endpoint_name.lower()}_{dataset_name.lower()}"
                             
                             success = self.insert_dataframe_to_table(
                                 df, table_name, 
