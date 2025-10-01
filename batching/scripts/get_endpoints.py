@@ -12,21 +12,34 @@ project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(_
 sys.path.append(project_root)
 os.chdir(project_root)
 
-def list_all_endpoint_names():
-    """Get all endpoint names from endpoint_config.json"""
+def list_all_endpoint_names(latest_only=True):
+    """Get all endpoint names from endpoint_config.json, optionally filtering for latest versions only"""
     with open('config/endpoint_config.json', 'r') as f:
         config = json.load(f)
-    return list(config['endpoints'].keys())
+    
+    if not latest_only:
+        return list(config['endpoints'].keys())
+    
+    # Filter for latest versions only
+    latest_endpoints = []
+    for name, endpoint_config in config['endpoints'].items():
+        if endpoint_config.get('latest_version', False):
+            latest_endpoints.append(name)
+    
+    return latest_endpoints
 
-def get_endpoints_by_priority(priority):
-    """Get endpoints by priority level"""
+def get_endpoints_by_priority(priority, latest_only=True):
+    """Get endpoints by priority level, optionally filtering for latest versions only"""
     with open('config/endpoint_config.json', 'r') as f:
         config = json.load(f)
     
     endpoints = []
     for name, endpoint_config in config['endpoints'].items():
+        # Check priority match
         if endpoint_config.get('priority') == priority:
-            endpoints.append({'endpoint': name})
+            # If latest_only is True, only include endpoints marked as latest_version
+            if not latest_only or endpoint_config.get('latest_version', False):
+                endpoints.append({'endpoint': name})
     return endpoints
 
 def get_endpoints_for_profile(profile_name):
@@ -50,11 +63,14 @@ def get_endpoints_for_profile(profile_name):
     # Otherwise use filter
     filter_type = profile.get('filter', 'all')
     
+    # Check if we should include all versions or latest only
+    latest_only = profile.get('latest_only', True)  # Default to latest only
+    
     if filter_type == 'all':
-        return list_all_endpoint_names()
+        return list_all_endpoint_names(latest_only=latest_only)
     elif filter_type.startswith('priority:'):
         priority = filter_type.split(':')[1]
-        return [ep['endpoint'] for ep in get_endpoints_by_priority(priority)]
+        return [ep['endpoint'] for ep in get_endpoints_by_priority(priority, latest_only=latest_only)]
     else:
         print(f"Error: Unknown filter type '{filter_type}'", file=sys.stderr)
         sys.exit(1)

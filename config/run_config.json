@@ -1,10 +1,10 @@
 {
   "collection_profiles": {
     "test": {
-      "description": "Quick test run with 3 endpoints",
+      "description": "Quick test run with 3 endpoints (latest versions)",
       "endpoints": [
         "BoxScoreAdvancedV3",
-        "BoxScoreTraditionalV2", 
+        "BoxScoreTraditionalV3", 
         "LeagueDashPlayerBioStats"
       ],
       "slurm_config": {
@@ -25,8 +25,9 @@
       }
     },
     "high_priority": {
-      "description": "High priority endpoints only",
+      "description": "High priority endpoints only (latest versions)",
       "filter": "priority:high",
+      "latest_only": true,
       "slurm_config": {
         "time": "24:00:00",
         "mem_per_cpu": "4GB",
@@ -34,8 +35,9 @@
       }
     },
     "full": {
-      "description": "All available endpoints",
+      "description": "All available endpoints (latest versions only)",
       "filter": "all",
+      "latest_only": true,
       "slurm_config": {
         "time": "24:00:00", 
         "mem_per_cpu": "8GB",
