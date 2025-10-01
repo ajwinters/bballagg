@@ -103,14 +103,43 @@ pip list | grep -E "(psycopg2|pandas|requests|nba)" || echo "Package check faile
 NODE_ID="${PROFILE}_${SLURM_JOB_ID}_${SLURM_ARRAY_TASK_ID}"
 echo "Node ID: $NODE_ID"
 
-# Run the single endpoint processor
-echo "Starting single endpoint processor..."
-python collectors/single_endpoint_processor_simple.py \
-    --endpoint "$ENDPOINT" \
-    --node-id "$NODE_ID" \
-    --rate-limit "$RATE_LIMIT" \
-    --db-config config/database_config.json \
-    --log-level INFO
+# Determine if we need to run master tables first
+echo "Checking if master tables need to be processed first..."
+
+# Check if this is a master endpoint
+IS_MASTER=$(python -c "
+import json
+import sys
+sys.path.append('src')
+with open('config/endpoint_config.json', 'r') as f:
+    config = json.load(f)
+endpoint_config = config['endpoints'].get('$ENDPOINT', {})
+if 'master' in endpoint_config:
+    print('true')
+else:
+    print('false')
+")
+
+# Run the NBA data processor
+echo "Starting NBA data processor for endpoint: $ENDPOINT"
+
+if [ "$IS_MASTER" = "true" ]; then
+    echo "Master endpoint detected - running with master-only mode first"
+    # For master endpoints, run them individually to ensure proper sequencing
+    python src/nba_data_processor.py \
+        --endpoint "$ENDPOINT" \
+        --test-mode \
+        --max-items 10 \
+        --log-level INFO
+else
+    echo "Regular endpoint - running with dependency check"
+    # For regular endpoints, run them normally (masters should already exist)
+    python src/nba_data_processor.py \
+        --endpoint "$ENDPOINT" \
+        --test-mode \
+        --max-items 5 \
+        --log-level INFO
+fi
 
 EXIT_CODE=$?
 

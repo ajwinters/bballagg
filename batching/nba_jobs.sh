@@ -37,8 +37,9 @@ case "$1" in
             exit 1
         fi
         
-        echo "Submitting NBA collection job with profile: $2"
-        sbatch deployment/slurm_nba_collection.sh "$2"
+        echo "Submitting NBA collection workflow with profile: $2"
+        echo "Using coordinated workflow (master tables → regular endpoints)"
+        sbatch batching/nba_workflow.sh "$2"
         ;;
         
     "status")

@@ -6,15 +6,34 @@ Simple script to get endpoint lists for SLURM jobs
 import json
 import sys
 import os
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from config.endpoints_config import list_all_endpoint_names, get_endpoints_by_priority
+# Add project root to path
+project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(project_root)
+os.chdir(project_root)
+
+def list_all_endpoint_names():
+    """Get all endpoint names from endpoint_config.json"""
+    with open('config/endpoint_config.json', 'r') as f:
+        config = json.load(f)
+    return list(config['endpoints'].keys())
+
+def get_endpoints_by_priority(priority):
+    """Get endpoints by priority level"""
+    with open('config/endpoint_config.json', 'r') as f:
+        config = json.load(f)
+    
+    endpoints = []
+    for name, endpoint_config in config['endpoints'].items():
+        if endpoint_config.get('priority') == priority:
+            endpoints.append({'endpoint': name})
+    return endpoints
 
 def get_endpoints_for_profile(profile_name):
     """Get endpoints for a given profile"""
     
-    # Load run config
-    config_path = os.path.join(os.path.dirname(__file__), '..', 'config', 'run_config.json')
+    # Load run config (using project root path)
+    config_path = os.path.join(project_root, 'config', 'run_config.json')
     with open(config_path, 'r') as f:
         config = json.load(f)
     

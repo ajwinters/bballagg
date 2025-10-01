@@ -643,13 +643,38 @@ class NBADataProcessor:
             # For master endpoints, always process them to ensure base data exists
             if is_master_endpoint:
                 if endpoint_name == 'CommonAllPlayers':
-                    # Always get current players
-                    return [{}]  # No parameters needed - will get all current players
-                elif endpoint_name == 'LeagueGameFinder' or endpoint_name == 'LeagueGameLog':
-                    # Always get current season games
-                    return [{}]  # No parameters needed - will get all current season games
+                    # Get current players (no season parameter needed)
+                    return [{}]
+                elif endpoint_name == 'LeagueGameFinder':
+                    # Get ALL NBA seasons for comprehensive game history
+                    seasons = []
+                    # NBA seasons from 1996-97 (when current format started) to current
+                    for year in range(1996, 2025):  # Will get 1996-97 through 2024-25
+                        season_str = f"{year}-{str(year+1)[2:]}"  # e.g., "2023-24"
+                        seasons.append({'season_nullable': season_str})
+                    
+                    # In test mode, limit to recent seasons
+                    if self.test_mode:
+                        seasons = seasons[-3:]  # Last 3 seasons only
+                        self.logger.info(f"Test mode: Limited LeagueGameFinder to {len(seasons)} recent seasons")
+                    else:
+                        self.logger.info(f"Processing LeagueGameFinder for {len(seasons)} seasons (comprehensive)")
+                    
+                    return seasons
+                elif endpoint_name == 'LeagueGameLog':
+                    # Get ALL NBA seasons for comprehensive game log history
+                    seasons = []
+                    for year in range(1996, 2025):
+                        season_str = f"{year}-{str(year+1)[2:]}"
+                        seasons.append({'season': season_str})
+                    
+                    if self.test_mode:
+                        seasons = seasons[-2:]  # Last 2 seasons only
+                        self.logger.info(f"Test mode: Limited LeagueGameLog to {len(seasons)} recent seasons")
+                    
+                    return seasons
                 else:
-                    # Other master endpoints without specific logic
+                    # Other master endpoints
                     return [{}]
             
             required_params = config.get('required_params', [])
@@ -789,11 +814,11 @@ class NBADataProcessor:
                     elif 'league_id_nullable' in sig.parameters:
                         api_params['league_id_nullable'] = self.league_config['id']
                     
-                    # Add season parameter (check for different parameter names)
+                    # Add season parameter (preserve from param_values if present, otherwise use current)
                     if 'season' in sig.parameters:
-                        api_params['season'] = self.current_season
+                        api_params['season'] = api_params.get('season', self.current_season)
                     elif 'season_nullable' in sig.parameters:
-                        api_params['season_nullable'] = self.current_season
+                        api_params['season_nullable'] = api_params.get('season_nullable', self.current_season)
                     
                     # Make API call
                     self.logger.debug(f"API call: {endpoint_name}({api_params})")
@@ -817,7 +842,7 @@ class NBADataProcessor:
                             success = self.insert_dataframe_to_table(
                                 df, table_name, 
                                 config.get('required_params', []), 
-                                param_values
+                                api_params  # Use the actual API parameters, not the original param_values
                             )
                             
                             if not success:
