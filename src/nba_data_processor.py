@@ -260,6 +260,68 @@ class NBADataProcessor:
         else:
             return f"master_{prefix}_{master_type}"
     
+    def get_master_table_column_name(self, master_type: str, table_name: str) -> str:
+        """Get the correct column name for the master table"""
+        try:
+            with self.db_manager.get_cursor() as cursor:
+                if master_type == 'game_id':
+                    # Check for game ID column variations
+                    possible_columns = ['gameid', 'game_id', 'id']
+                    for col in possible_columns:
+                        cursor.execute("""
+                            SELECT EXISTS (
+                                SELECT FROM information_schema.columns 
+                                WHERE table_name = %s AND column_name = %s
+                            )
+                        """, (table_name, col))
+                        
+                        if cursor.fetchone()[0]:
+                            self.logger.info(f"Found game ID column: {col} in {table_name}")
+                            return col
+                
+                elif master_type == 'player_id':
+                    # Check for player ID column variations
+                    possible_columns = ['personid', 'player_id', 'playerid', 'person_id', 'id']
+                    for col in possible_columns:
+                        cursor.execute("""
+                            SELECT EXISTS (
+                                SELECT FROM information_schema.columns 
+                                WHERE table_name = %s AND column_name = %s
+                            )
+                        """, (table_name, col))
+                        
+                        if cursor.fetchone()[0]:
+                            self.logger.info(f"Found player ID column: {col} in {table_name}")
+                            return col
+                
+                elif master_type == 'team_id':
+                    # Check for team ID column variations
+                    possible_columns = ['teamid', 'team_id', 'id']
+                    for col in possible_columns:
+                        cursor.execute("""
+                            SELECT EXISTS (
+                                SELECT FROM information_schema.columns 
+                                WHERE table_name = %s AND column_name = %s
+                            )
+                        """, (table_name, col))
+                        
+                        if cursor.fetchone()[0]:
+                            self.logger.info(f"Found team ID column: {col} in {table_name}")
+                            return col
+        
+        except Exception as e:
+            self.logger.error(f"Error finding column name for {master_type} in {table_name}: {e}")
+        
+        # Fallback to expected standard names
+        if master_type == 'game_id':
+            return 'gameid'  # NBA API typically uses 'gameid'
+        elif master_type == 'player_id':
+            return 'personid'  # NBA API typically uses 'personid' 
+        elif master_type == 'team_id':
+            return 'teamid'
+        else:
+            return 'id'
+    
     def clean_column_names(self, df: pd.DataFrame) -> pd.DataFrame:
         """
         Clean column names for PostgreSQL compatibility with special handling
@@ -781,10 +843,13 @@ class NBADataProcessor:
         """Get missing game IDs for game-based endpoints by comparing master table vs endpoint table"""
         try:
             with self.db_manager.get_cursor() as cursor:
+                # Get the correct column name for game ID in master table
+                game_id_column = self.get_master_table_column_name('game_id', master_table)
+                
                 # For test mode, return some sample game IDs to test the system
                 if self.test_mode:
                     # Get some real game IDs from master table for testing
-                    cursor.execute(f"SELECT DISTINCT game_id FROM {master_table} LIMIT %s", (self.max_items_per_endpoint,))
+                    cursor.execute(f"SELECT DISTINCT {game_id_column} FROM {master_table} LIMIT %s", (self.max_items_per_endpoint,))
                     game_rows = cursor.fetchall()
                     
                     if game_rows:
@@ -812,18 +877,19 @@ class NBADataProcessor:
                 if not table_exists:
                     # Table doesn't exist - all games are missing (first run)
                     self.logger.info(f"Endpoint table {endpoint_table_name} doesn't exist - processing ALL games from master table")
-                    cursor.execute(f"SELECT DISTINCT game_id FROM {master_table} ORDER BY game_id")
+                    cursor.execute(f"SELECT DISTINCT {game_id_column} FROM {master_table} ORDER BY {game_id_column}")
                     all_games = cursor.fetchall()
                     missing_games = [{'game_id': row[0]} for row in all_games]
                     
                 else:
                     # Table exists - find missing games
+                    # Note: endpoint tables use 'game_id' as standard, master uses actual column name
                     cursor.execute(f"""
-                        SELECT DISTINCT m.game_id 
+                        SELECT DISTINCT m.{game_id_column} 
                         FROM {master_table} m
-                        LEFT JOIN {endpoint_table_name} e ON m.game_id = e.game_id
+                        LEFT JOIN {endpoint_table_name} e ON m.{game_id_column} = e.game_id
                         WHERE e.game_id IS NULL
-                        ORDER BY m.game_id
+                        ORDER BY m.{game_id_column}
                     """)
                     
                     missing_rows = cursor.fetchall()
@@ -840,22 +906,8 @@ class NBADataProcessor:
         """Get missing player IDs for player-based endpoints by comparing master table vs endpoint table"""
         try:
             with self.db_manager.get_cursor() as cursor:
-                # Find the player_id column in master table
-                possible_columns = ['player_id', 'playerid', 'person_id', 'personid', 'id']
-                player_column = None
-                
-                # Check which column exists in master table
-                cursor.execute(f"""
-                    SELECT column_name FROM information_schema.columns 
-                    WHERE table_name = %s AND column_name = ANY(%s)
-                """, (master_table.split('_', 1)[1], possible_columns))
-                
-                result = cursor.fetchone()
-                if not result:
-                    self.logger.warning(f"No player_id column found in {master_table}")
-                    return []
-                
-                player_column = result[0]
+                # Get the correct column name for player ID in master table
+                player_column = self.get_master_table_column_name('player_id', master_table)
                 
                 # For test mode, just get some player IDs from the master table
                 if self.test_mode:
@@ -974,21 +1026,8 @@ class NBADataProcessor:
         """Get missing player + season combinations for comprehensive historical backfill"""
         try:
             with self.db_manager.get_cursor() as cursor:
-                # Find the player_id column in master table
-                possible_columns = ['player_id', 'playerid', 'person_id', 'personid', 'id']
-                player_column = None
-                
-                cursor.execute(f"""
-                    SELECT column_name FROM information_schema.columns 
-                    WHERE table_name = %s AND column_name = ANY(%s)
-                """, (master_table.split('_', 1)[1], possible_columns))
-                
-                result = cursor.fetchone()
-                if not result:
-                    self.logger.warning(f"No player_id column found in {master_table}")
-                    return []
-                
-                player_column = result[0]
+                # Get the correct column name for player ID in master table
+                player_column = self.get_master_table_column_name('player_id', master_table)
                 
                 # Get all seasons (comprehensive historical range)
                 seasons = []

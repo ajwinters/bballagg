@@ -386,3 +386,30 @@ LINE 2:             SELECT DISTINCT seasonnullable, COUNT(*) as coun...
 2025-09-28 21:04:16,633 - INFO - [CONNECT] Creating new database connection...
 2025-09-28 21:04:16,990 - INFO - [SUCCESS] Database connection established
 2025-09-28 21:04:16,990 - INFO - [SUCCESS] Reconnection successful
+2025-10-01 16:36:51,432 - INFO - Log file: C:\Users\ajwin\Projects\Personal\thebigone\logs\nba_processor_nba_20251001_163651.log
+2025-10-01 16:36:51,444 - INFO - Loaded 136 endpoint configurations
+2025-10-01 16:36:51,445 - INFO - Loaded league config for National Basketball Association
+2025-10-01 16:36:51,445 - INFO - Loaded parameter mappings for consistent column naming
+2025-10-01 16:36:51,445 - INFO - === NBA Data Processor Initialized ===
+2025-10-01 16:36:51,445 - INFO - League: NBA
+2025-10-01 16:36:51,445 - INFO - Test Mode: True
+2025-10-01 16:36:51,445 - INFO - Current Season: 2025-26
+2025-10-01 16:36:51,445 - INFO - Max items per endpoint: 3
+2025-10-01 16:37:44,361 - INFO - Log file: C:\Users\ajwin\Projects\Personal\thebigone\logs\nba_processor_nba_20251001_163744.log
+2025-10-01 16:37:44,361 - INFO - Loaded 136 endpoint configurations
+2025-10-01 16:37:44,361 - INFO - Loaded league config for National Basketball Association
+2025-10-01 16:37:44,370 - INFO - Loaded parameter mappings for consistent column naming
+2025-10-01 16:37:44,370 - INFO - === NBA Data Processor Initialized ===
+2025-10-01 16:37:44,370 - INFO - League: NBA
+2025-10-01 16:37:44,370 - INFO - Test Mode: True
+2025-10-01 16:37:44,370 - INFO - Current Season: 2025-26
+2025-10-01 16:37:44,370 - INFO - Max items per endpoint: 3
+2025-10-01 16:38:05,671 - INFO - Log file: C:\Users\ajwin\Projects\Personal\thebigone\logs\nba_processor_nba_20251001_163805.log
+2025-10-01 16:38:05,671 - INFO - Loaded 136 endpoint configurations
+2025-10-01 16:38:05,671 - INFO - Loaded league config for National Basketball Association
+2025-10-01 16:38:05,671 - INFO - Loaded parameter mappings for consistent column naming
+2025-10-01 16:38:05,671 - INFO - === NBA Data Processor Initialized ===
+2025-10-01 16:38:05,671 - INFO - League: NBA
+2025-10-01 16:38:05,671 - INFO - Test Mode: True
+2025-10-01 16:38:05,671 - INFO - Current Season: 2025-26
+2025-10-01 16:38:05,671 - INFO - Max items per endpoint: 3
