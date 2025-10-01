@@ -236,6 +236,80 @@ class NBADataProcessor:
         """Get table prefix for current league"""
         return self.league.lower()
     
+    def get_master_table_name(self, master_type: str) -> str:
+        """Get the actual master table name based on master type by searching existing tables"""
+        prefix = self.get_table_prefix()
+        
+        try:
+            with self.db_manager.get_cursor() as cursor:
+                # Get all tables that match our prefix and might be master tables
+                cursor.execute("""
+                    SELECT tablename FROM pg_tables 
+                    WHERE schemaname = 'public' 
+                    AND tablename LIKE %s
+                    ORDER BY tablename
+                """, (f"{prefix}_%",))
+                
+                all_tables = [row[0] for row in cursor.fetchall()]
+                self.logger.info(f"Available tables for {master_type}: {all_tables}")
+                
+                # Search for master tables based on known master endpoint patterns
+                if master_type == 'game_id':
+                    # Look for game master tables
+                    for table in all_tables:
+                        if any(keyword in table.lower() for keyword in ['leaguegamefinder', 'leaguegamelog', 'games']):
+                            # Verify it has game_id column
+                            cursor.execute("""
+                                SELECT EXISTS (
+                                    SELECT FROM information_schema.columns 
+                                    WHERE table_name = %s AND column_name = 'game_id'
+                                )
+                            """, (table,))
+                            
+                            if cursor.fetchone()[0]:
+                                self.logger.info(f"Found game master table: {table}")
+                                return table
+                
+                elif master_type == 'player_id':
+                    # Look for player master tables
+                    for table in all_tables:
+                        if any(keyword in table.lower() for keyword in ['commonallplayers', 'players']):
+                            # Verify it has player_id column (try different column names)
+                            possible_columns = ['player_id', 'playerid', 'person_id', 'personid']
+                            for col in possible_columns:
+                                cursor.execute("""
+                                    SELECT EXISTS (
+                                        SELECT FROM information_schema.columns 
+                                        WHERE table_name = %s AND column_name = %s
+                                    )
+                                """, (table, col))
+                                
+                                if cursor.fetchone()[0]:
+                                    self.logger.info(f"Found player master table: {table} with column {col}")
+                                    return table
+                
+                elif master_type == 'team_id':
+                    # Look for team master tables
+                    for table in all_tables:
+                        if any(keyword in table.lower() for keyword in ['teams', 'teaminfo']):
+                            cursor.execute("""
+                                SELECT EXISTS (
+                                    SELECT FROM information_schema.columns 
+                                    WHERE table_name = %s AND column_name = 'team_id'
+                                )
+                            """, (table,))
+                            
+                            if cursor.fetchone()[0]:
+                                self.logger.info(f"Found team master table: {table}")
+                                return table
+                
+        except Exception as e:
+            self.logger.error(f"Error searching for master table for {master_type}: {e}")
+        
+        # If no master table found, return None so we can handle it gracefully
+        self.logger.warning(f"No master table found for {master_type}. Available tables might not include master data yet.")
+        return None
+    
     def clean_column_names(self, df: pd.DataFrame) -> pd.DataFrame:
         """
         Clean column names for PostgreSQL compatibility with special handling
@@ -688,18 +762,30 @@ class NBADataProcessor:
             # Handle different parameter types - check for combinations first
             if 'game_id' in required_params:
                 # Game-based endpoints
-                master_table = f"{self.get_table_prefix()}_games"
-                missing_ids = self._get_missing_game_ids(endpoint_name, master_table)
+                master_table = self.get_master_table_name('game_id')
+                if master_table:
+                    missing_ids = self._get_missing_game_ids(endpoint_name, master_table)
+                else:
+                    self.logger.warning(f"No game master table found for {endpoint_name} - skipping")
+                    missing_ids = []
                 
             elif 'player_id' in required_params and 'season' in required_params:
                 # Player + Season combination endpoints (most comprehensive backfill)
-                master_table = f"{self.get_table_prefix()}_players"
-                missing_ids = self._get_missing_player_season_combinations(endpoint_name, master_table, required_params)
+                master_table = self.get_master_table_name('player_id')
+                if master_table:
+                    missing_ids = self._get_missing_player_season_combinations(endpoint_name, master_table, required_params)
+                else:
+                    self.logger.warning(f"No player master table found for {endpoint_name} - skipping")
+                    missing_ids = []
                 
             elif 'player_id' in required_params:
                 # Player-only endpoints
-                master_table = f"{self.get_table_prefix()}_players"
-                missing_ids = self._get_missing_player_ids(endpoint_name, master_table)
+                master_table = self.get_master_table_name('player_id')
+                if master_table:
+                    missing_ids = self._get_missing_player_ids(endpoint_name, master_table)
+                else:
+                    self.logger.warning(f"No player master table found for {endpoint_name} - skipping")
+                    missing_ids = []
                 
             elif 'team_id' in required_params and 'season' in required_params:
                 # Team + Season combination endpoints
