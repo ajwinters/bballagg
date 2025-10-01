@@ -968,6 +968,12 @@ if __name__ == "__main__":
                        help='Logging level')
     parser.add_argument('--endpoint', 
                        help='Process a specific endpoint only')
+    parser.add_argument('--single-endpoint',
+                       help='Process a single specific endpoint (distributed mode)')
+    parser.add_argument('--connection-timeout', type=int, default=60,
+                       help='Database connection timeout in seconds')
+    parser.add_argument('--retry-attempts', type=int, default=3,
+                       help='Number of retry attempts for failed operations')
     parser.add_argument('--run-full', action='store_true',
                        help='Run full data collection process')
     parser.add_argument('--masters-only', action='store_true',
@@ -990,13 +996,14 @@ if __name__ == "__main__":
     elif args.masters_only:
         # Run master endpoints only
         processor.run_master_endpoints()
-    elif args.endpoint:
+    elif args.endpoint or args.single_endpoint:
         # Process specific endpoint
-        endpoint_config = processor.endpoint_config['endpoints'].get(args.endpoint)
+        endpoint_name = args.endpoint or args.single_endpoint
+        endpoint_config = processor.endpoint_config['endpoints'].get(endpoint_name)
         if endpoint_config:
-            processor.process_single_endpoint(args.endpoint, endpoint_config)
+            processor.process_single_endpoint(endpoint_name, endpoint_config)
         else:
-            print(f"Error: Endpoint '{args.endpoint}' not found")
+            print(f"Error: Endpoint '{endpoint_name}' not found")
     else:
         # Default: Show available endpoints
         master_endpoints = processor.get_master_endpoints()

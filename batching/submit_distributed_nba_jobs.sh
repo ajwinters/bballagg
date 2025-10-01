@@ -1,0 +1,157 @@
+#!/bin/bash
+# NBA Distributed Job Submission - One Job Per Endpoint
+# Usage: ./submit_distributed_nba_jobs.sh <profile>
+
+PROFILE=${1:-test}
+
+echo "🚀 NBA DISTRIBUTED JOB SUBMISSION"
+echo "=================================="
+echo "Profile: $PROFILE"
+echo "Date: $(date)"
+echo ""
+
+# Navigate to project root
+PROJECT_ROOT="$(cd .. && pwd)"
+cd "$PROJECT_ROOT"
+
+# Create logs directory
+mkdir -p logs
+
+# Step 1: Submit master tables job
+echo "📋 PHASE 1: Submitting MASTER TABLES job..."
+MASTERS_JOB_OUTPUT=$(sbatch batching/nba_masters.sh $PROFILE)
+MASTERS_JOB_ID=$(echo $MASTERS_JOB_OUTPUT | grep -o '[0-9]\+$')
+
+if [ -z "$MASTERS_JOB_ID" ]; then
+    echo "❌ Failed to submit master tables job!"
+    exit 1
+fi
+
+echo "✅ Master tables job submitted: $MASTERS_JOB_ID"
+
+# Step 2: Get list of endpoints to process
+echo ""
+echo "📋 PHASE 2: Getting endpoint list..."
+
+# Get endpoints from config based on profile
+ENDPOINTS_LIST=$(python -c "
+import json
+import sys
+
+# Load run config
+with open('config/run_config.json', 'r') as f:
+    config = json.load(f)
+
+profile = '$PROFILE'
+endpoints = []
+
+if profile in config['collection_profiles']:
+    profile_config = config['collection_profiles'][profile]
+    
+    if 'endpoints' in profile_config:
+        # Specific endpoint list
+        endpoints = profile_config['endpoints']
+    elif 'filter' in profile_config:
+        # Load endpoint config and filter
+        with open('config/endpoint_config.json', 'r') as f:
+            endpoint_config = json.load(f)
+        
+        filter_val = profile_config['filter']
+        if filter_val == 'all':
+            endpoints = list(endpoint_config['endpoints'].keys())
+        elif filter_val.startswith('priority:'):
+            priority = filter_val.split(':')[1]
+            endpoints = [name for name, config in endpoint_config['endpoints'].items() 
+                        if config.get('priority') == priority]
+
+# Print endpoints, one per line
+for endpoint in endpoints:
+    print(endpoint)
+")
+
+if [ -z "$ENDPOINTS_LIST" ]; then
+    echo "❌ No endpoints found for profile '$PROFILE'"
+    exit 1
+fi
+
+# Convert to array
+readarray -t ENDPOINTS_ARRAY <<< "$ENDPOINTS_LIST"
+ENDPOINT_COUNT=${#ENDPOINTS_ARRAY[@]}
+
+echo "✅ Found $ENDPOINT_COUNT endpoints to process:"
+printf '   • %s\n' "${ENDPOINTS_ARRAY[@]}"
+
+# Step 3: Submit one job per endpoint
+echo ""
+echo "🚀 PHASE 3: Submitting $ENDPOINT_COUNT endpoint jobs..."
+
+ENDPOINT_JOB_IDS=()
+FAILED_SUBMISSIONS=0
+
+for endpoint in "${ENDPOINTS_ARRAY[@]}"; do
+    # Submit job with dependency on masters completion
+    JOB_OUTPUT=$(sbatch --dependency=afterok:$MASTERS_JOB_ID \
+                        --job-name="nba_${endpoint}" \
+                        batching/single_endpoint.sh "$PROFILE" "$endpoint")
+    
+    JOB_ID=$(echo $JOB_OUTPUT | grep -o '[0-9]\+$')
+    
+    if [ -n "$JOB_ID" ]; then
+        ENDPOINT_JOB_IDS+=($JOB_ID)
+        echo "✅ $endpoint → Job $JOB_ID"
+    else
+        echo "❌ Failed to submit $endpoint"
+        ((FAILED_SUBMISSIONS++))
+    fi
+done
+
+# Summary
+echo ""
+echo "📊 DISTRIBUTED SUBMISSION SUMMARY"
+echo "================================="
+echo "Master Tables Job:    $MASTERS_JOB_ID"
+echo "Endpoint Jobs:        ${#ENDPOINT_JOB_IDS[@]} submitted"
+echo "Failed Submissions:   $FAILED_SUBMISSIONS"
+echo "Total Endpoints:      $ENDPOINT_COUNT"
+
+if [ $FAILED_SUBMISSIONS -gt 0 ]; then
+    echo "⚠️  Some jobs failed to submit!"
+fi
+
+echo ""
+echo "🔍 MONITORING COMMANDS:"
+echo "======================"
+echo "View all NBA jobs:"
+echo "  squeue -u \$USER --name=nba*"
+echo ""
+echo "Monitor master job:"
+echo "  tail -f logs/nba_masters_$MASTERS_JOB_ID.out"
+echo ""
+echo "Monitor endpoint jobs:"
+echo "  squeue -j $(IFS=,; echo "${ENDPOINT_JOB_IDS[*]}")"
+echo ""
+echo "Cancel all NBA jobs if needed:"
+echo "  scancel -u \$USER --name=nba*"
+
+# Optional: Wait and report final results
+if [ "$2" = "wait" ]; then
+    echo ""
+    echo "⏳ Waiting for all jobs to complete..."
+    
+    ALL_JOB_IDS=($MASTERS_JOB_ID "${ENDPOINT_JOB_IDS[@]}")
+    IFS=','
+    JOB_LIST="${ALL_JOB_IDS[*]}"
+    
+    while squeue -j "$JOB_LIST" 2>/dev/null | grep -q -E "$(echo ${ALL_JOB_IDS[@]} | tr ' ' '|')"; do
+        sleep 60
+        RUNNING_COUNT=$(squeue -j "$JOB_LIST" 2>/dev/null | grep -c -E "$(echo ${ALL_JOB_IDS[@]} | tr ' ' '|')" || echo "0")
+        echo "  $(date): $RUNNING_COUNT jobs still running..."
+    done
+    
+    echo ""
+    echo "🏁 All jobs completed!"
+    echo "Check individual logs in logs/ directory"
+fi
+
+echo ""
+echo "✅ Distributed job submission complete!"
