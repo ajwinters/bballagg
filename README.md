@@ -1,21 +1,78 @@
 # NBA Data Collection System
 
-> **AI Agent Context**: This is a comprehensive NBA data collection system that processes all NBA API endpoints through a unified, configuration-driven architecture. The system is designed for scalable data collection using SLURM cluster computing with local processing capabilities.
+> **Last Updated**: October 2025 - Production-ready system with comprehensive parameter coverage, dynamic column mapping, and distributed SLURM processing
 
 ## 🏀 **Project Overview**
 
-This system collects comprehensive NBA, WNBA, and G-League data from the NBA API and stores it in a PostgreSQL RDS database. It processes 40+ different endpoints with intelligent parameter resolution, automatic retry logic, and robust error handling.
+This system collects comprehensive NBA data from the NBA API and stores it in a PostgreSQL RDS database. It processes 136 NBA API endpoints with intelligent parameter resolution, automatic retry logic, and robust error handling.
 
-### **Key Capabilities**
-- **Master Tables**: Players, Games, Teams across all leagues (NBA/WNBA/G-League)
-- **Endpoint Processing**: 40+ NBA API endpoints with configurable parameters
-- **Batch Processing**: SLURM-based distributed computing for large-scale collection
-- **Local Processing**: Streamlined local execution for incremental updates
-- **Configuration-Driven**: JSON configs for endpoints, leagues, database, and run parameters
+**Current Status**: ✅ Production-ready with complete historical coverage (1996-2025)
+
+### **Key Capabilities** 
+- **Master Tables**: Complete dependency resolution for Games, Players, Teams
+- **Endpoint Processing**: 136 NBA API endpoints with comprehensive parameter coverage
+- **Historical Coverage**: 29 seasons × 6 season types = 174 combinations per endpoint
+- **Distributed Processing**: SLURM-based HPC computing with intelligent job naming
+- **Dynamic Column Mapping**: Automatic handling of NBA API column name variations
+- **Version Filtering**: Latest endpoint versions only (eliminates V2/V3 duplicates)
+- **Configuration-Driven**: JSON-based system configuration and endpoint management
 
 ---
 
-## 📁 **Architecture Overview**
+## � **Quick Start**
+
+### **Prerequisites**
+- Python 3.8+ with virtual environment
+- PostgreSQL database (AWS RDS recommended)
+- SLURM cluster access (optional, for distributed processing)
+
+### **Basic Setup**
+```bash
+# Clone and setup
+git clone <repository_url>
+cd thebigone
+python -m venv .venv
+source .venv/bin/activate  # or .venv\Scripts\activate on Windows
+pip install -r requirements.txt
+
+# Configure database
+export DB_PASSWORD="your_password"
+# Edit config/database_config.json with your RDS details
+
+# Test single endpoint
+python src/nba_data_processor.py --endpoint CommonAllPlayers --test-mode --max-items 5
+```
+
+### **Distributed Processing**
+```bash
+# Submit high-priority endpoints (recommended)
+./batching/submit_distributed_nba_jobs.sh high_priority
+
+# Monitor jobs
+squeue -u $(whoami) | grep nba_
+
+# Cancel if needed
+scancel -u $(whoami) -n "*nba*"
+```
+
+---
+
+## 📚 **Documentation**
+
+### **Essential Guides**
+- **[📖 Complete Documentation](docs/README.md)** - Full documentation index
+- **[⚙️ Configuration Guide](docs/CONFIGURATION_GUIDE.md)** - System setup and configuration
+- **[🔧 Troubleshooting](docs/TROUBLESHOOTING.md)** - Common issues and solutions
+- **[🎯 Implementation Summary](docs/IMPLEMENTATION_SUMMARY.md)** - Recent features and changes
+
+### **Reference Material**
+- **[📋 Job Management](docs/reference/JOB_MANAGEMENT.md)** - SLURM job operations
+- **[🔀 Parameter System](docs/reference/PARAMETER_SYSTEM.md)** - Parameter handling reference
+- **[🏗️ System Architecture](ARCHITECTURE.md)** - Architecture overview
+
+---
+
+## 📁 **Project Structure**
 
 ```
 thebigone/
