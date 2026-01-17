@@ -23,7 +23,7 @@ echo "Job ID: $SLURM_JOB_ID"
 echo "Date: $(date)"
 
 # Navigate to project root
-PROJECT_ROOT="$(cd .. && pwd)"
+PROJECT_ROOT="/storage/home/ajw5296/work/thebigone"
 cd "$PROJECT_ROOT"
 echo "Working directory: $(pwd)"
 
