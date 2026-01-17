@@ -59,7 +59,7 @@ mkdir -p logs
 
 # Step 1: Submit master tables job
 echo "📋 PHASE 1: Submitting MASTER TABLES job..."
-MASTERS_JOB_OUTPUT=$(sbatch batching/nba_masters.sh $PROFILE)
+MASTERS_JOB_OUTPUT=$(sbatch "${PROJECT_ROOT}/batching/nba_masters.sh" $PROFILE)
 MASTERS_JOB_ID=$(echo $MASTERS_JOB_OUTPUT | grep -o '[0-9]\+$')
 
 if [ -z "$MASTERS_JOB_ID" ]; then
@@ -79,7 +79,7 @@ import json
 import sys
 
 # Load endpoint config
-with open('config/endpoint_config.json', 'r') as f:
+with open('${PROJECT_ROOT}/config/endpoint_config.json', 'r') as f:
     endpoint_config = json.load(f)
 
 profile = '$PROFILE'
@@ -125,7 +125,7 @@ for endpoint in "${ENDPOINTS_ARRAY[@]}"; do
     # Job name format: nba_<profile>_<endpoint> (e.g., nba_high_priority_PlayerGameLog)
     JOB_OUTPUT=$(sbatch --dependency=afterok:$MASTERS_JOB_ID \
                         --job-name="nba_${PROFILE}_${endpoint}" \
-                        batching/single_endpoint.sh "$PROFILE" "$endpoint")
+                        "${PROJECT_ROOT}/batching/single_endpoint.sh" "$PROFILE" "$endpoint")
     
     JOB_ID=$(echo $JOB_OUTPUT | grep -o '[0-9]\+$')
     
