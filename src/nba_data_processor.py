@@ -254,22 +254,22 @@ class NBADataProcessor:
     
     def get_processable_endpoints(self) -> List[Tuple[str, dict]]:
         """
-        Get endpoints that should be processed based on priority and latest_version
+        Get endpoints that should be processed - all with non-None priority
         Excludes master endpoints (they're processed separately)
         Returns list of (endpoint_name, config) tuples
         """
         processable_endpoints = []
-        
+
         for endpoint_name, config in self.endpoint_config['endpoints'].items():
             # Skip if it's a master endpoint
             if 'master' in config:
                 continue
-                
-            # Check priority and latest_version criteria
-            if (config.get('priority') == 'high' and 
-                config.get('latest_version') == True):
+
+            # Include all endpoints with a non-None priority
+            priority = config.get('priority')
+            if priority is not None and priority != 'None':
                 processable_endpoints.append((endpoint_name, config))
-        
+
         self.logger.info(f"Found {len(processable_endpoints)} processable endpoints")
         return processable_endpoints
     
