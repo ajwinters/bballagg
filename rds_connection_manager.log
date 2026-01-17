@@ -8,3 +8,150 @@
 2025-10-01 19:42:01,051 - INFO - [CONNECT] Creating new database connection...
 2025-10-01 19:42:01,573 - INFO - [SUCCESS] Database connection established
 2025-10-01 19:42:01,573 - INFO - [SUCCESS] Reconnection successful
+2026-01-16 20:37:42,295 - INFO - Log file: C:\Users\ajwin\Projects\Personal\NBA\thebigone\logs\nba_processor_nba_20260116_203742.log
+2026-01-16 20:37:42,295 - INFO - Loaded 136 endpoint configurations
+2026-01-16 20:37:42,300 - INFO - Loaded league config for National Basketball Association
+2026-01-16 20:37:42,307 - INFO - Loaded parameter mappings for consistent column naming
+2026-01-16 20:37:42,307 - INFO - === NBA Data Processor Initialized ===
+2026-01-16 20:37:42,307 - INFO - League: NBA
+2026-01-16 20:37:42,307 - INFO - Test Mode: True
+2026-01-16 20:37:42,307 - INFO - Current Season: 2025-26
+2026-01-16 20:37:42,307 - INFO - Max items per endpoint: 5
+2026-01-16 20:37:42,307 - INFO - Processing Master Endpoints
+2026-01-16 20:37:42,307 - INFO - Found 3 master endpoints
+2026-01-16 20:37:42,307 - INFO -   - LeagueGameFinder: master for game_id
+2026-01-16 20:37:42,307 - INFO -   - CommonAllPlayers: master for player_id
+2026-01-16 20:37:42,307 - INFO -   - CommonTeamYears: master for team_id
+2026-01-16 20:37:42,307 - INFO - Processing master endpoint: LeagueGameFinder
+2026-01-16 20:37:42,307 - INFO - Processing endpoint: LeagueGameFinder
+2026-01-16 20:37:42,307 - INFO - Test mode: Limited LeagueGameFinder to 3 recent seasons
+2026-01-16 20:37:42,307 - INFO - Processing 3 items for LeagueGameFinder
+2026-01-16 20:37:42,756 - INFO - Matched 1 datasets for LeagueGameFinder
+2026-01-16 20:37:42,758 - INFO - Creating master table: master_nba_games for LeagueGameFinder
+2026-01-16 20:37:42,759 - WARNING - [RECONNECT] Connection lost - attempting to reconnect...
+2026-01-16 20:37:42,759 - INFO - [RECONNECT] Reconnection attempt 1/3
+2026-01-16 20:37:42,759 - INFO - [CONNECT] Creating new database connection...
+2026-01-16 20:37:42,898 - INFO - [SUCCESS] Database connection established
+2026-01-16 20:37:42,898 - INFO - [SUCCESS] Reconnection successful
+2026-01-16 20:37:43,809 - INFO - Data inserted successfully into master_nba_games table (2790 rows).
+2026-01-16 20:37:43,825 - INFO - Inserted 2790 rows into master_nba_games
+2026-01-16 20:37:44,642 - INFO - Matched 1 datasets for LeagueGameFinder
+2026-01-16 20:37:44,642 - INFO - Creating master table: master_nba_games for LeagueGameFinder
+2026-01-16 20:37:45,496 - INFO - Data inserted successfully into master_nba_games table (2795 rows).
+2026-01-16 20:37:45,514 - INFO - Inserted 2795 rows into master_nba_games
+2026-01-16 20:37:46,298 - INFO - Matched 1 datasets for LeagueGameFinder
+2026-01-16 20:37:46,298 - INFO - Creating master table: master_nba_games for LeagueGameFinder
+2026-01-16 20:37:47,202 - INFO - Data inserted successfully into master_nba_games table (2802 rows).
+2026-01-16 20:37:47,218 - INFO - Inserted 2802 rows into master_nba_games
+2026-01-16 20:37:47,819 - INFO - Completed processing LeagueGameFinder
+2026-01-16 20:37:47,819 - INFO - Processing master endpoint: CommonAllPlayers
+2026-01-16 20:37:47,819 - INFO - Processing endpoint: CommonAllPlayers
+2026-01-16 20:37:47,819 - INFO - Processing 1 items for CommonAllPlayers
+2026-01-16 20:37:47,990 - INFO - Matched 1 datasets for CommonAllPlayers
+2026-01-16 20:37:47,990 - INFO - Creating master table: master_nba_players for CommonAllPlayers
+2026-01-16 20:37:49,383 - INFO - Data inserted successfully into master_nba_players table (5103 rows).
+2026-01-16 20:37:49,403 - INFO - Inserted 5103 rows into master_nba_players
+2026-01-16 20:37:50,004 - INFO - Completed processing CommonAllPlayers
+2026-01-16 20:37:50,004 - INFO - Processing master endpoint: CommonTeamYears
+2026-01-16 20:37:50,004 - INFO - Processing endpoint: CommonTeamYears
+2026-01-16 20:37:50,004 - INFO - Processing 1 items for CommonTeamYears
+2026-01-16 20:37:51,887 - INFO - Matched 1 datasets for CommonTeamYears
+2026-01-16 20:37:51,887 - INFO - Creating master table: master_nba_teams for CommonTeamYears
+2026-01-16 20:37:51,998 - INFO - Data inserted successfully into master_nba_teams table (45 rows).
+2026-01-16 20:37:52,013 - INFO - Inserted 45 rows into master_nba_teams
+2026-01-16 20:37:52,614 - INFO - Completed processing CommonTeamYears
+2026-01-16 20:37:52,614 - INFO - Master endpoints completed: 3/3 successful
+2026-01-16 20:41:25,481 - INFO - Log file: C:\Users\ajwin\Projects\Personal\NBA\thebigone\logs\nba_processor_nba_20260116_204125.log
+2026-01-16 20:41:25,484 - INFO - Loaded 136 endpoint configurations
+2026-01-16 20:41:25,484 - INFO - Loaded league config for National Basketball Association
+2026-01-16 20:41:25,485 - INFO - Loaded parameter mappings for consistent column naming
+2026-01-16 20:41:25,485 - INFO - === NBA Data Processor Initialized ===
+2026-01-16 20:41:25,485 - INFO - League: NBA
+2026-01-16 20:41:25,485 - INFO - Test Mode: True
+2026-01-16 20:41:25,485 - INFO - Current Season: 2025-26
+2026-01-16 20:41:25,485 - INFO - Max items per endpoint: 3
+2026-01-16 20:41:25,485 - INFO - Processing endpoint: BoxScoreAdvancedV3
+2026-01-16 20:41:25,485 - WARNING - [RECONNECT] Connection lost - attempting to reconnect...
+2026-01-16 20:41:25,486 - INFO - [RECONNECT] Reconnection attempt 1/3
+2026-01-16 20:41:25,486 - INFO - [CONNECT] Creating new database connection...
+2026-01-16 20:41:25,619 - INFO - [SUCCESS] Database connection established
+2026-01-16 20:41:25,619 - INFO - [SUCCESS] Reconnection successful
+2026-01-16 20:41:25,676 - INFO - Found game ID column: gameid in master_nba_games
+2026-01-16 20:41:26,015 - INFO - Test mode: Using 3 game IDs from master table for BoxScoreAdvancedV3
+2026-01-16 20:41:26,030 - INFO - Test mode: Limited BoxScoreAdvancedV3 from 3 to 3 items
+2026-01-16 20:41:26,030 - INFO - Processing 3 items for BoxScoreAdvancedV3
+2026-01-16 20:41:26,557 - ERROR - API call failed for BoxScoreAdvancedV3: 'NoneType' object has no attribute 'keys'
+2026-01-16 20:41:26,686 - INFO - Table nba_boxscoreadvancedv3_failed_data created successfully or already exists.
+2026-01-16 20:41:26,703 - INFO - Created table nba_boxscoreadvancedv3_failed_data with failed record structure
+2026-01-16 20:41:26,751 - INFO - Data inserted successfully into nba_boxscoreadvancedv3_failed_data table (1 rows).
+2026-01-16 20:41:26,766 - INFO - Recorded failed API call in nba_boxscoreadvancedv3_failed_data: 'NoneType' object has no attribute 'keys'
+2026-01-16 20:41:27,455 - INFO - Matched 2 datasets for BoxScoreAdvancedV3
+2026-01-16 20:41:27,574 - INFO - Table nba_boxscoreadvancedv3_playerstats created successfully or already exists.
+2026-01-16 20:41:27,590 - INFO - Created table: nba_boxscoreadvancedv3_playerstats
+2026-01-16 20:41:27,656 - INFO - Data inserted successfully into nba_boxscoreadvancedv3_playerstats table (27 rows).
+2026-01-16 20:41:27,675 - INFO - Inserted 27 rows into nba_boxscoreadvancedv3_playerstats
+2026-01-16 20:41:27,785 - INFO - Table nba_boxscoreadvancedv3_teamstats created successfully or already exists.
+2026-01-16 20:41:27,802 - INFO - Created table: nba_boxscoreadvancedv3_teamstats
+2026-01-16 20:41:27,846 - INFO - Data inserted successfully into nba_boxscoreadvancedv3_teamstats table (2 rows).
+2026-01-16 20:41:27,864 - INFO - Inserted 2 rows into nba_boxscoreadvancedv3_teamstats
+2026-01-16 20:41:29,050 - INFO - Matched 2 datasets for BoxScoreAdvancedV3
+2026-01-16 20:41:29,160 - INFO - Data inserted successfully into nba_boxscoreadvancedv3_playerstats table (26 rows).
+2026-01-16 20:41:29,179 - INFO - Inserted 26 rows into nba_boxscoreadvancedv3_playerstats
+2026-01-16 20:41:29,287 - INFO - Data inserted successfully into nba_boxscoreadvancedv3_teamstats table (2 rows).
+2026-01-16 20:41:29,298 - INFO - Inserted 2 rows into nba_boxscoreadvancedv3_teamstats
+2026-01-16 20:41:29,904 - INFO - Completed processing BoxScoreAdvancedV3
+2026-01-16 20:58:50,406 - INFO - Log file: C:\Users\ajwin\Projects\Personal\NBA\thebigone\logs\nba_processor_nba_20260116_205850.log
+2026-01-16 20:58:50,406 - INFO - Loaded 136 endpoint configurations
+2026-01-16 20:58:50,406 - INFO - Loaded league config for National Basketball Association
+2026-01-16 20:58:50,406 - INFO - Loaded parameter mappings for consistent column naming
+2026-01-16 20:58:50,406 - INFO - === NBA Data Processor Initialized ===
+2026-01-16 20:58:50,406 - INFO - League: NBA
+2026-01-16 20:58:50,406 - INFO - Test Mode: True
+2026-01-16 20:58:50,406 - INFO - Current Season: 2025-26
+2026-01-16 20:58:50,408 - INFO - Max items per endpoint: 1
+2026-01-16 20:59:04,666 - INFO - Log file: C:\Users\ajwin\Projects\Personal\NBA\thebigone\logs\nba_processor_nba_20260116_205904.log
+2026-01-16 20:59:04,666 - INFO - Loaded 136 endpoint configurations
+2026-01-16 20:59:04,672 - INFO - Loaded league config for National Basketball Association
+2026-01-16 20:59:04,672 - INFO - Loaded parameter mappings for consistent column naming
+2026-01-16 20:59:04,672 - INFO - === NBA Data Processor Initialized ===
+2026-01-16 20:59:04,672 - INFO - League: NBA
+2026-01-16 20:59:04,672 - INFO - Test Mode: True
+2026-01-16 20:59:04,672 - INFO - Current Season: 2025-26
+2026-01-16 20:59:04,672 - INFO - Max items per endpoint: 2
+2026-01-16 20:59:04,672 - INFO - Processing endpoint: LeagueGameFinder
+2026-01-16 20:59:04,672 - INFO - Test mode: Limited LeagueGameFinder to 8 season/type combinations
+2026-01-16 20:59:04,672 - INFO - Processing 8 items for LeagueGameFinder
+2026-01-16 20:59:09,755 - INFO - Matched 1 datasets for LeagueGameFinder
+2026-01-16 20:59:09,755 - INFO - Creating master table: master_nba_games for LeagueGameFinder
+2026-01-16 20:59:09,755 - WARNING - [RECONNECT] Connection lost - attempting to reconnect...
+2026-01-16 20:59:09,755 - INFO - [RECONNECT] Reconnection attempt 1/3
+2026-01-16 20:59:09,755 - INFO - [CONNECT] Creating new database connection...
+2026-01-16 20:59:09,970 - INFO - [SUCCESS] Database connection established
+2026-01-16 20:59:09,970 - INFO - [SUCCESS] Reconnection successful
+2026-01-16 20:59:10,169 - INFO - Data inserted successfully into master_nba_games table (146 rows).
+2026-01-16 20:59:10,185 - INFO - Inserted 146 rows into master_nba_games
+2026-01-16 20:59:15,458 - INFO - Matched 0 datasets for LeagueGameFinder
+2026-01-16 20:59:16,259 - ERROR - API call failed for LeagueGameFinder: 'resultSet'
+2026-01-16 20:59:16,259 - WARNING - Skipping failed record for master endpoint LeagueGameFinder - will retry on next run. Error: 'resultSet'
+2026-01-16 20:59:16,895 - INFO - Matched 1 datasets for LeagueGameFinder
+2026-01-16 20:59:16,895 - INFO - Creating master table: master_nba_games for LeagueGameFinder
+2026-01-16 20:59:17,435 - INFO - Data inserted successfully into master_nba_games table (1230 rows).
+2026-01-16 20:59:17,458 - INFO - Inserted 1230 rows into master_nba_games
+2026-01-16 20:59:21,959 - INFO - Matched 0 datasets for LeagueGameFinder
+2026-01-16 20:59:26,089 - INFO - Matched 1 datasets for LeagueGameFinder
+2026-01-16 20:59:26,089 - INFO - Creating master table: master_nba_games for LeagueGameFinder
+2026-01-16 20:59:26,266 - INFO - Data inserted successfully into master_nba_games table (145 rows).
+2026-01-16 20:59:26,286 - INFO - Inserted 145 rows into master_nba_games
+2026-01-16 20:59:30,636 - INFO - Matched 0 datasets for LeagueGameFinder
+2026-01-16 20:59:31,384 - ERROR - API call failed for LeagueGameFinder: 'resultSet'
+2026-01-16 20:59:31,384 - WARNING - Skipping failed record for master endpoint LeagueGameFinder - will retry on next run. Error: 'resultSet'
+2026-01-16 20:59:31,384 - INFO - Completed processing LeagueGameFinder
+2026-01-16 21:19:37,889 - INFO - Log file: C:\Users\ajwin\Projects\Personal\NBA\thebigone\logs\nba_processor_nba_20260116_211937.log
+2026-01-16 21:19:37,889 - INFO - Loaded 136 endpoint configurations
+2026-01-16 21:19:37,889 - INFO - Loaded league config for National Basketball Association
+2026-01-16 21:19:37,889 - INFO - Loaded parameter mappings for consistent column naming
+2026-01-16 21:19:37,889 - INFO - === NBA Data Processor Initialized ===
+2026-01-16 21:19:37,889 - INFO - League: NBA
+2026-01-16 21:19:37,889 - INFO - Test Mode: True
+2026-01-16 21:19:37,889 - INFO - Current Season: 2025-26
+2026-01-16 21:19:37,889 - INFO - Max items per endpoint: 1

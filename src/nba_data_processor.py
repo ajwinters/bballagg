@@ -612,7 +612,7 @@ class NBADataProcessor:
     def create_failed_records(self, endpoint_name: str, config: dict, param_values: dict, error_message: str):
         """
         Create failed records in the main data tables with NULL data but preserved ID columns
-        
+
         Args:
             endpoint_name: Name of the endpoint that failed
             config: Endpoint configuration
@@ -620,27 +620,23 @@ class NBADataProcessor:
             error_message: Error message from the API call
         """
         try:
+            # Skip failed record insertion for master endpoints - master tables should only contain valid data
+            # Failed master endpoint calls will be retried on next run
+            if self.is_master_endpoint(endpoint_name):
+                self.logger.warning(f"Skipping failed record for master endpoint {endpoint_name} - will retry on next run. Error: {error_message[:100]}")
+                return
+
             # Get expected data structure from endpoint configuration
             expected_data = config.get('expected_data', {})
-            
+
             if not expected_data:
                 # If no expected data, create a single generic failed record
                 expected_data = {'failed_data': {}}
-            
+
             # Create failed records for each expected dataset
             for dataset_name, dataset_info in expected_data.items():
-                # Special handling for master endpoints
-                if self.is_master_endpoint(endpoint_name):
-                    # For master endpoints, only handle the first dataset
-                    if dataset_name == list(expected_data.keys())[0]:  # First dataset only
-                        master_type = self.get_master_designation(endpoint_name)
-                        table_name = self.get_master_table_name(master_type)
-                    else:
-                        # Skip additional datasets for master endpoints
-                        continue
-                else:
-                    # Regular endpoint - use standard naming
-                    table_name = f"{self.get_table_prefix()}_{endpoint_name.lower()}_{dataset_name.lower()}"
+                # Regular endpoint - use standard naming
+                table_name = f"{self.get_table_prefix()}_{endpoint_name.lower()}_{dataset_name.lower()}"
                 
                 # Create a DataFrame with ID columns from parameters and failed_reason
                 failed_record = {}
@@ -784,21 +780,35 @@ class NBADataProcessor:
                     # Get current players (no season parameter needed)
                     return [{}]
                 elif endpoint_name == 'LeagueGameFinder':
-                    # Get ALL NBA seasons for comprehensive game history
-                    seasons = []
+                    # Get ALL NBA seasons × season types for comprehensive game history
+                    param_combinations = []
+                    season_types = ['Regular Season', 'Playoffs', 'Pre Season', 'All Star']
+                    # IST only exists from 2023-24 onwards
+
                     # NBA seasons from 1996-97 (when current format started) to current
-                    for year in range(1996, 2025):  # Will get 1996-97 through 2024-25
+                    for year in range(1996, 2026):  # Will get 1996-97 through 2025-26
                         season_str = f"{year}-{str(year+1)[2:]}"  # e.g., "2023-24"
-                        seasons.append({'season_nullable': season_str})
-                    
-                    # In test mode, limit to recent seasons
+                        for season_type in season_types:
+                            param_combinations.append({
+                                'season_nullable': season_str,
+                                'season_type_nullable': season_type
+                            })
+                        # Add IST for 2023-24 and later
+                        if year >= 2023:
+                            param_combinations.append({
+                                'season_nullable': season_str,
+                                'season_type_nullable': 'IST'
+                            })
+
+                    # In test mode, limit to recent season combinations
                     if self.test_mode:
-                        seasons = seasons[-3:]  # Last 3 seasons only
-                        self.logger.info(f"Test mode: Limited LeagueGameFinder to {len(seasons)} recent seasons")
+                        # Just get last 2 seasons × 2 season types for testing
+                        param_combinations = param_combinations[-8:]
+                        self.logger.info(f"Test mode: Limited LeagueGameFinder to {len(param_combinations)} season/type combinations")
                     else:
-                        self.logger.info(f"Processing LeagueGameFinder for {len(seasons)} seasons (comprehensive)")
-                    
-                    return seasons
+                        self.logger.info(f"Processing LeagueGameFinder for {len(param_combinations)} season/type combinations (comprehensive)")
+
+                    return param_combinations
                 elif endpoint_name == 'LeagueGameLog':
                     # Get ALL NBA seasons for comprehensive game log history
                     seasons = []

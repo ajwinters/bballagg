@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(powershell -c \"[console]::beep\\(800,200\\); [console]::beep\\(1000,300\\)\")",
+      "Bash(.venv/Scripts/python.exe:*)"
+    ]
+  }
+}
