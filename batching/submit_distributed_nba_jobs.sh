@@ -51,7 +51,7 @@ echo "Date: $(date)"
 echo ""
 
 # Navigate to project root
-PROJECT_ROOT="$(cd .. && pwd)"
+PROJECT_ROOT="/storage/home/ajw5296/work/thebigone"
 cd "$PROJECT_ROOT"
 
 # Create logs directory
@@ -78,34 +78,26 @@ ENDPOINTS_LIST=$(python -c "
 import json
 import sys
 
-# Load run config
-with open('config/run_config.json', 'r') as f:
-    config = json.load(f)
+# Load endpoint config
+with open('config/endpoint_config.json', 'r') as f:
+    endpoint_config = json.load(f)
 
 profile = '$PROFILE'
 endpoints = []
 
-if profile in config['collection_profiles']:
-    profile_config = config['collection_profiles'][profile]
-    
-    if 'endpoints' in profile_config:
-        # Specific endpoint list
-        endpoints = profile_config['endpoints']
-    elif 'filter' in profile_config:
-        # Load endpoint config and filter
-        with open('config/endpoint_config.json', 'r') as f:
-            endpoint_config = json.load(f)
-        
-        filter_val = profile_config['filter']
-        if filter_val == 'all':
-            endpoints = list(endpoint_config['endpoints'].keys())
-        elif filter_val.startswith('priority:'):
-            priority = filter_val.split(':')[1]
-            endpoints = [name for name, config in endpoint_config['endpoints'].items() 
-                        if config.get('priority') == priority]
+# Get all endpoints with non-None priority (excluding master endpoints)
+for name, config in endpoint_config['endpoints'].items():
+    # Skip master endpoints
+    if 'master' in config:
+        continue
+
+    # Include all endpoints with a non-None priority
+    priority = config.get('priority')
+    if priority is not None and priority != 'None':
+        endpoints.append(name)
 
 # Print endpoints, one per line
-for endpoint in endpoints:
+for endpoint in sorted(endpoints):
     print(endpoint)
 ")
 

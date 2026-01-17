@@ -619,7 +619,8 @@
         "season",
         "team_id"
       ],
-      "notes": "Don't do every combination of player and team, just the player and their team",
+      "combination_type": "player_team_season",
+      "notes": "Requires player's own team_id - looked up from game logs",
       "latest_version": true,
       "policy": "replacing",
       "frequency": "daily"
@@ -632,7 +633,8 @@
         "season",
         "team_id"
       ],
-      "notes": "",
+      "combination_type": "player_team_season",
+      "notes": "Requires player's own team_id - looked up from game logs",
       "latest_version": true,
       "policy": "replacing",
       "frequency": "daily"
@@ -645,7 +647,8 @@
         "season",
         "team_id"
       ],
-      "notes": "use opposing team id, interesting but limited. Good for player vs team analysis",
+      "combination_type": "player_team_season",
+      "notes": "Requires player's own team_id - looked up from game logs",
       "latest_version": true,
       "policy": "replacing",
       "frequency": "daily"
@@ -658,7 +661,8 @@
         "season",
         "team_id"
       ],
-      "notes": "interesting shot data, dribbles, shot clock, shot type",
+      "combination_type": "player_team_season",
+      "notes": "Requires player's own team_id - looked up from game logs",
       "latest_version": true,
       "policy": "replacing",
       "frequency": "daily"
@@ -1452,7 +1456,8 @@
         "season_nullable",
         "team_id"
       ],
-      "notes": "needs season, playerid on teamid. Interesting. Might not be complete",
+      "combination_type": "player_team_season",
+      "notes": "Requires player's own team_id - looked up from game logs",
       "latest_version": true,
       "policy": "stacking",
       "frequency": "daily"

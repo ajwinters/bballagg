@@ -155,3 +155,81 @@
 2026-01-16 21:19:37,889 - INFO - Test Mode: True
 2026-01-16 21:19:37,889 - INFO - Current Season: 2025-26
 2026-01-16 21:19:37,889 - INFO - Max items per endpoint: 1
+2026-01-16 23:00:17,527 - INFO - Log file: C:\Users\ajwin\Projects\Personal\NBA\thebigone\logs\nba_processor_nba_20260116_230017.log
+2026-01-16 23:00:17,527 - INFO - Loaded 136 endpoint configurations
+2026-01-16 23:00:17,527 - INFO - Loaded league config for National Basketball Association
+2026-01-16 23:00:17,528 - INFO - Loaded parameter mappings for consistent column naming
+2026-01-16 23:00:17,528 - INFO - === NBA Data Processor Initialized ===
+2026-01-16 23:00:17,528 - INFO - League: NBA
+2026-01-16 23:00:17,528 - INFO - Test Mode: True
+2026-01-16 23:00:17,528 - INFO - Current Season: 2025-26
+2026-01-16 23:00:17,528 - INFO - Max items per endpoint: 3
+2026-01-16 23:00:17,528 - WARNING - [RECONNECT] Connection lost - attempting to reconnect...
+2026-01-16 23:00:17,528 - INFO - [RECONNECT] Reconnection attempt 1/3
+2026-01-16 23:00:17,528 - INFO - [CONNECT] Creating new database connection...
+2026-01-16 23:00:17,753 - INFO - [SUCCESS] Database connection established
+2026-01-16 23:00:17,753 - INFO - [SUCCESS] Reconnection successful
+2026-01-16 23:00:17,867 - INFO - Test mode: Got 3 player-team-season combinations for PlayerDashPtShots
+2026-01-16 23:00:26,196 - INFO - Log file: C:\Users\ajwin\Projects\Personal\NBA\thebigone\logs\nba_processor_nba_20260116_230026.log
+2026-01-16 23:00:26,196 - INFO - Loaded 136 endpoint configurations
+2026-01-16 23:00:26,196 - INFO - Loaded league config for National Basketball Association
+2026-01-16 23:00:26,197 - INFO - Loaded parameter mappings for consistent column naming
+2026-01-16 23:00:26,197 - INFO - === NBA Data Processor Initialized ===
+2026-01-16 23:00:26,197 - INFO - League: NBA
+2026-01-16 23:00:26,197 - INFO - Test Mode: True
+2026-01-16 23:00:26,197 - INFO - Current Season: 2025-26
+2026-01-16 23:00:26,197 - INFO - Max items per endpoint: 2
+2026-01-16 23:00:26,197 - INFO - Processing endpoint: PlayerDashPtShots
+2026-01-16 23:00:26,197 - WARNING - [RECONNECT] Connection lost - attempting to reconnect...
+2026-01-16 23:00:26,197 - INFO - [RECONNECT] Reconnection attempt 1/3
+2026-01-16 23:00:26,197 - INFO - [CONNECT] Creating new database connection...
+2026-01-16 23:00:26,421 - INFO - [SUCCESS] Database connection established
+2026-01-16 23:00:26,421 - INFO - [SUCCESS] Reconnection successful
+2026-01-16 23:00:26,505 - INFO - Test mode: Got 2 player-team-season combinations for PlayerDashPtShots
+2026-01-16 23:00:26,524 - INFO - Test mode: Limited PlayerDashPtShots from 2 to 2 items
+2026-01-16 23:00:26,524 - INFO - Processing 2 items for PlayerDashPtShots
+2026-01-16 23:00:26,654 - INFO - Matched 7 datasets for PlayerDashPtShots
+2026-01-16 23:00:26,805 - INFO - Table nba_playerdashptshots_closestdefender10ftplusshooting created successfully or already exists.
+2026-01-16 23:00:26,826 - INFO - Created table: nba_playerdashptshots_closestdefender10ftplusshooting
+2026-01-16 23:00:26,887 - INFO - Data inserted successfully into nba_playerdashptshots_closestdefender10ftplusshooting table (1 rows).
+2026-01-16 23:00:26,907 - INFO - Inserted 1 rows into nba_playerdashptshots_closestdefender10ftplusshooting
+2026-01-16 23:00:27,055 - INFO - Table nba_playerdashptshots_closestdefendershooting created successfully or already exists.
+2026-01-16 23:00:27,076 - INFO - Created table: nba_playerdashptshots_closestdefendershooting
+2026-01-16 23:00:27,137 - INFO - Data inserted successfully into nba_playerdashptshots_closestdefendershooting table (4 rows).
+2026-01-16 23:00:27,157 - INFO - Inserted 4 rows into nba_playerdashptshots_closestdefendershooting
+2026-01-16 23:00:27,297 - INFO - Table nba_playerdashptshots_dribbleshooting created successfully or already exists.
+2026-01-16 23:00:27,320 - INFO - Created table: nba_playerdashptshots_dribbleshooting
+2026-01-16 23:00:27,382 - INFO - Data inserted successfully into nba_playerdashptshots_dribbleshooting table (6 rows).
+2026-01-16 23:00:27,402 - INFO - Inserted 6 rows into nba_playerdashptshots_dribbleshooting
+2026-01-16 23:00:27,546 - INFO - Table nba_playerdashptshots_generalshooting created successfully or already exists.
+2026-01-16 23:00:27,566 - INFO - Created table: nba_playerdashptshots_generalshooting
+2026-01-16 23:00:27,626 - INFO - Data inserted successfully into nba_playerdashptshots_generalshooting table (5 rows).
+2026-01-16 23:00:27,646 - INFO - Inserted 5 rows into nba_playerdashptshots_generalshooting
+2026-01-16 23:00:27,791 - INFO - Table nba_playerdashptshots_overall created successfully or already exists.
+2026-01-16 23:00:27,811 - INFO - Created table: nba_playerdashptshots_overall
+2026-01-16 23:00:27,870 - INFO - Data inserted successfully into nba_playerdashptshots_overall table (4 rows).
+2026-01-16 23:00:27,890 - INFO - Inserted 4 rows into nba_playerdashptshots_overall
+2026-01-16 23:00:28,032 - INFO - Table nba_playerdashptshots_shotclockshooting created successfully or already exists.
+2026-01-16 23:00:28,052 - INFO - Created table: nba_playerdashptshots_shotclockshooting
+2026-01-16 23:00:28,112 - INFO - Data inserted successfully into nba_playerdashptshots_shotclockshooting table (4 rows).
+2026-01-16 23:00:28,132 - INFO - Inserted 4 rows into nba_playerdashptshots_shotclockshooting
+2026-01-16 23:00:28,275 - INFO - Table nba_playerdashptshots_touchtimeshooting created successfully or already exists.
+2026-01-16 23:00:28,295 - INFO - Created table: nba_playerdashptshots_touchtimeshooting
+2026-01-16 23:00:28,355 - INFO - Data inserted successfully into nba_playerdashptshots_touchtimeshooting table (3 rows).
+2026-01-16 23:00:28,375 - INFO - Inserted 3 rows into nba_playerdashptshots_touchtimeshooting
+2026-01-16 23:00:29,649 - INFO - Matched 7 datasets for PlayerDashPtShots
+2026-01-16 23:00:29,787 - INFO - Data inserted successfully into nba_playerdashptshots_closestdefender10ftplusshooting table (1 rows).
+2026-01-16 23:00:29,807 - INFO - Inserted 1 rows into nba_playerdashptshots_closestdefender10ftplusshooting
+2026-01-16 23:00:29,945 - INFO - Data inserted successfully into nba_playerdashptshots_closestdefendershooting table (4 rows).
+2026-01-16 23:00:29,965 - INFO - Inserted 4 rows into nba_playerdashptshots_closestdefendershooting
+2026-01-16 23:00:30,104 - INFO - Data inserted successfully into nba_playerdashptshots_dribbleshooting table (6 rows).
+2026-01-16 23:00:30,123 - INFO - Inserted 6 rows into nba_playerdashptshots_dribbleshooting
+2026-01-16 23:00:30,271 - INFO - Data inserted successfully into nba_playerdashptshots_generalshooting table (5 rows).
+2026-01-16 23:00:30,291 - INFO - Inserted 5 rows into nba_playerdashptshots_generalshooting
+2026-01-16 23:00:30,429 - INFO - Data inserted successfully into nba_playerdashptshots_overall table (4 rows).
+2026-01-16 23:00:30,447 - INFO - Inserted 4 rows into nba_playerdashptshots_overall
+2026-01-16 23:00:30,590 - INFO - Data inserted successfully into nba_playerdashptshots_shotclockshooting table (4 rows).
+2026-01-16 23:00:30,611 - INFO - Inserted 4 rows into nba_playerdashptshots_shotclockshooting
+2026-01-16 23:00:30,748 - INFO - Data inserted successfully into nba_playerdashptshots_touchtimeshooting table (3 rows).
+2026-01-16 23:00:30,769 - INFO - Inserted 3 rows into nba_playerdashptshots_touchtimeshooting
+2026-01-16 23:00:31,369 - INFO - Completed processing PlayerDashPtShots

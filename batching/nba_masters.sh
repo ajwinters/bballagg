@@ -27,15 +27,9 @@ if command -v scontrol &> /dev/null && [ -n "$SLURM_JOB_ID" ]; then
     echo "📝 Updated job name to: nba_masters_${PROFILE}"
 fi
 
-# Navigate to project root (handle both batch/ subdir and direct execution)
-if [ -d "../src" ]; then
-    # Running from batching/ subdirectory
-    PROJECT_ROOT="$(cd .. && pwd)"
-    cd "$PROJECT_ROOT"
-else
-    # Running from project root
-    PROJECT_ROOT="$(pwd)"
-fi
+# Navigate to project root
+PROJECT_ROOT="/storage/home/ajw5296/work/thebigone"
+cd "$PROJECT_ROOT"
 
 echo "🗂️  Project root: $PROJECT_ROOT"
 echo "🗂️  Current directory: $(pwd)"

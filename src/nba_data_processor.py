@@ -832,9 +832,16 @@ class NBADataProcessor:
                 return [{}]
             
             missing_ids = []
-            
+
+            # Check for special combination_type first
+            combination_type = config.get('combination_type')
+
+            if combination_type == 'player_team_season':
+                # Special case: needs player_id, team_id (player's own team), and season
+                missing_ids = self._get_player_team_season_combinations(endpoint_name, config)
+
             # Handle different parameter types - check for combinations first
-            if 'game_id' in required_params:
+            elif 'game_id' in required_params:
                 # Game-based endpoints
                 master_table = self.get_master_table_name('game_id')
                 if master_table:
@@ -1073,11 +1080,81 @@ class NBADataProcessor:
                 
                 self.logger.info(f"Found {len(missing_teams)} missing teams for {endpoint_name}")
                 return missing_teams
-                        
+
         except Exception as e:
             self.logger.error(f"Error getting missing team IDs for {endpoint_name}: {e}")
             return []
-    
+
+    def _get_player_team_season_combinations(self, endpoint_name: str, config: dict) -> List[dict]:
+        """
+        Get player + team + season combinations for endpoints that require the player's own team.
+        Looks up player-team relationships from game logs.
+        """
+        try:
+            with self.db_manager.get_cursor() as cursor:
+                # Check if game logs table exists
+                cursor.execute("""
+                    SELECT EXISTS (
+                        SELECT FROM information_schema.tables
+                        WHERE table_schema = 'public'
+                        AND table_name = 'nba_playergamelogs_playergamelogs'
+                    )
+                """)
+                if not cursor.fetchone()[0]:
+                    self.logger.warning(f"PlayerGameLogs table not found - cannot get player-team combinations for {endpoint_name}")
+                    return []
+
+                # Get seasons
+                seasons = []
+                for year in range(1996, 2026):
+                    if self.league == 'WNBA':
+                        seasons.append(str(year))
+                    else:
+                        seasons.append(f"{year}-{str(year+1)[2:]}")
+
+                if self.test_mode:
+                    # Test mode: get a small sample of player-team-season combinations
+                    seasons = seasons[-3:]  # Last 3 seasons
+                    cursor.execute("""
+                        SELECT DISTINCT playerid, teamid, season
+                        FROM nba_playergamelogs_playergamelogs
+                        WHERE playerid IS NOT NULL
+                        AND teamid IS NOT NULL
+                        AND season IS NOT NULL
+                        ORDER BY season DESC, playerid
+                        LIMIT %s
+                    """, (self.max_items_per_endpoint,))
+
+                    rows = cursor.fetchall()
+                    combinations = [
+                        {'player_id': row[0], 'team_id': row[1], 'season': row[2]}
+                        for row in rows
+                    ]
+                    self.logger.info(f"Test mode: Got {len(combinations)} player-team-season combinations for {endpoint_name}")
+                    return combinations
+                else:
+                    # Production mode: get all unique player-team-season combinations
+                    cursor.execute("""
+                        SELECT DISTINCT playerid, teamid, season
+                        FROM nba_playergamelogs_playergamelogs
+                        WHERE playerid IS NOT NULL
+                        AND teamid IS NOT NULL
+                        AND season IS NOT NULL
+                        ORDER BY season, playerid
+                    """)
+
+                    rows = cursor.fetchall()
+                    combinations = [
+                        {'player_id': row[0], 'team_id': row[1], 'season': row[2]}
+                        for row in rows
+                    ]
+                    self.logger.info(f"Found {len(combinations)} player-team-season combinations for {endpoint_name}")
+                    return combinations
+
+        except Exception as e:
+            self.logger.error(f"Error getting player-team-season combinations for {endpoint_name}: {e}")
+            return []
+
     def _get_missing_player_season_combinations(self, endpoint_name: str, master_table: str, required_params: List[str]) -> List[dict]:
         """Get missing player + season combinations for comprehensive historical backfill"""
         try:
