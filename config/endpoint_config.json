@@ -1,11 +1,11 @@
 {
   "endpoints": {
     "BoxScoreAdvancedV2": {
-      "priority": "high",
+      "priority": null,
       "required_params": [
         "game_id"
       ],
-      "notes": "",
+      "notes": "Deprecated - V3 endpoint preferred, V2 returns resultSet errors",
       "latest_version": false,
       "policy": "stacking",
       "frequency": ""
@@ -31,11 +31,11 @@
       "frequency": ""
     },
     "BoxScoreFourFactorsV2": {
-      "priority": "high",
+      "priority": null,
       "required_params": [
         "game_id"
       ],
-      "notes": "",
+      "notes": "Deprecated - V3 endpoint preferred, V2 returns resultSet errors",
       "latest_version": false,
       "policy": "stacking",
       "frequency": ""
@@ -71,11 +71,11 @@
       "frequency": ""
     },
     "BoxScoreMiscV2": {
-      "priority": "high",
+      "priority": null,
       "required_params": [
         "game_id"
       ],
-      "notes": "",
+      "notes": "Deprecated - V3 endpoint preferred, V2 returns resultSet errors",
       "latest_version": false,
       "policy": "stacking",
       "frequency": ""
@@ -111,11 +111,11 @@
       "frequency": ""
     },
     "BoxScoreScoringV2": {
-      "priority": "high",
+      "priority": null,
       "required_params": [
         "game_id"
       ],
-      "notes": "",
+      "notes": "Deprecated - V3 endpoint preferred, V2 returns resultSet errors",
       "latest_version": false,
       "policy": "stacking",
       "frequency": ""
@@ -152,11 +152,11 @@
       "frequency": ""
     },
     "BoxScoreTraditionalV2": {
-      "priority": "high",
+      "priority": null,
       "required_params": [
         "game_id"
       ],
-      "notes": "",
+      "notes": "Deprecated - V3 endpoint preferred, V2 returns resultSet errors",
       "latest_version": false,
       "policy": "stacking",
       "frequency": ""
@@ -172,11 +172,11 @@
       "frequency": ""
     },
     "BoxScoreUsageV2": {
-      "priority": "high",
+      "priority": null,
       "required_params": [
         "game_id"
       ],
-      "notes": "",
+      "notes": "Deprecated - V3 endpoint preferred, V2 returns resultSet errors",
       "latest_version": false,
       "policy": "stacking",
       "frequency": ""
@@ -273,21 +273,21 @@
       "frequency": "daily"
     },
     "PlayByPlay": {
-      "priority": "high",
+      "priority": null,
       "required_params": [
         "game_id"
       ],
-      "notes": "",
+      "notes": "Deprecated - V3 endpoint preferred, returns resultSet errors",
       "latest_version": false,
       "policy": "stacking",
       "frequency": "daily"
     },
     "PlayByPlayV2": {
-      "priority": "high",
+      "priority": null,
       "required_params": [
         "game_id"
       ],
-      "notes": "",
+      "notes": "Deprecated - V3 endpoint preferred, returns resultSet errors",
       "latest_version": false,
       "policy": "stacking",
       "frequency": "daily"

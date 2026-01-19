@@ -1600,7 +1600,7 @@ class NBADataProcessor:
                                 self.logger.warning(f"Failed to insert {dataset_name} for {endpoint_name}")
                     
                     # Rate limiting - increased to reduce API flooding and timeout errors
-                    time.sleep(1.0)  # ~60 requests per minute limit
+                    time.sleep(1.5)  # ~40 requests per minute limit
                     
                 except Exception as e:
                     error_msg = str(e)
