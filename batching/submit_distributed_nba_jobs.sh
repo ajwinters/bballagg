@@ -85,16 +85,30 @@ with open('${PROJECT_ROOT}/config/endpoint_config.json', 'r') as f:
 profile = '$PROFILE'
 endpoints = []
 
-# Get all endpoints with non-None priority (excluding master endpoints)
 for name, config in endpoint_config['endpoints'].items():
     # Skip master endpoints
     if 'master' in config:
         continue
 
-    # Include all endpoints with a non-None priority
     priority = config.get('priority')
-    if priority is not None and priority != 'None':
-        endpoints.append(name)
+
+    # Filter based on profile
+    if profile == 'high_priority':
+        # Only include high priority endpoints
+        if priority == 'high':
+            endpoints.append(name)
+    elif profile == 'test':
+        # Test mode: only high priority endpoints (same as high_priority but with test flags)
+        if priority == 'high':
+            endpoints.append(name)
+    elif profile == 'full':
+        # Full mode: all endpoints with non-None priority
+        if priority is not None and priority != 'None':
+            endpoints.append(name)
+    else:
+        # Default: all non-None priority
+        if priority is not None and priority != 'None':
+            endpoints.append(name)
 
 # Print endpoints, one per line
 for endpoint in sorted(endpoints):

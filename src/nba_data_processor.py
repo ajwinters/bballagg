@@ -1515,13 +1515,56 @@ class NBADataProcessor:
                     elif 'season_nullable' in sig.parameters:
                         api_params['season_nullable'] = api_params.get('season_nullable', self.current_season)
                     
-                    # Make API call
+                    # Make API call with retry logic
                     self.logger.debug(f"API call: {endpoint_name}({api_params})")
-                    endpoint_instance = endpoint_class(**api_params)
-                    
-                    # Get DataFrames
-                    dataframes = endpoint_instance.get_data_frames()
-                    
+
+                    max_retries = 3
+                    dataframes = None
+                    last_error = None
+
+                    for attempt in range(max_retries):
+                        try:
+                            self.logger.info(f"API call attempt {attempt + 1}/{max_retries} for {endpoint_name}")
+                            endpoint_instance = endpoint_class(**api_params)
+                            dataframes = endpoint_instance.get_data_frames()
+
+                            if dataframes:
+                                self.logger.info(f"API call successful on attempt {attempt + 1}")
+                                break  # Success, exit retry loop
+                            else:
+                                self.logger.warning(f"No DataFrames returned for {endpoint_name} on attempt {attempt + 1}")
+                                break  # Empty response is not a retry-able error
+
+                        except Exception as retry_error:
+                            last_error = retry_error
+                            error_str = str(retry_error).lower()
+
+                            # Don't retry for permanent errors (bad parameters, etc.)
+                            permanent_error_indicators = [
+                                'invalid game id', 'invalid player id', 'invalid team id',
+                                'bad request', '400', '401', '403', 'unauthorized', 'forbidden',
+                                'parameter', 'invalid parameter', 'missing required'
+                            ]
+
+                            if any(indicator in error_str for indicator in permanent_error_indicators):
+                                self.logger.error(f"Permanent error on attempt {attempt + 1}, not retrying: {retry_error}")
+                                break
+
+                            # Retry for temporary errors (timeout, connection, rate limit)
+                            if attempt < max_retries - 1:
+                                wait_time = (attempt + 1) * 2  # Exponential backoff: 2s, 4s
+                                self.logger.warning(f"Temporary error on attempt {attempt + 1}: {retry_error}")
+                                self.logger.info(f"Retrying in {wait_time} seconds...")
+                                time.sleep(wait_time)
+                            else:
+                                self.logger.error(f"All {max_retries} API call attempts failed: {retry_error}")
+
+                    # If we exhausted retries and still have an error, record failure and continue
+                    if dataframes is None and last_error is not None:
+                        self.logger.error(f"API call failed after {max_retries} attempts for {endpoint_name}: {last_error}")
+                        self.create_failed_records(endpoint_name, config, param_values, str(last_error))
+                        continue
+
                     if not dataframes:
                         self.logger.warning(f"No DataFrames returned for {endpoint_name}")
                         continue
@@ -1556,8 +1599,8 @@ class NBADataProcessor:
                             if not success:
                                 self.logger.warning(f"Failed to insert {dataset_name} for {endpoint_name}")
                     
-                    # Rate limiting
-                    time.sleep(0.6)  # 100 requests per minute limit
+                    # Rate limiting - increased to reduce API flooding and timeout errors
+                    time.sleep(1.0)  # ~60 requests per minute limit
                     
                 except Exception as e:
                     error_msg = str(e)
