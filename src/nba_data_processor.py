@@ -485,60 +485,34 @@ class NBADataProcessor:
 
     def match_dataframes_to_expected_data(self, endpoint_name: str, dataframes: List[pd.DataFrame]) -> Dict[str, pd.DataFrame]:
         """
-        Match DataFrames returned from get_data_frames() to their expected names
-        Uses the expected_data attribute from the endpoint to determine correct names
-        
+        Assign alphabetical suffixes (A, B, C, D...) to DataFrames in order.
+        This avoids issues with mismatched naming between API response order and expected_data.
+
         Args:
             endpoint_name: Name of the endpoint
             dataframes: List of DataFrames returned from get_data_frames()
-            
+
         Returns:
-            Dictionary mapping expected names to DataFrames
+            Dictionary mapping alphabetical names to DataFrames
         """
-        try:
-            # Get the endpoint class
-            endpoint_class = getattr(nbaapi, endpoint_name)
-            
-            # Get expected data if available
-            if hasattr(endpoint_class, 'expected_data'):
-                expected_data = endpoint_class.expected_data
-                self.logger.debug(f"Expected data for {endpoint_name}: {list(expected_data.keys())}")
-            else:
-                # Fallback to generic names if no expected_data
-                self.logger.warning(f"No expected_data found for {endpoint_name}, using generic names")
-                expected_data = {f"data_{i}": {} for i in range(len(dataframes))}
-            
-            matched_data = {}
-            
-            # Strategy 1: Try to match by number of columns (when unique)
-            if len(dataframes) == len(expected_data):
-                # Simple case: same number of dataframes and expected datasets
-                for i, (expected_name, df) in enumerate(zip(expected_data.keys(), dataframes)):
-                    if df is not None and not df.empty:
-                        matched_data[expected_name] = df
-                        self.logger.debug(f"Matched {expected_name}: {df.shape}")
-            else:
-                # Complex case: Try to match by column patterns or content
-                self.logger.warning(f"DataFrame count mismatch for {endpoint_name}: "
-                                  f"{len(dataframes)} DFs vs {len(expected_data)} expected")
-                
-                # Use generic names for now
-                for i, df in enumerate(dataframes):
-                    if df is not None and not df.empty:
-                        name = f"dataset_{i}"
-                        matched_data[name] = df
-            
-            self.logger.info(f"Matched {len(matched_data)} datasets for {endpoint_name}")
-            return matched_data
-            
-        except Exception as e:
-            self.logger.error(f"Error matching DataFrames for {endpoint_name}: {e}")
-            # Fallback to generic naming
-            matched_data = {}
-            for i, df in enumerate(dataframes):
-                if df is not None and not df.empty:
-                    matched_data[f"dataset_{i}"] = df
-            return matched_data
+        import string
+
+        matched_data = {}
+
+        # Use uppercase letters A, B, C, D... for naming
+        # If more than 26 dataframes, extend to AA, AB, etc. (unlikely for NBA API)
+        for i, df in enumerate(dataframes):
+            if df is not None and not df.empty:
+                if i < 26:
+                    suffix = string.ascii_uppercase[i]  # A, B, C, D...
+                else:
+                    # For 26+, use AA, AB, etc.
+                    suffix = string.ascii_uppercase[i // 26 - 1] + string.ascii_uppercase[i % 26]
+                matched_data[suffix] = df
+                self.logger.debug(f"Assigned dataframe {i} to suffix {suffix}: {df.shape}")
+
+        self.logger.info(f"Assigned {len(matched_data)} datasets for {endpoint_name} with alphabetical suffixes")
+        return matched_data
     
     def create_table_if_needed(self, table_name: str, df: pd.DataFrame) -> bool:
         """
