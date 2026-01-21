@@ -152,10 +152,16 @@ FAILED_SUBMISSIONS=0
 for endpoint in "${ENDPOINTS_ARRAY[@]}"; do
     # Submit job with dependency on masters completion
     # Job name format: nba_<profile>_<endpoint> (e.g., nba_high_priority_PlayerGameLog)
-    # Pass SINCE_SEASON as third argument if provided
-    JOB_OUTPUT=$(sbatch --dependency=afterok:$MASTERS_JOB_ID \
-                        --job-name="nba_${PROFILE}_${endpoint}" \
-                        "${PROJECT_ROOT}/batching/single_endpoint.sh" "$PROFILE" "$endpoint" "$SINCE_SEASON")
+    # Pass SINCE_SEASON as third argument only if provided
+    if [ -n "$SINCE_SEASON" ]; then
+        JOB_OUTPUT=$(sbatch --dependency=afterok:$MASTERS_JOB_ID \
+                            --job-name="nba_${PROFILE}_${endpoint}" \
+                            "${PROJECT_ROOT}/batching/single_endpoint.sh" "$PROFILE" "$endpoint" "$SINCE_SEASON")
+    else
+        JOB_OUTPUT=$(sbatch --dependency=afterok:$MASTERS_JOB_ID \
+                            --job-name="nba_${PROFILE}_${endpoint}" \
+                            "${PROJECT_ROOT}/batching/single_endpoint.sh" "$PROFILE" "$endpoint")
+    fi
 
     JOB_ID=$(echo $JOB_OUTPUT | grep -o '[0-9]\+$')
 
