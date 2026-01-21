@@ -6,25 +6,29 @@
 #SBATCH --job-name=nba_endpoint
 #SBATCH --output=logs/nba_%x_%j.out
 #SBATCH --error=logs/nba_%x_%j.err
-#SBATCH --time=02:00:00
+#SBATCH --time=24:00:00
 #SBATCH --mem=4GB
 #SBATCH --cpus-per-task=1
 
 # Check if arguments provided
 if [ -z "$1" ] || [ -z "$2" ]; then
     echo "Error: Missing arguments"
-    echo "Usage: sbatch --dependency=afterok:<masters_job_id> $0 <profile> <endpoint_name>"
+    echo "Usage: sbatch --dependency=afterok:<masters_job_id> $0 <profile> <endpoint_name> [since_season]"
     exit 1
 fi
 
 PROFILE=$1
 ENDPOINT_NAME=$2
+SINCE_SEASON=${3:-}  # Optional third argument for since-season
 
 echo "🏀 SINGLE ENDPOINT JOB"
 echo "====================="
 echo "Profile: $PROFILE"
 echo "Endpoint: $ENDPOINT_NAME"
-echo "Job ID: $SLURM_JOB_ID" 
+if [ -n "$SINCE_SEASON" ]; then
+    echo "Since Season: $SINCE_SEASON"
+fi
+echo "Job ID: $SLURM_JOB_ID"
 echo "Date: $(date)"
 
 # Update job name to include endpoint name (if scontrol is available)
@@ -151,12 +155,20 @@ fi
 # Determine test mode parameters
 if [ "$PROFILE" = "test" ]; then
     TEST_MODE_FLAG="--test-mode"
-    MAX_ITEMS="--max-items 5" 
+    MAX_ITEMS="--max-items 5"
     echo "🧪 Running in TEST MODE"
 else
     TEST_MODE_FLAG=""
     MAX_ITEMS=""
     echo "🏭 Running in PRODUCTION MODE"
+fi
+
+# Determine since-season parameter
+if [ -n "$SINCE_SEASON" ]; then
+    SINCE_SEASON_FLAG="--since-season $SINCE_SEASON"
+    echo "📅 Filtering to games since season: $SINCE_SEASON"
+else
+    SINCE_SEASON_FLAG=""
 fi
 
 echo ""
@@ -167,6 +179,7 @@ echo "=============================================="
 python src/nba_data_processor.py \
     $TEST_MODE_FLAG \
     $MAX_ITEMS \
+    $SINCE_SEASON_FLAG \
     --log-level INFO \
     --single-endpoint "$ENDPOINT_NAME" \
     --connection-timeout 120 \

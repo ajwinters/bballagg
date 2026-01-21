@@ -39,20 +39,23 @@ class NBADataProcessor:
     Main NBA Data Processor - Configuration-driven endpoint processing
     """
     
-    def __init__(self, league: str = 'NBA', test_mode: bool = False, 
-                 max_items_per_endpoint: int = None, log_level: str = 'INFO'):
+    def __init__(self, league: str = 'NBA', test_mode: bool = False,
+                 max_items_per_endpoint: int = None, log_level: str = 'INFO',
+                 since_season: str = None):
         """
         Initialize the NBA Data Processor
-        
+
         Args:
             league: League to process (NBA, WNBA, G-League)
             test_mode: Whether to run in test mode with limited data
             max_items_per_endpoint: Maximum items to process per endpoint (for test mode)
             log_level: Logging level
+            since_season: Only process games from this season onwards (e.g., '2020-21')
         """
         self.league = league.upper()
         self.test_mode = test_mode
         self.max_items_per_endpoint = max_items_per_endpoint or (10 if test_mode else None)
+        self.since_season = since_season
         
         # Setup logging
         self.logger = self._setup_logging(log_level)
@@ -74,6 +77,8 @@ class NBADataProcessor:
         self.logger.info(f"League: {self.league}")
         self.logger.info(f"Test Mode: {self.test_mode}")
         self.logger.info(f"Current Season: {self.current_season}")
+        if self.since_season:
+            self.logger.info(f"Since Season: {self.since_season} (filtering to games from this season onwards)")
         if self.max_items_per_endpoint:
             self.logger.info(f"Max items per endpoint: {self.max_items_per_endpoint}")
     
@@ -879,13 +884,20 @@ class NBADataProcessor:
             with self.db_manager.get_cursor() as cursor:
                 # Get the correct column name for game ID in master table
                 game_id_column = self.get_master_table_column_name('game_id', master_table)
-                
+
+                # Build season filter clause if since_season is set
+                season_filter = ""
+                if self.since_season:
+                    season_filter = f" AND season >= '{self.since_season}'"
+                    self.logger.info(f"Filtering games to season >= {self.since_season}")
+
                 # For test mode, return some sample game IDs to test the system
                 if self.test_mode:
                     # Get some real game IDs from master table for testing
-                    cursor.execute(f"SELECT DISTINCT {game_id_column} FROM {master_table} LIMIT %s", (self.max_items_per_endpoint,))
+                    query = f"SELECT DISTINCT {game_id_column} FROM {master_table} WHERE 1=1 {season_filter} LIMIT %s"
+                    cursor.execute(query, (self.max_items_per_endpoint,))
                     game_rows = cursor.fetchall()
-                    
+
                     if game_rows:
                         sample_game_ids = [row[0] for row in game_rows]
                         self.logger.info(f"Test mode: Using {len(sample_game_ids)} game IDs from master table for {endpoint_name}")
@@ -893,42 +905,44 @@ class NBADataProcessor:
                     else:
                         self.logger.warning(f"No game IDs found in master table {master_table}")
                         return []
-                
+
                 # Production mode: Find games in master table that are NOT in endpoint table
                 endpoint_table_name = f"{self.get_table_prefix()}_{endpoint_name.lower()}"
-                
+
                 # Check if endpoint table exists
                 cursor.execute("""
                     SELECT EXISTS (
-                        SELECT FROM information_schema.tables 
-                        WHERE table_schema = 'public' 
+                        SELECT FROM information_schema.tables
+                        WHERE table_schema = 'public'
                         AND table_name = %s
                     )
                 """, (endpoint_table_name,))
-                
+
                 table_exists = cursor.fetchone()[0]
-                
+
                 if not table_exists:
                     # Table doesn't exist - all games are missing (first run)
                     self.logger.info(f"Endpoint table {endpoint_table_name} doesn't exist - processing ALL games from master table")
-                    cursor.execute(f"SELECT DISTINCT {game_id_column} FROM {master_table} ORDER BY {game_id_column}")
+                    query = f"SELECT DISTINCT {game_id_column} FROM {master_table} WHERE 1=1 {season_filter} ORDER BY {game_id_column}"
+                    cursor.execute(query)
                     all_games = cursor.fetchall()
                     missing_games = [{'game_id': row[0]} for row in all_games]
-                    
+
                 else:
                     # Table exists - find missing games
                     # Note: endpoint tables use 'game_id' as standard, master uses actual column name
-                    cursor.execute(f"""
-                        SELECT DISTINCT m.{game_id_column} 
+                    query = f"""
+                        SELECT DISTINCT m.{game_id_column}
                         FROM {master_table} m
-                        LEFT JOIN {endpoint_table_name} e ON m.{game_id_column} = e.game_id
-                        WHERE e.game_id IS NULL
+                        LEFT JOIN {endpoint_table_name} e ON m.{game_id_column} = e.gameid
+                        WHERE e.gameid IS NULL {season_filter.replace('season', 'm.season')}
                         ORDER BY m.{game_id_column}
-                    """)
-                    
+                    """
+                    cursor.execute(query)
+
                     missing_rows = cursor.fetchall()
                     missing_games = [{'game_id': row[0]} for row in missing_rows]
-                
+
                 self.logger.info(f"Found {len(missing_games)} missing games for {endpoint_name}")
                 return missing_games
                 
@@ -1703,15 +1717,18 @@ if __name__ == "__main__":
                        help='Run full data collection process')
     parser.add_argument('--masters-only', action='store_true',
                        help='Run master endpoints only')
-    
+    parser.add_argument('--since-season',
+                       help='Only process games from this season onwards (e.g., 2020-21)')
+
     args = parser.parse_args()
-    
+
     # Initialize processor
     processor = NBADataProcessor(
         league=args.league,
         test_mode=args.test_mode,
         max_items_per_endpoint=args.max_items,
-        log_level=args.log_level
+        log_level=args.log_level,
+        since_season=args.since_season
     )
     
     # Execute based on arguments

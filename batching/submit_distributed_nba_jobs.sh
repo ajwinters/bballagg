@@ -1,39 +1,49 @@
 #!/bin/bash
 # NBA Distributed Job Submission - One Job Per Endpoint
-# Usage: ./submit_distributed_nba_jobs.sh [profile]
+# Usage: ./submit_distributed_nba_jobs.sh [profile] [since_season]
 #
 # Available profiles:
 #   high_priority  - High priority endpoints only (DEFAULT)
-#   test          - Limited endpoints with small data samples  
+#   test          - Limited endpoints with small data samples
 #   full          - All available endpoints (comprehensive)
 #
+# Optional since_season parameter:
+#   Filter to only process games from this season onwards (e.g., 2020-21)
+#
 # Examples:
-#   ./submit_distributed_nba_jobs.sh                    # Uses high_priority
-#   ./submit_distributed_nba_jobs.sh high_priority      # High priority endpoints
-#   ./submit_distributed_nba_jobs.sh test               # Test mode
-#   ./submit_distributed_nba_jobs.sh full               # All endpoints
+#   ./submit_distributed_nba_jobs.sh                         # Uses high_priority, all seasons
+#   ./submit_distributed_nba_jobs.sh high_priority           # High priority endpoints, all seasons
+#   ./submit_distributed_nba_jobs.sh high_priority 2020-21   # High priority, 2020-21 onwards
+#   ./submit_distributed_nba_jobs.sh test                    # Test mode
+#   ./submit_distributed_nba_jobs.sh full 2015-16            # All endpoints, 2015-16 onwards
 
 # Show help if requested
 if [ "$1" = "--help" ] || [ "$1" = "-h" ]; then
     echo "NBA Distributed Job Submission"
     echo "=============================="
-    echo "Usage: $0 [profile]"
+    echo "Usage: $0 [profile] [since_season]"
     echo ""
     echo "Available profiles:"
     echo "  high_priority  - High priority endpoints only (DEFAULT)"
     echo "  test          - Limited endpoints with small data samples"
     echo "  full          - All available endpoints (comprehensive)"
     echo ""
+    echo "Optional since_season:"
+    echo "  Filter to only process games from this season onwards"
+    echo "  Format: YYYY-YY (e.g., 2020-21)"
+    echo ""
     echo "Examples:"
-    echo "  $0                    # Uses high_priority (default)"
-    echo "  $0 high_priority      # High priority endpoints"
-    echo "  $0 test               # Test mode"
-    echo "  $0 full               # All endpoints"
+    echo "  $0                         # Uses high_priority, all seasons"
+    echo "  $0 high_priority           # High priority endpoints, all seasons"
+    echo "  $0 high_priority 2020-21   # High priority, 2020-21 season onwards"
+    echo "  $0 test                    # Test mode"
+    echo "  $0 full 2015-16            # All endpoints, 2015-16 onwards"
     echo ""
     exit 0
 fi
 
 PROFILE=${1:-high_priority}
+SINCE_SEASON=${2:-}  # Optional second argument for since-season
 
 echo "🚀 NBA DISTRIBUTED JOB SUBMISSION"
 echo "=================================="
@@ -46,6 +56,11 @@ elif [ "$PROFILE" = "full" ]; then
     echo "Mode: FULL MODE (all endpoints - comprehensive collection)"
 else
     echo "Mode: CUSTOM PROFILE"
+fi
+if [ -n "$SINCE_SEASON" ]; then
+    echo "Since Season: $SINCE_SEASON (filtering to games from this season onwards)"
+else
+    echo "Since Season: ALL (processing all available games)"
 fi
 echo "Date: $(date)"
 echo ""
@@ -137,12 +152,13 @@ FAILED_SUBMISSIONS=0
 for endpoint in "${ENDPOINTS_ARRAY[@]}"; do
     # Submit job with dependency on masters completion
     # Job name format: nba_<profile>_<endpoint> (e.g., nba_high_priority_PlayerGameLog)
+    # Pass SINCE_SEASON as third argument if provided
     JOB_OUTPUT=$(sbatch --dependency=afterok:$MASTERS_JOB_ID \
                         --job-name="nba_${PROFILE}_${endpoint}" \
-                        "${PROJECT_ROOT}/batching/single_endpoint.sh" "$PROFILE" "$endpoint")
-    
+                        "${PROJECT_ROOT}/batching/single_endpoint.sh" "$PROFILE" "$endpoint" "$SINCE_SEASON")
+
     JOB_ID=$(echo $JOB_OUTPUT | grep -o '[0-9]\+$')
-    
+
     if [ -n "$JOB_ID" ]; then
         ENDPOINT_JOB_IDS+=($JOB_ID)
         echo "✅ $endpoint → Job $JOB_ID (nba_${PROFILE}_${endpoint})"
