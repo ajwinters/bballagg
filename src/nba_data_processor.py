@@ -213,7 +213,7 @@ class NBADataProcessor:
     def _get_all_seasons(self) -> List[str]:
         """Get all historical seasons for comprehensive coverage"""
         seasons = []
-        for year in range(1996, 2025):  # 1996-97 through 2024-25
+        for year in range(1996, 2027):  # 1996-97 through 2026-27
             if self.league_config['season_format'] == 'two_year':
                 seasons.append(f"{year}-{str(year+1)[2:]}")  # NBA/G-League: 1996-97 format
             else:
@@ -791,7 +791,7 @@ class NBADataProcessor:
                 elif endpoint_name == 'LeagueGameLog':
                     # Get ALL NBA seasons for comprehensive game log history
                     seasons = []
-                    for year in range(1996, 2025):
+                    for year in range(1996, 2027):  # 1996-97 through 2026-27
                         season_str = f"{year}-{str(year+1)[2:]}"
                         seasons.append({'season': season_str})
                     
@@ -1152,12 +1152,12 @@ class NBADataProcessor:
                 
                 # Get all seasons (comprehensive historical range)
                 seasons = []
-                for year in range(1996, 2025):  # 1996-97 through 2024-25
+                for year in range(1996, 2027):  # 1996-97 through 2026-27
                     if self.league == 'WNBA':
                         seasons.append(str(year))  # WNBA uses single year format
                     else:
                         seasons.append(f"{year}-{str(year+1)[2:]}")  # NBA uses 1996-97 format
-                
+
                 # For test mode, limit seasons and players
                 if self.test_mode:
                     seasons = seasons[-3:]  # Last 3 seasons only
@@ -1259,12 +1259,12 @@ class NBADataProcessor:
             
                 # Get all seasons (comprehensive historical range)
                 seasons = []
-                for year in range(1996, 2025):  # 1996-97 through 2024-25
+                for year in range(1996, 2027):  # 1996-97 through 2026-27
                     if self.league == 'WNBA':
                         seasons.append(str(year))  # WNBA uses single year format
                     else:
                         seasons.append(f"{year}-{str(year+1)[2:]}")  # NBA uses 1996-97 format
-                
+
                 # For test mode, limit seasons and teams
                 if self.test_mode:
                     seasons = seasons[-3:]  # Last 3 seasons only
