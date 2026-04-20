@@ -8,19 +8,16 @@
       "Bash(python -c \"\nimport psycopg2\n\nconn = psycopg2.connect\\(\n    host=''nba-rds-instance.c9wwc0ukkiu5.us-east-1.rds.amazonaws.com'',\n    database=''thebigone'',\n    user=''ajwin'',\n    password=''CharlesBark!23'',\n    port=5432,\n    sslmode=''require''\n\\)\n\ncursor = conn.cursor\\(\\)\n\n# First check the table structure\ncursor.execute\\(\"\"\"\"\"\"\n    SELECT column_name FROM information_schema.columns \n    WHERE table_name = ''nba_boxscorescoringv3_failed_data''\n\"\"\"\"\"\"\\)\n\ncolumns = [row[0] for row in cursor.fetchall\\(\\)]\nprint\\(f''Columns: {columns}''\\)\n\nconn.close\\(\\)\n\")",
       "Bash(python -c \"\nimport psycopg2\n\nconn = psycopg2.connect\\(\n    host=''nba-rds-instance.c9wwc0ukkiu5.us-east-1.rds.amazonaws.com'',\n    database=''thebigone'',\n    user=''ajwin'',\n    password=''CharlesBark!23'',\n    port=5432,\n    sslmode=''require''\n\\)\n\ncursor = conn.cursor\\(\\)\n\n# Get some failed game IDs with timeout errors\ncursor.execute\\(\"\"\"\"\"\"\n    SELECT gameid, failedreason \n    FROM nba_boxscorescoringv3_failed_data \n    WHERE failedreason ILIKE ''%timeout%'' OR failedreason ILIKE ''%https%'' OR failedreason ILIKE ''%connection%''\n    LIMIT 10\n\"\"\"\"\"\"\\)\n\nrows = cursor.fetchall\\(\\)\nprint\\(f''Found {len\\(rows\\)} timeout-related failures:''\\)\nfor row in rows:\n    print\\(f''  Game ID: {row[0]}''\\)\n    print\\(f''  Error: {row[1][:150]}''\\)\n    print\\(\\)\n\nconn.close\\(\\)\n\")",
       "Bash(python -c:*)",
-      "Bash(.venv/Scripts/python:*)"
+      "Bash(.venv/Scripts/python:*)",
+      "Bash(./deploy/run_jobs.sh --masters-first --test-mode 2>&1)",
+      "Bash(./deploy/run_jobs.sh --masters-first --profile high_priority 2>&1)",
+      "Bash(./deploy/monitor.sh 2>&1)",
+      "Bash(ssh:*)",
+      "Bash(for ip:*)",
+      "Bash(do)",
+      "Bash(echo -n \"$ip: \")",
+      "Bash(done)"
     ]
   },
-  "hooks": {
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "powershell -c \"[console]::beep(600,150); [console]::beep(800,150); [console]::beep(1000,300)\""
-          }
-        ]
-      }
-    ]
-  }
+  "hooks": {}
 }

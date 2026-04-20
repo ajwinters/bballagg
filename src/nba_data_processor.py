@@ -661,6 +661,41 @@ class NBADataProcessor:
         except Exception as e:
             self.logger.error(f"Failed to create failed records for {endpoint_name}: {e}")
 
+    def cleanup_failed_records(self, table_name: str, required_params: list, param_values: dict):
+        """
+        Remove failed records from a table after a successful API call for the same parameters.
+        """
+        try:
+            # Build WHERE clause matching the ID columns + failed_reason IS NOT NULL
+            conditions = []
+            values = []
+            mappings = self.parameter_mappings.get("mappings", {})
+            for param in required_params:
+                standard_param = mappings.get(param, param)
+                clean_param = ''.join(c.lower() if c.isalnum() else '' for c in standard_param)
+                conditions.append(f'"{clean_param}" = %s')
+                values.append(param_values.get(param))
+
+            if not conditions:
+                return
+
+            where_clause = " AND ".join(conditions)
+            # Match rows that have the failedreason column populated (these are the failed records)
+            # Try both column name variants
+            for col_name in ['failedreason', 'failed_reason']:
+                query = f'DELETE FROM "{table_name}" WHERE {where_clause} AND "{col_name}" IS NOT NULL'
+                try:
+                    result = self.db_manager.execute_query(query, tuple(values))
+                    if result and result > 0:
+                        self.logger.info(f"Cleaned up {result} failed record(s) from {table_name}")
+                    return
+                except Exception:
+                    continue  # Try the other column name variant
+
+        except Exception as e:
+            # Non-critical — don't let cleanup failures break the pipeline
+            self.logger.debug(f"Failed record cleanup skipped for {table_name}: {e}")
+
     def get_failed_parameter_combinations(self, endpoint_name: str) -> List[Dict[str, Any]]:
         """
         Get all failed parameter combinations for an endpoint to enable retry logic
@@ -1527,11 +1562,14 @@ class NBADataProcessor:
                             last_error = retry_error
                             error_str = str(retry_error).lower()
 
-                            # Don't retry for permanent errors (bad parameters, etc.)
+                            # Don't retry for permanent errors (bad parameters, no data, etc.)
                             permanent_error_indicators = [
                                 'invalid game id', 'invalid player id', 'invalid team id',
                                 'bad request', '400', '401', '403', 'unauthorized', 'forbidden',
-                                'parameter', 'invalid parameter', 'missing required'
+                                'parameter', 'invalid parameter', 'missing required',
+                                "'nonetype' object has no attribute",  # API returned no data for this game
+                                'list index out of range',  # API response missing expected datasets
+                                'expecting value',  # Empty/malformed JSON response
                             ]
 
                             if any(indicator in error_str for indicator in permanent_error_indicators):
@@ -1577,14 +1615,17 @@ class NBADataProcessor:
                             else:
                                 # Regular endpoint - use standard naming
                                 table_name = f"{self.get_table_prefix()}_{endpoint_name.lower()}_{dataset_name.lower()}"
-                            
+
                             success = self.insert_dataframe_to_table(
-                                df, table_name, 
-                                config.get('required_params', []), 
+                                df, table_name,
+                                config.get('required_params', []),
                                 api_params  # Use the actual API parameters, not the original param_values
                             )
-                            
-                            if not success:
+
+                            if success:
+                                # Remove any previous failed records for this ID
+                                self.cleanup_failed_records(table_name, config.get('required_params', []), api_params)
+                            else:
                                 self.logger.warning(f"Failed to insert {dataset_name} for {endpoint_name}")
                     
                     # Rate limiting - increased to reduce API flooding and timeout errors
