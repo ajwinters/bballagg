@@ -72,7 +72,9 @@ for vps_idx in $(seq 0 $((NUM_VPS - 1))); do
 
   TOTAL_COMPLETED=$((TOTAL_COMPLETED + COMPLETED))
   TOTAL_FAILED=$((TOTAL_FAILED + FAILED))
-  TOTAL_ASSIGNED=$((TOTAL_ASSIGNED + ${ASSIGNED:-0}))
+  if [[ "$ASSIGNED" =~ ^[0-9]+$ ]]; then
+    TOTAL_ASSIGNED=$((TOTAL_ASSIGNED + ASSIGNED))
+  fi
 done
 
 echo ""

@@ -41,7 +41,7 @@ class NBADataProcessor:
     
     def __init__(self, league: str = 'NBA', test_mode: bool = False,
                  max_items_per_endpoint: int = None, log_level: str = 'INFO',
-                 since_season: str = None):
+                 since_season: str = None, until_season: str = None):
         """
         Initialize the NBA Data Processor
 
@@ -51,11 +51,13 @@ class NBADataProcessor:
             max_items_per_endpoint: Maximum items to process per endpoint (for test mode)
             log_level: Logging level
             since_season: Only process games from this season onwards (e.g., '2020-21')
+            until_season: Only process games up to and including this season (e.g., '2024-25')
         """
         self.league = league.upper()
         self.test_mode = test_mode
         self.max_items_per_endpoint = max_items_per_endpoint or (10 if test_mode else None)
         self.since_season = since_season
+        self.until_season = until_season
         
         # Setup logging
         self.logger = self._setup_logging(log_level)
@@ -79,6 +81,8 @@ class NBADataProcessor:
         self.logger.info(f"Current Season: {self.current_season}")
         if self.since_season:
             self.logger.info(f"Since Season: {self.since_season} (filtering to games from this season onwards)")
+        if self.until_season:
+            self.logger.info(f"Until Season: {self.until_season} (filtering to games up to and including this season)")
         if self.max_items_per_endpoint:
             self.logger.info(f"Max items per endpoint: {self.max_items_per_endpoint}")
     
@@ -920,11 +924,14 @@ class NBADataProcessor:
                 # Get the correct column name for game ID in master table
                 game_id_column = self.get_master_table_column_name('game_id', master_table)
 
-                # Build season filter clause if since_season is set
+                # Build season filter clause for since/until bounds
                 season_filter = ""
                 if self.since_season:
-                    season_filter = f" AND season >= '{self.since_season}'"
+                    season_filter += f" AND season >= '{self.since_season}'"
                     self.logger.info(f"Filtering games to season >= {self.since_season}")
+                if self.until_season:
+                    season_filter += f" AND season <= '{self.until_season}'"
+                    self.logger.info(f"Filtering games to season <= {self.until_season}")
 
                 # For test mode, return some sample game IDs to test the system
                 if self.test_mode:
@@ -1760,6 +1767,8 @@ if __name__ == "__main__":
                        help='Run master endpoints only')
     parser.add_argument('--since-season',
                        help='Only process games from this season onwards (e.g., 2020-21)')
+    parser.add_argument('--until-season',
+                       help='Only process games up to and including this season (e.g., 2024-25)')
 
     args = parser.parse_args()
 
@@ -1769,7 +1778,8 @@ if __name__ == "__main__":
         test_mode=args.test_mode,
         max_items_per_endpoint=args.max_items,
         log_level=args.log_level,
-        since_season=args.since_season
+        since_season=args.since_season,
+        until_season=args.until_season
     )
     
     # Execute based on arguments

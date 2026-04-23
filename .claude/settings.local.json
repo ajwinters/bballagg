@@ -16,7 +16,18 @@
       "Bash(for ip:*)",
       "Bash(do)",
       "Bash(echo -n \"$ip: \")",
-      "Bash(done)"
+      "Bash(done)",
+      "Bash(python3 src/job_queue.py add-sharded --help)",
+      "Bash(python3 src/job_queue.py add --help)",
+      "Bash(python3 src/job_queue.py status)",
+      "Bash(python3 src/nba_data_processor.py --help)",
+      "Bash(nc -vz nba-rds-instance.c9wwc0ukkiu5.us-east-1.rds.amazonaws.com 5432)",
+      "Read(//tmp/**)",
+      "Bash(tmux ls *)",
+      "Bash(screen -ls)",
+      "Bash(kill 34861 112535)",
+      "Bash(bash /home/ubuntu/Projects/bballagg/deploy/deploy.sh)",
+      "Bash(python3 *)"
     ]
   },
   "hooks": {}

@@ -70,17 +70,17 @@ def init_queue_table():
 
 
 def add_jobs(endpoints, extra_args=''):
-    """Add endpoints to the queue. Skips duplicates that are pending/running."""
+    """Add endpoints to the queue. Skips duplicates that are pending/running with the same extra_args."""
     conn = get_connection()
     cur = conn.cursor()
 
     added = 0
     skipped = 0
     for ep in endpoints:
-        # Don't add if already pending or running
+        # Dedup on (endpoint_name, extra_args) so shards of the same endpoint can coexist
         cur.execute(
-            "SELECT id FROM job_queue WHERE endpoint_name = %s AND status IN ('pending', 'running')",
-            (ep,)
+            "SELECT id FROM job_queue WHERE endpoint_name = %s AND extra_args = %s AND status IN ('pending', 'running')",
+            (ep, extra_args)
         )
         if cur.fetchone():
             skipped += 1
@@ -94,6 +94,66 @@ def add_jobs(endpoints, extra_args=''):
     conn.commit()
     conn.close()
     logger.info(f"Added {added} jobs, skipped {skipped} (already queued/running).")
+
+
+def build_season_shards(shard_count, start_year=1996, end_year=None):
+    """
+    Split NBA seasons from start_year..end_year into shard_count contiguous ranges.
+    Returns list of (since_season, until_season) tuples in 'YYYY-YY' format.
+
+    Example: shard_count=4, 1996-97..2025-26 (30 seasons) →
+        [('1996-97','2003-04'), ('2004-05','2011-12'),
+         ('2012-13','2019-20'), ('2020-21','2025-26')]
+    """
+    import math
+    from datetime import datetime
+    if end_year is None:
+        now = datetime.now()
+        # NBA season YYYY-YY starting in October of year Y
+        end_year = now.year if now.month >= 10 else now.year - 1
+    years = list(range(start_year, end_year + 1))
+    if shard_count <= 1 or len(years) <= 1:
+        season_of = lambda y: f"{y}-{str(y+1)[-2:]}"
+        return [(season_of(years[0]), season_of(years[-1]))]
+    chunk_size = math.ceil(len(years) / shard_count)
+    shards = []
+    for i in range(0, len(years), chunk_size):
+        chunk = years[i:i + chunk_size]
+        first, last = chunk[0], chunk[-1]
+        shards.append((f"{first}-{str(first+1)[-2:]}", f"{last}-{str(last+1)[-2:]}"))
+    return shards
+
+
+def add_sharded_jobs(endpoint, shard_count, extra_args=''):
+    """
+    Create shard_count queue entries for a single endpoint, each covering a
+    season range. extra_args is prepended to the shard's --since-season/--until-season.
+    """
+    shards = build_season_shards(shard_count)
+    conn = get_connection()
+    cur = conn.cursor()
+
+    added = 0
+    skipped = 0
+    for since_s, until_s in shards:
+        shard_args = f"--since-season {since_s} --until-season {until_s}"
+        full_args = f"{extra_args} {shard_args}".strip()
+        cur.execute(
+            "SELECT id FROM job_queue WHERE endpoint_name = %s AND extra_args = %s AND status IN ('pending', 'running')",
+            (endpoint, full_args)
+        )
+        if cur.fetchone():
+            skipped += 1
+            continue
+        cur.execute(
+            "INSERT INTO job_queue (endpoint_name, extra_args) VALUES (%s, %s)",
+            (endpoint, full_args)
+        )
+        added += 1
+
+    conn.commit()
+    conn.close()
+    logger.info(f"Sharded {endpoint} into {len(shards)} ranges: added {added}, skipped {skipped}.")
 
 
 def claim_job(worker_ip):
@@ -254,6 +314,14 @@ if __name__ == '__main__':
     add_p = sub.add_parser('add', help='Add endpoints to the queue')
     add_p.add_argument('endpoints', nargs='+', help='Endpoint names or "high_priority"')
     add_p.add_argument('--extra-args', default='', help='Extra args to pass to processor')
+    add_p.add_argument('--auto-shard', action='store_true',
+                       help='Split endpoints with shard_count>1 (from config) into multiple season-range jobs')
+
+    # add-sharded (explicit single-endpoint sharding)
+    shard_p = sub.add_parser('add-sharded', help='Add N season-range shards for a single endpoint')
+    shard_p.add_argument('endpoint', help='Endpoint name to shard')
+    shard_p.add_argument('--shards', type=int, help='Override shard count (defaults to config shard_count)')
+    shard_p.add_argument('--extra-args', default='', help='Extra args to pass to processor (in addition to shard range)')
 
     # status
     sub.add_parser('status', help='Show queue status')
@@ -273,19 +341,45 @@ if __name__ == '__main__':
         init_queue_table()
 
     elif args.command == 'add':
+        config_path = os.path.join(os.path.dirname(__file__), '..', 'config', 'endpoint_config.json')
+        with open(config_path) as f:
+            ep_data = json.load(f)
         endpoints = args.endpoints
         if endpoints == ['high_priority']:
-            config_path = os.path.join(os.path.dirname(__file__), '..', 'config', 'endpoint_config.json')
-            with open(config_path) as f:
-                data = json.load(f)
             endpoints = [
-                name for name, cfg in data['endpoints'].items()
+                name for name, cfg in ep_data['endpoints'].items()
                 if cfg.get('priority') == 'high' and cfg.get('latest_version')
             ]
             logger.info(f"Resolved high_priority to {len(endpoints)} endpoints")
-        add_jobs(endpoints, args.extra_args)
+
+        if args.auto_shard:
+            # Split endpoints with shard_count>1 via add_sharded_jobs, others go through add_jobs
+            non_sharded = []
+            for ep in endpoints:
+                sc = ep_data['endpoints'].get(ep, {}).get('shard_count', 1)
+                if sc and sc > 1:
+                    add_sharded_jobs(ep, sc, args.extra_args)
+                else:
+                    non_sharded.append(ep)
+            if non_sharded:
+                add_jobs(non_sharded, args.extra_args)
+        else:
+            add_jobs(endpoints, args.extra_args)
+
+    elif args.command == 'add-sharded':
+        shard_count = args.shards
+        if shard_count is None:
+            config_path = os.path.join(os.path.dirname(__file__), '..', 'config', 'endpoint_config.json')
+            with open(config_path) as f:
+                ep_data = json.load(f)
+            shard_count = ep_data['endpoints'].get(args.endpoint, {}).get('shard_count', 1)
+        if shard_count <= 1:
+            logger.error(f"Endpoint '{args.endpoint}' has no shard_count > 1 configured. Pass --shards N to override.")
+            sys.exit(1)
+        add_sharded_jobs(args.endpoint, shard_count, args.extra_args)
 
     elif args.command == 'status':
+        import re
         summary, jobs = get_queue_status()
         print(f"\n{'='*60}")
         print(f"Queue Summary: {summary}")
@@ -302,7 +396,14 @@ if __name__ == '__main__':
             elif j['started_at']:
                 duration = f" (running since {j['started_at'].strftime('%m-%d %H:%M')})"
             error = f" ERR: {j['error_message'][:60]}" if j['error_message'] else ""
-            print(f"  [{icon}] #{j['id']:2d} {j['endpoint_name']:<30s} {j['status']:<10s}{worker}{duration}{error}")
+            # Render season shard range compactly if present
+            name = j['endpoint_name']
+            extra = j.get('extra_args') or ''
+            since = re.search(r'--since-season\s+(\S+)', extra)
+            until = re.search(r'--until-season\s+(\S+)', extra)
+            if since or until:
+                name = f"{name} [{since.group(1) if since else '...'}→{until.group(1) if until else '...'}]"
+            print(f"  [{icon}] #{j['id']:2d} {name:<46s} {j['status']:<10s}{worker}{duration}{error}")
         print()
 
     elif args.command == 'reset':
