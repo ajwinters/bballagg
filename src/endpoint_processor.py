@@ -514,7 +514,8 @@ def make_api_call(endpoint_class, params, rate_limit, logger):
                 'missing 1 required positional argument',
                 'nonetype',  # API returning None due to bad parameters
                 'keys',      # 'NoneType' object has no attribute 'keys'
-                'list index out of range'  # Empty response causing list access errors
+                'list index out of range',  # Empty response causing list access errors
+                'expecting value',  # Empty body — stat type doesn't exist for this game/era
             ]
             
             if any(indicator in error_str for indicator in permanent_error_indicators):

@@ -352,13 +352,13 @@
       "frequency": "daily"
     },
     "PlayerGameLogs": {
-      "priority": "low",
+      "priority": "high",
       "required_params": [
         "league_id_nullable",
         "season_nullable",
         "season_type_nullable"
       ],
-      "notes": "Use season_nullable, returns all games for all players during that season ~52000 records per season. Actually going to move this to low. This info is convenient for bulk data retrieval but more complete data can be aggregated from the boxscores. It's nearly identical to LeagueGameLog but with player ids.",
+      "notes": "Promoted to high 2026-04-28 because it is a prerequisite for combination_type=player_team_season endpoints (PlayerDashPtReb, PlayerDashPtShots) which look up player-team relationships from the nba_playergamelogs_playergamelogs table. Returns all games for all players during a season (~52k rows/season).",
       "latest_version": true,
       "policy": "stacking",
       "frequency": "daily"

@@ -14,14 +14,20 @@
 
 set -e
 
+# Force Python to use UTF-8 for stdout/stderr so unicode chars (e.g. → in
+# sharded job names) don't crash the local status print on Windows cp1252.
+export PYTHONIOENCODING=utf-8
+
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
 CONFIG="$SCRIPT_DIR/vps_config.json"
 
-USER=$(python3 -c "import json; print(json.load(open('$CONFIG'))['vps_user'])")
-REMOTE_DIR=$(python3 -c "import json; print(json.load(open('$CONFIG'))['remote_dir'])")
-PYTHON=$(python3 -c "import json; print(json.load(open('$CONFIG'))['vps_python'])")
-IPS=($(python3 -c "import json; [print(s['ip']) for s in json.load(open('$CONFIG'))['servers']]"))
+PY=$(command -v python || command -v python3)
+# tr -d '\r' strips CR that Windows Python emits with \n (CRLF).
+USER=$($PY -c "import json,sys; print(json.load(sys.stdin)['vps_user'])" < "$CONFIG" | tr -d '\r')
+REMOTE_DIR=$($PY -c "import json,sys; print(json.load(sys.stdin)['remote_dir'])" < "$CONFIG" | tr -d '\r')
+PYTHON=$($PY -c "import json,sys; print(json.load(sys.stdin)['vps_python'])" < "$CONFIG" | tr -d '\r')
+IPS=($($PY -c "import json,sys; [print(s['ip']) for s in json.load(sys.stdin)['servers']]" < "$CONFIG" | tr -d '\r'))
 NUM_VPS=${#IPS[@]}
 
 SSH_OPTS="-o StrictHostKeyChecking=no -o ConnectTimeout=10 -o LogLevel=ERROR"
@@ -43,7 +49,7 @@ echo ""
 # Show current queue status
 echo "=== Current Queue Status ==="
 cd "$PROJECT_DIR"
-python3 src/job_queue.py status
+$PY src/job_queue.py status
 echo ""
 
 # Step 1: Kill old processes (unless --skip-kill)
@@ -81,12 +87,19 @@ done
 
 echo ""
 echo "=== Launching workers ==="
+# Use ssh -f to fork ssh into background after auth (avoids "Connection reset"
+# from the &-detached remote process keeping fds open). Run in parallel so one
+# host's hiccup doesn't break the rest.
 for vps_idx in $(seq 0 $((NUM_VPS - 1))); do
   VPS_IP=${IPS[$vps_idx]}
-  ssh $SSH_OPTS $USER@$VPS_IP \
-    "cd $REMOTE_DIR && nohup bash queue_worker.sh > logs/queue_worker.log 2>&1 &"
-  echo "[VPS $((vps_idx+1)) @ $VPS_IP] Worker launched."
+  (
+    ssh -f $SSH_OPTS $USER@$VPS_IP \
+      "cd $REMOTE_DIR && nohup bash queue_worker.sh > logs/queue_worker.log 2>&1 < /dev/null &" \
+      && echo "[VPS $((vps_idx+1)) @ $VPS_IP] Worker launched." \
+      || echo "[VPS $((vps_idx+1)) @ $VPS_IP] LAUNCH FAILED"
+  ) &
 done
+wait
 
 echo ""
 echo "All workers launched. They will pull jobs from the queue automatically."

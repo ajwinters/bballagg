@@ -27,7 +27,15 @@
       "Bash(screen -ls)",
       "Bash(kill 34861 112535)",
       "Bash(bash /home/ubuntu/Projects/bballagg/deploy/deploy.sh)",
-      "Bash(python3 *)"
+      "Bash(python3 *)",
+      "Bash(bash c:/Users/ajwin/Projects/Personal/NBA/thebigone/deploy/monitor.sh)",
+      "Bash(python src/validate_completeness.py)",
+      "Bash(rsync --version)",
+      "Bash(git fetch *)",
+      "Bash(tar --version)",
+      "Bash(ssh-keygen -?)",
+      "Bash(python src/job_queue.py status)",
+      "Bash(bash deploy/run_queue.sh)"
     ]
   },
   "hooks": {}

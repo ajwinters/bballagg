@@ -5,10 +5,12 @@
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 CONFIG="$SCRIPT_DIR/vps_config.json"
 
-USER=$(python3 -c "import json; print(json.load(open('$CONFIG'))['vps_user'])")
-REMOTE_DIR=$(python3 -c "import json; print(json.load(open('$CONFIG'))['remote_dir'])")
-PYTHON=$(python3 -c "import json; print(json.load(open('$CONFIG'))['vps_python'])")
-IPS=($(python3 -c "import json; [print(s['ip']) for s in json.load(open('$CONFIG'))['servers']]"))
+PY=$(command -v python || command -v python3)
+# tr -d '\r' strips CR that Windows Python emits with \n (CRLF).
+USER=$($PY -c "import json,sys; print(json.load(sys.stdin)['vps_user'])" < "$CONFIG" | tr -d '\r')
+REMOTE_DIR=$($PY -c "import json,sys; print(json.load(sys.stdin)['remote_dir'])" < "$CONFIG" | tr -d '\r')
+PYTHON=$($PY -c "import json,sys; print(json.load(sys.stdin)['vps_python'])" < "$CONFIG" | tr -d '\r')
+IPS=($($PY -c "import json,sys; [print(s['ip']) for s in json.load(sys.stdin)['servers']]" < "$CONFIG" | tr -d '\r'))
 NUM_VPS=${#IPS[@]}
 
 SSH_OPTS="-o StrictHostKeyChecking=no -o ConnectTimeout=10 -o LogLevel=ERROR"
@@ -85,4 +87,4 @@ PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
 echo ""
 echo "=== Job Queue ==="
 cd "$PROJECT_DIR"
-python3 src/job_queue.py status 2>/dev/null || echo "(No job queue configured — use 'python3 src/job_queue.py init' to set up)"
+$PY src/job_queue.py status 2>/dev/null || echo "(No job queue configured — use '$PY src/job_queue.py init' to set up)"

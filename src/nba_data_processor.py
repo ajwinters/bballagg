@@ -393,7 +393,7 @@ class NBADataProcessor:
         
         # Preserve these column names exactly (system metadata columns)
         preserve_columns = {
-            'failed_reason', 'data_collected_date'
+            'data_collected_date'
         }
         
         cleaned_columns = []
@@ -485,11 +485,7 @@ class NBADataProcessor:
         # Add date column for when data was collected (only if not present)
         if 'data_collected_date' not in df.columns:
             df['data_collected_date'] = datetime.now()
-        
-        # Add failed_reason column for unified error tracking (NULL for successful records)
-        if 'failed_reason' not in df.columns:
-            df['failed_reason'] = None
-        
+
         return df
 
     def match_dataframes_to_expected_data(self, endpoint_name: str, dataframes: List[pd.DataFrame]) -> Dict[str, pd.DataFrame]:
@@ -591,191 +587,6 @@ class NBADataProcessor:
         except Exception as e:
             self.logger.error(f"Failed to insert data into {table_name}: {e}")
             return False
-    
-    def create_failed_records(self, endpoint_name: str, config: dict, param_values: dict, error_message: str):
-        """
-        Create failed records in the main data tables with NULL data but preserved ID columns
-
-        Args:
-            endpoint_name: Name of the endpoint that failed
-            config: Endpoint configuration
-            param_values: Parameter values used in the failed call
-            error_message: Error message from the API call
-        """
-        try:
-            # Skip failed record insertion for master endpoints - master tables should only contain valid data
-            # Failed master endpoint calls will be retried on next run
-            if self.is_master_endpoint(endpoint_name):
-                self.logger.warning(f"Skipping failed record for master endpoint {endpoint_name} - will retry on next run. Error: {error_message[:100]}")
-                return
-
-            # Get expected data structure from endpoint configuration
-            expected_data = config.get('expected_data', {})
-
-            if not expected_data:
-                # If no expected data, create a single generic failed record
-                expected_data = {'failed_data': {}}
-
-            # Create failed records for each expected dataset
-            for dataset_name, dataset_info in expected_data.items():
-                # Regular endpoint - use standard naming
-                table_name = f"{self.get_table_prefix()}_{endpoint_name.lower()}_{dataset_name.lower()}"
-                
-                # Create a DataFrame with ID columns from parameters and failed_reason
-                failed_record = {}
-                
-                # Add ID columns from API call parameters
-                required_params = config.get('required_params', [])
-                for param in required_params:
-                    # Use parameter mappings for standardized column name
-                    mappings = self.parameter_mappings.get("mappings", {})
-                    standard_param = mappings.get(param, param)
-                    clean_param = ''.join(c.lower() if c.isalnum() else '' for c in standard_param)
-                    failed_record[clean_param] = param_values.get(param)
-                
-                # Add metadata columns
-                failed_record['data_collected_date'] = datetime.now()
-                failed_record['failed_reason'] = str(error_message)[:500]  # Truncate long messages
-                
-                # Create DataFrame
-                failed_df = pd.DataFrame([failed_record])
-                
-                # Clean column names
-                failed_df = self.clean_column_names(failed_df)
-                
-                # Try to create/insert the failed record
-                try:
-                    # Check if table exists, if not we need to create with proper structure
-                    if not self.db_manager.check_table_exists(table_name):
-                        # Create table with just the failed record structure
-                        # The table will expand when successful records are added later
-                        self.db_manager.create_table(table_name, failed_df)
-                        self.logger.info(f"Created table {table_name} with failed record structure")
-                    
-                    # Insert the failed record
-                    self.db_manager.insert_dataframe_to_rds(failed_df, table_name)
-                    self.logger.info(f"Recorded failed API call in {table_name}: {error_message[:100]}")
-                    
-                except Exception as insert_error:
-                    # If insertion fails, it might be due to column mismatch with existing table
-                    self.logger.warning(f"Could not insert failed record to {table_name}: {insert_error}")
-                    # Continue with other datasets
-                    continue
-            
-        except Exception as e:
-            self.logger.error(f"Failed to create failed records for {endpoint_name}: {e}")
-
-    def cleanup_failed_records(self, table_name: str, required_params: list, param_values: dict):
-        """
-        Remove failed records from a table after a successful API call for the same parameters.
-        """
-        try:
-            # Build WHERE clause matching the ID columns + failed_reason IS NOT NULL
-            conditions = []
-            values = []
-            mappings = self.parameter_mappings.get("mappings", {})
-            for param in required_params:
-                standard_param = mappings.get(param, param)
-                clean_param = ''.join(c.lower() if c.isalnum() else '' for c in standard_param)
-                conditions.append(f'"{clean_param}" = %s')
-                values.append(param_values.get(param))
-
-            if not conditions:
-                return
-
-            where_clause = " AND ".join(conditions)
-            # Match rows that have the failedreason column populated (these are the failed records)
-            # Try both column name variants
-            for col_name in ['failedreason', 'failed_reason']:
-                query = f'DELETE FROM "{table_name}" WHERE {where_clause} AND "{col_name}" IS NOT NULL'
-                try:
-                    result = self.db_manager.execute_query(query, tuple(values))
-                    if result and result > 0:
-                        self.logger.info(f"Cleaned up {result} failed record(s) from {table_name}")
-                    return
-                except Exception:
-                    continue  # Try the other column name variant
-
-        except Exception as e:
-            # Non-critical — don't let cleanup failures break the pipeline
-            self.logger.debug(f"Failed record cleanup skipped for {table_name}: {e}")
-
-    def get_failed_parameter_combinations(self, endpoint_name: str) -> List[Dict[str, Any]]:
-        """
-        Get all failed parameter combinations for an endpoint to enable retry logic
-        
-        Args:
-            endpoint_name: Name of the endpoint to check for failures
-            
-        Returns:
-            List of dictionaries containing failed parameter combinations
-        """
-        failed_combinations = []
-        
-        try:
-            # Find all tables that match this endpoint pattern
-            table_pattern = f"{self.get_table_prefix()}_{endpoint_name.lower()}_%"
-            
-            with self.db_manager.get_cursor() as cursor:
-                cursor.execute("""
-                    SELECT table_name 
-                    FROM information_schema.tables 
-                    WHERE table_schema = 'public' 
-                    AND table_name LIKE %s
-                """, (table_pattern,))
-                
-                matching_tables = [row[0] for row in cursor.fetchall()]
-                self.logger.debug(f"Found {len(matching_tables)} tables matching pattern {table_pattern}")
-            
-            # Check each matching table for failed records
-            for table_name in matching_tables:
-                try:
-                    with self.db_manager.get_cursor() as cursor:
-                        # Get all records with failed_reason (handle both possible column names)
-                        cursor.execute(f"""
-                            SELECT column_name 
-                            FROM information_schema.columns 
-                            WHERE table_name = '{table_name}' 
-                            AND column_name IN ('failed_reason', 'failedreason')
-                        """)
-                        
-                        failed_reason_col = cursor.fetchone()
-                        if not failed_reason_col:
-                            self.logger.debug(f"No failed_reason column in {table_name}")
-                            continue
-                        
-                        failed_reason_col = failed_reason_col[0]
-                        
-                        cursor.execute(f"""
-                            SELECT DISTINCT * FROM {table_name} 
-                            WHERE {failed_reason_col} IS NOT NULL
-                        """)
-                        
-                        failed_records = cursor.fetchall()
-                        colnames = [desc[0] for desc in cursor.description]
-                        
-                        for record in failed_records:
-                            record_dict = dict(zip(colnames, record))
-                            
-                            # Extract parameter values (exclude metadata columns)
-                            param_combo = {}
-                            for key, value in record_dict.items():
-                                if key not in ['datacollecteddate', 'failedreason', 'failed_reason'] and value is not None:
-                                    param_combo[key] = value
-                            
-                            if param_combo:  # Only add if we have parameters
-                                param_combo['failed_reason'] = record_dict.get(failed_reason_col)
-                                param_combo['table_name'] = table_name
-                                failed_combinations.append(param_combo)
-                
-                except Exception as e:
-                    self.logger.warning(f"Could not query failed records from {table_name}: {e}")
-                    continue
-        
-        except Exception as e:
-            self.logger.error(f"Error getting failed parameter combinations for {endpoint_name}: {e}")
-        
-        return failed_combinations
     
     def get_missing_ids_for_endpoint(self, endpoint_name: str, config: dict) -> List[Any]:
         """
@@ -1127,7 +938,7 @@ class NBADataProcessor:
                     SELECT EXISTS (
                         SELECT FROM information_schema.tables
                         WHERE table_schema = 'public'
-                        AND table_name = 'nba_playergamelogs_playergamelogs'
+                        AND table_name = 'nba_playergamelogs_a'
                     )
                 """)
                 if not cursor.fetchone()[0]:
@@ -1147,7 +958,7 @@ class NBADataProcessor:
                     seasons = seasons[-3:]  # Last 3 seasons
                     cursor.execute("""
                         SELECT DISTINCT playerid, teamid, season
-                        FROM nba_playergamelogs_playergamelogs
+                        FROM nba_playergamelogs_a
                         WHERE playerid IS NOT NULL
                         AND teamid IS NOT NULL
                         AND season IS NOT NULL
@@ -1166,7 +977,7 @@ class NBADataProcessor:
                     # Production mode: get all unique player-team-season combinations
                     cursor.execute("""
                         SELECT DISTINCT playerid, teamid, season
-                        FROM nba_playergamelogs_playergamelogs
+                        FROM nba_playergamelogs_a
                         WHERE playerid IS NOT NULL
                         AND teamid IS NOT NULL
                         AND season IS NOT NULL
@@ -1592,10 +1403,10 @@ class NBADataProcessor:
                             else:
                                 self.logger.error(f"All {max_retries} API call attempts failed: {retry_error}")
 
-                    # If we exhausted retries and still have an error, record failure and continue
+                    # If we exhausted retries and still have an error, log and continue.
+                    # Missing-id logic re-derives this gameid from master vs data on the next run.
                     if dataframes is None and last_error is not None:
                         self.logger.error(f"API call failed after {max_retries} attempts for {endpoint_name}: {last_error}")
-                        self.create_failed_records(endpoint_name, config, param_values, str(last_error))
                         continue
 
                     if not dataframes:
@@ -1629,10 +1440,7 @@ class NBADataProcessor:
                                 api_params  # Use the actual API parameters, not the original param_values
                             )
 
-                            if success:
-                                # Remove any previous failed records for this ID
-                                self.cleanup_failed_records(table_name, config.get('required_params', []), api_params)
-                            else:
+                            if not success:
                                 self.logger.warning(f"Failed to insert {dataset_name} for {endpoint_name}")
                     
                     # Rate limiting - increased to reduce API flooding and timeout errors
@@ -1641,11 +1449,6 @@ class NBADataProcessor:
                 except Exception as e:
                     error_msg = str(e)
                     self.logger.error(f"API call failed for {endpoint_name}: {error_msg}")
-                    
-                    # Create failed records in main data tables
-                    self.create_failed_records(endpoint_name, config, param_values, error_msg)
-                    
-                    # Continue with next item
                     continue
             
             self.logger.info(f"Completed processing {endpoint_name}")
