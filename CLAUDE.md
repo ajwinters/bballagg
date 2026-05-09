@@ -100,13 +100,13 @@ Ignore the RUNNING flag (false positive — see quirk 1). Look at the queue summ
 python src/job_queue.py status
 ```
 
-## Current state (2026-04-30)
+## Current state (2026-05-09)
 
-- **Phase 2 bulk dispatch in progress**, started 2026-04-30 ~12:15 UTC. 63 jobs total (per-game endpoints sharded 4 ways via `--auto-shard`, plus 9 non-sharded). 8 workers running on the fleet (one per VPS). ETA roughly 6-12 hours of fleet time.
-- Phases 1A (master refresh) and 1B (PlayerGameLogs, wrote 837k rows to `nba_playergamelogs_a`) completed earlier today. PlayerDashPtReb / PlayerDashPtShots are now READY (prereq satisfied).
-- Master tables refreshed: gamedates current through 2026-04-27. Master tables are *stacking* — `master_nba_games` now has 160k rows for 40,060 distinct gameids; expected, all our queries DISTINCT-project.
-- 35 `vw_nba_*` views recreated over the data tables only (after `_failed_data` cleanup).
-- Code path simplified earlier 2026-04-28: `create_failed_records`, `cleanup_failed_records`, `get_failed_parameter_combinations` removed; `add_metadata_columns` no longer injects `failed_reason`.
+- **Fleet idle.** Phase 2 bulk dispatch ran 2026-04-29 12:40 → 2026-05-02 22:07 UTC. 71 jobs completed, 0 new failures. PlayerDashPtReb/PlayerDashPtShots populated for the first time (prereq satisfied via PlayerGameLogs).
+- Per-game endpoints at 95–99% complete on supported gameids. Worst real gaps: HustleStatsBoxScore (1,616 missing), PlayByPlayV3 (944), BoxScoreUsageV3 (237). The 96-missing cluster across BoxScoreAdvancedV3 / MiscV3 / FourFactorsV3 / ScoringV3 looks like the same gameids permanently failing on each (likely preseason/all-star/IST games where V3 advanced stats don't exist).
+- BoxScoreDefensiveV2 / BoxScoreMatchupsV3 still 28k missing — that's the ~28k pre-tracking-era gameids genuinely unsupported by those endpoints. Expected.
+- **Master tables deduped 2026-05-09.** Stacking from prior runs cleaned up: `master_nba_games` 240k → 80,150 rows (40,072 distinct gameids, 2× for home/away — the real structure), `master_nba_players` 128k → 5,153 (1:1), `master_nba_teams` 945 → 45 (1:1). Dedup keys: `(gameid, teamid)`, `personid`, `teamid` respectively, keeping latest `datacollecteddate`.
+- **Long-term fix pending:** master endpoints should TRUNCATE-then-INSERT rather than plain INSERT, so they don't immediately re-bloat. See "Retry behavior" / TODO in nba_data_processor.py master path.
 
 ## Session handoff guidance
 
